@@ -146,6 +146,16 @@ def create_app():
                     )
 
                     connection.commit()
+     # -----------------------------
+    # Debug: Show registered routes
+    # -----------------------------
+
+    print("\n========== REGISTERED ROUTES ==========")
+
+    for rule in app.url_map.iter_rules():
+        print(rule)
+
+    print("========================================\n")
 
     return app
 
