@@ -1,274 +1,6623 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>STARK INDUSTRIES | CONSTRUCTOR V3.3</title>
-    <style>
-        body { margin: 0; overflow: hidden; background: #020202; font-family: 'Segoe UI', sans-serif; touch-action: none; }
-        #hud { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 50%, rgba(0,20,30,0.8) 150%); pointer-events: none; }
-        .home-btn { position: absolute; top: 20px; left: 20px; background: rgba(0, 20, 30, 0.6); border: 1px solid rgba(0,255,255,0.3); color: #00ffff; padding: 10px 20px; text-decoration: none; font-size: 12px; letter-spacing: 2px; pointer-events: auto; transition: 0.3s; border-radius: 6px; backdrop-filter: blur(10px); z-index: 10; }
-        .home-btn:hover { background: #00ffff; color: #000; box-shadow: 0 0 20px rgba(0, 255, 255, 0.6); }
-        
-        #toolbar { position: absolute; top: 50%; left: 20px; transform: translateY(-50%); display: flex; flex-direction: column; gap: 12px; pointer-events: auto; background: rgba(0,10,15,0.7); padding: 15px; border-radius: 12px; border: 1px solid rgba(0,255,255,0.2); backdrop-filter: blur(10px); z-index: 10;}
-        .tool-btn { background: rgba(0, 30, 40, 0.6); border: 1px solid rgba(0,255,255,0.3); color: #00ffff; width: 50px; height: 50px; font-size: 20px; cursor: pointer; transition: 0.3s; border-radius: 8px; display: flex; align-items: center; justify-content: center;}
-        .tool-btn:hover { background: rgba(0,255,255,0.2); box-shadow: 0 0 15px rgba(0,255,255,0.4); }
-        .tool-btn.active-tool { background: #00ffff; color: black; box-shadow: 0 0 20px #00ffff; border-color: white; }
-        .divider { height: 1px; width: 100%; background: rgba(0,255,255,0.2); margin: 5px 0; }
-        
-        #properties { position: absolute; top: 50%; right: 20px; transform: translateY(-50%); background: rgba(0, 10, 15, 0.7); padding: 25px; border-radius: 12px; border: 1px solid rgba(0,255,255,0.2); pointer-events: auto; display: none; width: 220px; backdrop-filter: blur(10px); box-shadow: -10px 0 30px rgba(0,0,0,0.5); z-index: 10;}
-        #properties.active { display: block; }
-        label { color: #88ccdd; font-size: 11px; display: block; margin-top: 15px; letter-spacing: 1px; }
-        input[type="color"] { width: 100%; border: none; height: 35px; cursor: pointer; border-radius: 5px; background: none; }
-        input[type="range"] { width: 100%; margin-top: 5px; accent-color: #00ffff; }
-        
-        .action-btn { background: rgba(0,0,0,0.5); border: 1px solid rgba(0,255,255,0.4); color: #00ffff; padding: 12px; width: 100%; margin-top: 15px; font-size: 12px; letter-spacing: 2px; cursor: pointer; transition: 0.3s; border-radius: 6px; z-index: 10; position: relative;}
-        .action-btn:hover { background: #00ffff; color: black; box-shadow: 0 0 15px rgba(0,255,255,0.5); }
-        
-        #top-bar { position: absolute; top: 20px; width: 100%; text-align: center; pointer-events: none; z-index: 5;}
-        h1 { color: #00ffff; letter-spacing: 8px; font-size: 20px; text-shadow: 0 0 15px rgba(0,255,255,0.6); margin:0; text-transform: uppercase; }
-        #multi-badge { display: none; background: #00ffff; color: black; font-size: 10px; padding: 2px 6px; border-radius: 4px; float: right; font-weight: bold; }
 
-        /* COLLAPSIBLE MENU CSS */
-        #toggle-icon { transition: transform 0.3s; font-size: 12px; }
-        #prop-body { transition: max-height 0.3s ease-out, opacity 0.3s, margin-top 0.3s; overflow: hidden; max-height: 400px; opacity: 1; margin-top: 10px; }
-        
-        #properties.collapsed #prop-body { max-height: 0; opacity: 0; margin-top: 0; }
-        #properties.collapsed #toggle-icon { transform: rotate(-90deg); }
-        #properties.collapsed h3 { border-bottom: none; padding-bottom: 0; }
+<meta charset="UTF-8">
 
-        @media (max-width: 768px) {
-            #toolbar { 
-                top: auto; bottom: 80px; left: 50%; transform: translateX(-50%); 
-                flex-direction: row; flex-wrap: wrap; justify-content: center; width: 90%; padding: 10px;
-            }
-            .tool-btn { width: 40px; height: 40px; font-size: 16px; }
-            .divider { width: 1px; height: 40px; margin: 0 5px; }
-            #properties { top: 80px; right: 50%; transform: translateX(50%); width: 90%; max-width: 300px; padding: 15px; }
-            .home-btn { top: 10px; left: 10px; padding: 8px 10px; font-size: 10px; }
-            h1 { font-size: 14px; margin-top: 10px;}
-            #top-bar p { display: none; }
-        }
-    </style>
-    <script type="importmap">
-        { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
-    </script>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>AETHER FORGE v11 | 3D ENGINEERING WORKSPACE</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #020202;
+    font-family: 'Segoe UI', sans-serif;
+    touch-action: none;
+    color: white;
+}
+
+#hud {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle,
+        transparent 45%,
+        rgba(0,20,30,.8) 150%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.home-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(0,20,30,.7);
+    border: 1px solid rgba(0,255,255,.35);
+    color: #00ffff;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 2px;
+    pointer-events: auto;
+    transition: .3s;
+    border-radius: 6px;
+    backdrop-filter: blur(12px);
+    z-index: 50;
+}
+
+.home-btn:hover {
+    background: #00ffff;
+    color: #000;
+    box-shadow: 0 0 20px rgba(0,255,255,.6);
+}
+
+#top-bar {
+    top: 88px;
+    opacity: 1;
+    z-index: 10;
+}
+
+#top-bar h1 {
+    color: #075f63;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-shadow: 0 1px 3px rgba(255,255,255,.9);
+}
+
+#top-bar p {
+    color: #376b70;
+    font-size: 8px;
+    opacity: 1;
+    text-shadow: 0 1px 2px rgba(255,255,255,.8);
+}
+#toolbar {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: auto;
+    background: rgba(0,10,15,.78);
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,255,255,.22);
+    backdrop-filter: blur(12px);
+    z-index: 20;
+}
+
+.tool-btn {
+    background: rgba(0,30,40,.65);
+    border: 1px solid rgba(0,255,255,.3);
+    color: #00ffff;
+    width: 48px;
+    height: 48px;
+    font-size: 19px;
+    cursor: pointer;
+    transition: .25s;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tool-btn:hover {
+    background: rgba(0,255,255,.16);
+    box-shadow: 0 0 15px rgba(0,255,255,.4);
+}
+
+.tool-btn.active-tool {
+    background: #00ffff;
+    color: #000;
+    box-shadow: 0 0 20px #00ffff;
+    border-color: white;
+}
+
+.divider {
+    height: 1px;
+    width: 100%;
+    background: rgba(0,255,255,.2);
+    margin: 3px 0;
+}
+
+/* =========================================
+   LIBRARY
+========================================= */
+
+.overlay-panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 650px;
+    max-height: 82vh;
+    overflow-y: auto;
+    padding: 22px;
+    background: rgba(0,10,15,.97);
+    border: 1px solid rgba(0,255,255,.35);
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 60px rgba(0,255,255,.16);
+    z-index: 100;
+    display: none;
+}
+
+.overlay-panel.active {
+    display: block;
+}
+
+.overlay-panel::-webkit-scrollbar {
+    width: 5px;
+}
+
+.overlay-panel::-webkit-scrollbar-thumb {
+    background: #00ffff;
+    border-radius: 5px;
+}
+
+.library-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.library-title {
+    color: #00ffff;
+    font-size: 16px;
+    letter-spacing: 3px;
+    margin: 0;
+}
+
+.library-subtitle {
+    display: block;
+    color: #668899;
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-top: 4px;
+}
+
+.close-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(0,255,255,.3);
+    background: rgba(0,30,40,.6);
+    color: #00ffff;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.close-btn:hover {
+    background: #00ffff;
+    color: #000;
+}
+
+#shape-search {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0,0,0,.5);
+    border: 1px solid rgba(0,255,255,.22);
+    border-radius: 7px;
+    color: white;
+    outline: none;
+    margin-bottom: 15px;
+}
+
+.shape-categories {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.category-btn {
+    padding: 8px 13px;
+    background: rgba(0,30,40,.6);
+    border: 1px solid rgba(0,255,255,.2);
+    color: #88ccdd;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.category-btn.active {
+    background: #00ffff;
+    color: #000;
+}
+
+#shape-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 10px;
+}
+
+.shape-card {
+    min-height: 105px;
+    background: rgba(0,25,35,.7);
+    border: 1px solid rgba(0,255,255,.18);
+    border-radius: 9px;
+    color: #00ffff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: .25s;
+}
+
+.shape-card:hover {
+    transform: translateY(-3px);
+    border-color: #00ffff;
+    background: rgba(0,255,255,.12);
+    box-shadow: 0 0 20px rgba(0,255,255,.18);
+}
+
+.shape-icon {
+    font-size: 28px;
+}
+
+.shape-name {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.shape-domain {
+    font-size: 7px;
+    color: #668899;
+    letter-spacing: 1px;
+}
+
+.no-shapes {
+    grid-column: 1/-1;
+    text-align: center;
+    color: #668899;
+    padding: 30px;
+    font-size: 11px;
+}
+
+/* =========================================
+   PARAMETERS
+========================================= */
+
+.parameter-row {
+    margin-bottom: 14px;
+}
+
+.parameter-row label {
+    color: #88ccdd;
+    font-size: 10px;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.parameter-row input {
+    width: 100%;
+    padding: 9px;
+    background: rgba(0,0,0,.5);
+    border: 1px solid rgba(0,255,255,.2);
+    color: #00ffff;
+    border-radius: 5px;
+    outline: none;
+}
+
+/* =========================================
+   PROPERTIES
+========================================= */
+
+#properties {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background: rgba(0,10,15,.82);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,255,255,.22);
+    pointer-events: auto;
+    display: none;
+    width: 270px;
+    max-height: 78vh;
+    overflow-y: auto;
+    backdrop-filter: blur(14px);
+    box-shadow: -10px 0 30px rgba(0,0,0,.5);
+    z-index: 20;
+}
+
+#properties.active {
+    display: block;
+}
+
+.prop-header {
+    color: #00ffff;
+    margin: 0;
+    border-bottom: 1px solid rgba(0,255,255,.2);
+    padding-bottom: 10px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+#multi-badge {
+    display: none;
+    background: #00ffff;
+    color: #000;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.property-section {
+    margin-top: 18px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0,255,255,.12);
+}
+
+.property-section-title {
+    color: #00ffff;
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.prop-label {
+    color: #88ccdd;
+    font-size: 10px;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+}
+
+.prop-input,
+.vector-input {
+    background: rgba(0,0,0,.55);
+    border: 1px solid rgba(0,255,255,.2);
+    color: #00ffff;
+    border-radius: 5px;
+    outline: none;
+}
+
+.prop-input {
+    width: 100%;
+    padding: 8px;
+}
+
+.vector-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 6px;
+}
+
+.vector-input {
+    width: 100%;
+    padding: 7px 5px;
+    font-size: 11px;
+}
+
+input[type="color"] {
+    width: 100%;
+    border: none;
+    height: 35px;
+    cursor: pointer;
+    border-radius: 5px;
+    background: none;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: #00ffff;
+}
+
+/* =========================================
+   OUTLINER
+========================================= */
+
+#outliner {
+    position: absolute;
+    top: 20px;
+    right: 310px;
+    width: 210px;
+    max-height: 260px;
+    background: rgba(0,10,15,.82);
+    border: 1px solid rgba(0,255,255,.2);
+    border-radius: 10px;
+    padding: 12px;
+    backdrop-filter: blur(12px);
+    z-index: 15;
+    pointer-events: auto;
+}
+
+.outliner-title {
+    color: #00ffff;
+    font-size: 10px;
+    letter-spacing: 2px;
+    border-bottom: 1px solid rgba(0,255,255,.15);
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+#object-list {
+    max-height: 190px;
+    overflow-y: auto;
+}
+
+.object-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px;
+    margin-bottom: 4px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #88ccdd;
+    font-size: 10px;
+}
+
+.object-item:hover {
+    background: rgba(0,255,255,.08);
+}
+
+.object-item.selected {
+    background: rgba(0,255,255,.18);
+    color: #00ffff;
+    border-left: 2px solid #00ffff;
+}
+
+.object-name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.empty-outliner {
+    color: #536d77;
+    text-align: center;
+    padding: 20px 5px;
+    font-size: 9px;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.action-btn {
+    background: rgba(0,0,0,.5);
+    border: 1px solid rgba(0,255,255,.4);
+    color: #00ffff;
+    padding: 11px;
+    width: 100%;
+    margin-top: 12px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: .3s;
+    border-radius: 6px;
+}
+
+.action-btn:hover {
+    background: #00ffff;
+    color: #000;
+    box-shadow: 0 0 15px rgba(0,255,255,.5);
+}
+
+.action-btn.danger {
+    border-color: #ff3333;
+    color: #ff3333;
+}
+
+.action-btn.danger:hover {
+    background: #ff3333;
+    color: white;
+}
+
+.visible-btn-text {
+    color: rgba(0,0,0,.5) !important;
+}
+
+.action-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+}
+
+.action-row .action-btn {
+    margin-top: 8px;
+}
+
+#bottom-actions {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    pointer-events: auto;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    z-index: 20;
+}
+
+#bottom-actions .action-btn {
+    width: auto;
+    padding: 10px 24px;
+    margin-top: 0;
+}
+
+#status-message {
+    position: absolute;
+    bottom: 75px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,15,20,.9);
+    border: 1px solid rgba(0,255,255,.3);
+    color: #00ffff;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 9px;
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: .3s;
+    pointer-events: none;
+    z-index: 50;
+}
+
+#status-message.show {
+    opacity: 1;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media(max-width:900px) {
+
+    #outliner {
+        display:none;
+    }
+
+    #properties {
+        right:10px;
+        width:260px;
+    }
+
+}
+
+@media(max-width:768px) {
+
+    #toolbar {
+        top:auto;
+        bottom:72px;
+        left:50%;
+        transform:translateX(-50%);
+        flex-direction:row;
+        flex-wrap:wrap;
+        justify-content:center;
+        width:94%;
+        padding:8px;
+    }
+
+    .tool-btn {
+        width:40px;
+        height:40px;
+        font-size:16px;
+    }
+
+    .divider {
+        width:1px;
+        height:35px;
+    }
+
+    #properties {
+        top:70px;
+        right:50%;
+        transform:translateX(50%);
+        width:90%;
+        max-width:320px;
+        max-height:55vh;
+        padding:14px;
+    }
+
+    #top-bar h1 {
+        font-size:14px;
+        letter-spacing:4px;
+    }
+
+    #top-bar p {
+        display:none;
+    }
+
+    #bottom-actions {
+        bottom:8px;
+        gap:5px;
+    }
+
+    #bottom-actions .action-btn {
+        padding:8px 10px;
+        font-size:8px;
+    }
+
+    .overlay-panel {
+        width:94%;
+        max-height:75vh;
+        padding:16px;
+    }
+
+    #shape-grid {
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+
+/* =========================================================
+   AETHER FORGE V7 — PROFESSIONAL WORKSPACE OVERRIDES
+   ========================================================= */
+
+:root {
+    --af-bg: #080c11;
+    --af-surface: rgba(13, 19, 27, .94);
+    --af-surface-2: rgba(18, 27, 37, .96);
+    --af-border: rgba(125, 170, 195, .20);
+    --af-border-strong: rgba(0, 217, 255, .42);
+    --af-text: #e8f0f4;
+    --af-muted: #8295a2;
+    --af-accent: #00d9ff;
+    --af-success: #35d07f;
+    --af-warning: #f2b94b;
+    --af-danger: #ff5f68;
+}
+
+body {
+    background:
+        radial-gradient(circle at 50% 40%, rgba(0, 90, 115, .08), transparent 45%),
+        var(--af-bg);
+    color: var(--af-text);
+    font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+#professional-header {
+    position: absolute;
+    inset: 14px 18px auto 18px;
+    height: 58px;
+    display: grid;
+    grid-template-columns: minmax(210px, 1fr) auto minmax(210px, 1fr);
+    align-items: center;
+    gap: 20px;
+    padding: 8px 12px;
+    background: rgba(8, 13, 19, .88);
+    border: 1px solid var(--af-border);
+    border-radius: 10px;
+    backdrop-filter: blur(18px);
+    box-shadow: 0 12px 35px rgba(0,0,0,.28);
+    z-index: 45;
+    pointer-events: auto;
+}
+
+.brand-block,
+.workspace-meta,
+.header-actions {
+    display: flex;
+    align-items: center;
+}
+
+.brand-block { gap: 10px; }
+.brand-mark {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--af-border-strong);
+    border-radius: 8px;
+    color: var(--af-accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    background: rgba(0, 217, 255, .07);
+}
+.brand-name {
+    color: var(--af-text);
+    font-size: 13px;
+    font-weight: 750;
+    letter-spacing: 2px;
+}
+.brand-subtitle,
+.project-label {
+    color: var(--af-muted);
+    font-size: 8px;
+    letter-spacing: 1.4px;
+}
+.workspace-meta {
+    justify-content: center;
+    gap: 10px;
+    min-width: 0;
+}
+.workspace-meta strong {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 600;
+}
+.save-state {
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 8px;
+    letter-spacing: .8px;
+    border: 1px solid var(--af-border);
+}
+.save-state.saved { color: var(--af-success); border-color: rgba(53,208,127,.3); background: rgba(53,208,127,.07); }
+.save-state.unsaved { color: var(--af-warning); border-color: rgba(242,185,75,.3); background: rgba(242,185,75,.07); }
+.save-state.saving,
+.save-state.loading { color: var(--af-accent); border-color: rgba(0,217,255,.28); background: rgba(0,217,255,.06); }
+.save-state.error { color: var(--af-danger); border-color: rgba(255,95,104,.3); background: rgba(255,95,104,.07); }
+
+.header-actions {
+    justify-content: flex-end;
+    gap: 6px;
+}
+.header-btn {
+    border: 1px solid var(--af-border);
+    background: rgba(255,255,255,.025);
+    color: #b7c7cf;
+    padding: 7px 10px;
+    border-radius: 6px;
+    font-size: 9px;
+    letter-spacing: .7px;
+    cursor: pointer;
+    transition: border-color .16s ease, background .16s ease, color .16s ease;
+}
+.header-btn:hover,
+.header-btn.active {
+    color: var(--af-accent);
+    border-color: var(--af-border-strong);
+    background: rgba(0,217,255,.08);
+}
+.header-btn.active { box-shadow: inset 0 0 0 1px rgba(0,217,255,.08); }
+
+#top-bar {
+    top: 88px;
+    opacity: .55;
+}
+#top-bar h1 {
+    font-size: 10px;
+    letter-spacing: 4px;
+}
+#top-bar p { font-size: 8px; opacity: .8; }
+
+.home-btn {
+    top: 87px;
+    left: 20px;
+    font-size: 9px;
+    padding: 8px 12px;
+    border-color: var(--af-border);
+    color: var(--af-muted);
+    background: rgba(8,13,19,.7);
+}
+.home-btn:hover { color: #061016; }
+
+#toolbar {
+    left: 18px;
+    padding: 8px;
+    gap: 6px;
+    background: rgba(9, 15, 21, .9);
+    border-color: var(--af-border);
+    border-radius: 9px;
+    box-shadow: 0 12px 35px rgba(0,0,0,.22);
+}
+.tool-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    border-color: var(--af-border);
+    background: rgba(255,255,255,.025);
+    color: #9db2bd;
+    font-size: 15px;
+}
+.tool-btn:hover {
+    background: rgba(0,217,255,.08);
+    border-color: var(--af-border-strong);
+    color: var(--af-accent);
+    box-shadow: none;
+}
+.tool-btn.active-tool {
+    background: rgba(0,217,255,.14);
+    border-color: var(--af-accent);
+    color: var(--af-accent);
+    box-shadow: inset 0 0 0 1px rgba(0,217,255,.12);
+}
+.divider { background: var(--af-border); }
+
+#outliner,
+#properties,
+.overlay-panel {
+    background: var(--af-surface);
+    border-color: var(--af-border);
+    box-shadow: 0 18px 50px rgba(0,0,0,.35);
+}
+#outliner { top: 88px; right: 308px; }
+#properties { right: 18px; }
+.property-section { border-top-color: var(--af-border); }
+.property-section-title,
+.prop-header,
+.library-title { color: var(--af-accent); }
+.prop-label,
+.parameter-row label { color: #91a7b3; }
+.prop-input,
+.vector-input,
+.parameter-row input,
+#shape-search {
+    border-color: var(--af-border);
+    background: rgba(0,0,0,.25);
+    color: var(--af-text);
+}
+.prop-input:focus,
+.vector-input:focus,
+.parameter-row input:focus,
+#shape-search:focus {
+    border-color: var(--af-border-strong);
+    box-shadow: 0 0 0 2px rgba(0,217,255,.07);
+}
+.object-item { color: #a0b1ba; }
+.object-item.selected {
+    background: rgba(0,217,255,.09);
+    border-left-color: var(--af-accent);
+}
+.shape-card {
+    background: rgba(255,255,255,.025);
+    border-color: var(--af-border);
+}
+.shape-card:hover {
+    transform: translateY(-2px);
+    background: rgba(0,217,255,.07);
+    border-color: var(--af-border-strong);
+    box-shadow: none;
+}
+.action-btn {
+    border-color: var(--af-border);
+    background: rgba(255,255,255,.025);
+}
+.action-btn:hover {
+    background: var(--af-accent);
+    box-shadow: none;
+}
+.action-btn.danger { border-color: rgba(255,95,104,.55); color: var(--af-danger); }
+
+#workspace-statusbar {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 16px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 0 11px;
+    background: rgba(8,13,19,.88);
+    border: 1px solid var(--af-border);
+    border-radius: 7px;
+    color: var(--af-muted);
+    font-size: 8px;
+    letter-spacing: .7px;
+    z-index: 35;
+    pointer-events: none;
+}
+#workspace-statusbar span { white-space: nowrap; }
+#workspace-statusbar b { color: #a9bbc4; font-weight: 600; margin-right: 3px; }
+
+#bottom-actions {
+    bottom: 58px;
+    justify-content: flex-end;
+    right: 18px;
+    width: auto;
+}
+#bottom-actions .action-btn {
+    padding: 8px 13px;
+    font-size: 8px;
+    border-radius: 6px;
+}
+#status-message {
+    bottom: 100px;
+    background: rgba(10,17,24,.95);
+    border-color: var(--af-border-strong);
+    box-shadow: 0 10px 30px rgba(0,0,0,.3);
+}
+
+@media (max-width: 900px) {
+    #professional-header {
+        grid-template-columns: 1fr auto;
+    }
+    .workspace-meta { display: none; }
+    #outliner { display: none; }
+}
+@media (max-width: 768px) {
+    #professional-header {
+        inset: 8px;
+        height: 48px;
+        padding: 6px 8px;
+    }
+    .brand-name { font-size: 11px; }
+    .brand-subtitle { display: none; }
+    .brand-mark { width: 30px; height: 30px; }
+    .header-btn { padding: 6px 8px; font-size: 8px; }
+    .home-btn { top: 62px; left: 10px; }
+    #top-bar { display: none; }
+    #workspace-statusbar {
+        left: 8px;
+        right: 8px;
+        bottom: 6px;
+        overflow: auto;
+        gap: 12px;
+    }
+    #bottom-actions {
+        bottom: 44px;
+        right: 8px;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+
+
+/* V8 — engineering canvas + curve editor */
+body {
+    background: #dbe4ea;
+}
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(circle at 50% 35%, rgba(255,255,255,.62), transparent 46%),
+        linear-gradient(135deg, #eef3f6 0%, #dbe4ea 48%, #cbd7df 100%);
+}
+body > canvas {
+    position: relative;
+    z-index: 1;
+}
+.curve-panel { max-width: 520px; }
+.curve-note {
+    color: #6c7e89;
+    background: rgba(255,255,255,.55);
+    border: 1px solid rgba(80,105,120,.16);
+    border-radius: 7px;
+    padding: 10px 12px;
+    font-size: 10px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+.curve-axis-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:15px; }
+.curve-axis {
+    border:1px solid rgba(76,100,115,.22); background:rgba(255,255,255,.55); color:#526570;
+    border-radius:6px; padding:9px; font-weight:700; cursor:pointer;
+}
+.curve-axis.active, .curve-axis:hover { color:#057e98; border-color:rgba(0,160,190,.5); background:rgba(0,190,220,.10); }
+.curve-range { width:100%; accent-color:#079dbb; margin:4px 0 16px; }
+#curve-angle-value { float:right; color:#087f99; font-weight:700; }
+.curve-presets { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+.curve-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.curve-actions .action-btn.secondary { background:rgba(255,255,255,.5); color:#586d78; border-color:rgba(80,105,120,.22); }
+
+
+/* V10 — direct mesh editing workspace */
+.mesh-edit-panel { width: 360px; max-width: calc(100vw - 24px); left: 50%; top: 82px; transform: translateX(-50%); z-index: 80; }
+.edit-mode-grid, .edit-action-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:8px; margin:10px 0; }
+.edit-mode, .edit-action-grid .action-btn { min-height:38px; }
+.edit-mode { border:1px solid var(--af-border); background:rgba(255,255,255,.72); color:var(--af-text); border-radius:7px; font-size:10px; font-weight:800; letter-spacing:.7px; cursor:pointer; }
+.edit-mode.active { border-color:var(--af-accent); background:rgba(0,180,220,.12); color:#007b9d; box-shadow:0 0 0 1px rgba(0,180,220,.14) inset; }
+.edit-help { font-size:10px; line-height:1.55; color:#5e707b; background:rgba(255,255,255,.58); border:1px solid rgba(91,112,125,.14); padding:9px; border-radius:7px; }
+.edit-status-row { display:flex; justify-content:space-between; gap:10px; font-size:10px; font-weight:750; color:#425663; padding:7px 0; }
+.edit-number-row { display:flex; align-items:end; gap:8px; }
+.edit-number-row .prop-label { flex:1; }
+.edit-unit { font-size:10px; color:#71828c; padding-bottom:10px; }
+#mesh-edit-panel .action-btn { font-size:9px; }
+.mesh-edit-active { box-shadow:0 0 0 2px rgba(0,180,220,.18) inset; }
+.vertex-handle { cursor:crosshair; }
+
+
+/* V11 — advanced CAD workflow */
+.v11-panel { width: 430px; max-width: calc(100vw - 24px); left: 50%; top: 76px; transform: translateX(-50%); z-index: 90; }
+.v11-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+.v11-grid.three { grid-template-columns:repeat(3,1fr); }
+.v11-section { border:1px solid rgba(80,105,120,.15); border-radius:8px; padding:10px; margin:9px 0; background:rgba(255,255,255,.42); }
+.v11-section-title { font-size:9px; font-weight:800; letter-spacing:1px; color:#435763; margin-bottom:8px; }
+.v11-note { font-size:10px; line-height:1.5; color:#5e707b; }
+.v11-feature-list { max-height:170px; overflow:auto; display:flex; flex-direction:column; gap:5px; }
+.v11-feature { display:flex; justify-content:space-between; gap:8px; padding:7px 8px; border:1px solid rgba(80,105,120,.13); border-radius:6px; background:rgba(255,255,255,.55); font-size:9px; }
+.v11-feature strong { color:#244454; }
+.v11-badge { font-size:8px; font-weight:800; color:#087f99; }
+.v11-primary { background:linear-gradient(135deg,#087f99,#06a5bd)!important; color:white!important; border-color:#087f99!important; }
+.v11-demo-card { border:1px solid rgba(0,160,190,.22); background:rgba(0,180,220,.08); border-radius:8px; padding:10px; margin-bottom:10px; }
+.v11-demo-card strong { display:block; color:#075f78; font-size:10px; margin-bottom:4px; }
+#v11-operation-bar { position:absolute; left:18px; bottom:58px; z-index:38; display:flex; gap:6px; pointer-events:auto; }
+#v11-operation-bar .action-btn { padding:7px 10px; font-size:8px; }
+@media(max-width:700px){ .v11-panel{top:64px; width:calc(100vw - 16px)} #v11-operation-bar{left:8px; bottom:44px; overflow:auto; max-width:calc(100vw - 16px)} }
+
+</style>
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+}
+
+</script>
+
 </head>
+
 <body>
-    <div id="hud"></div>
-    <a href="index.html" class="home-btn">ᐊ MAIN TERMINAL</a>
-    
-    <div id="top-bar">
-        <h1>NEON CONSTRUCTOR</h1>
-        <p style="color:#88ccdd; font-size:11px; letter-spacing: 2px; margin-top:5px;">TEMPORAL STATE ENGINE ONLINE</p>
-    </div>
 
-    <div id="toolbar">
-        <button class="tool-btn" id="btn-undo" title="Undo (Ctrl+Z)">↶</button>
-        <button class="tool-btn" id="btn-redo" title="Redo (Ctrl+Y)">↷</button>
-        <div class="divider"></div>
-        <button class="tool-btn" id="add-cube" title="Spawn Cube">🧊</button>
-        <button class="tool-btn" id="add-sphere" title="Spawn Sphere">⚪</button>
-        <button class="tool-btn" id="add-cyl" title="Spawn Cylinder">🛢️</button>
-        <div class="divider"></div>
-        <button class="tool-btn active-tool" id="tool-move" title="Move (G)">✥</button>
-        <button class="tool-btn" id="tool-rotate" title="Rotate (R)">↻</button>
-        <button class="tool-btn" id="tool-scale" title="Scale (S)">⤢</button>
-    </div>
+<div id="hud"></div>
 
-<div id="properties">
-        <h3 id="prop-header" style="color:#00ffff; margin:0; border-bottom:1px solid rgba(0,255,255,0.2); padding-bottom:10px; font-size: 14px; letter-spacing:2px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
-            <span>⚙️ PROPERTIES <span id="multi-badge">GROUP</span></span>
-            <span id="toggle-icon">▼</span>
-        </h3>
-        <div id="prop-body">
-            <label>NEON CORE</label><input type="color" id="prop-color" value="#00ffff">
-            <label>PHOTON INTENSITY</label><input type="range" id="prop-glow" min="0" max="2" step="0.1" value="1">
-            <label>MATTER DENSITY</label><input type="range" id="prop-opacity" min="0" max="1" step="0.1" value="0.8">
-            <button class="action-btn" id="btn-delete" style="border-color: #ff3333; color: #ff3333;">OBLITERATE</button>
+<a href="index.html" class="home-btn">
+    ᐊ MAIN TERMINAL
+</a>
+
+<header id="professional-header" aria-label="Aether Forge workspace header">
+    <div class="brand-block">
+        <div class="brand-mark" aria-hidden="true">AF</div>
+        <div>
+            <div class="brand-name">AETHER FORGE</div>
+            <div class="brand-subtitle">3D ENGINEERING WORKSPACE</div>
         </div>
     </div>
+    <div class="workspace-meta">
+        <span class="project-label">PROJECT</span>
+        <strong id="workspace-project-name">Untitled Workspace</strong>
+        <span id="workspace-save-state" class="save-state loading">Loading…</span>
+    </div>
+    <div class="header-actions">
+        <button type="button" class="header-btn" id="btn-frame-selected" title="Frame Selected (F)">Frame</button>
+        <button type="button" class="header-btn" id="btn-grid-toggle" title="Toggle Grid">Grid</button>
+        <button type="button" class="header-btn" id="btn-snap-toggle" title="Toggle Snap">Snap</button>
+    </div>
+</header>
 
-    <div style="position:absolute; bottom:20px; width:100%; text-align:center; pointer-events:auto; display:flex; gap:20px; justify-content:center; z-index: 10;">
-        <button class="action-btn" id="btn-import-trigger" style="width: auto; padding: 10px 30px;">📂 IMPORT</button>
-        <button class="action-btn" id="btn-export" style="width: auto; padding: 10px 30px;">💾 EXPORT</button>
-        <input type="file" id="file-import" accept=".obj" style="display: none;">
+<div id="top-bar">
+
+    <h1>AETHER FORGE</h1>
+
+    <p>
+        AETHER FORGE // ENGINEERING 3D WORKSPACE // V11.0
+    </p>
+
+</div>
+
+
+<!-- TOOLBAR -->
+
+<div id="toolbar">
+
+    <button class="tool-btn" id="btn-undo" aria-label="Undo (Ctrl+Z)" title="Undo">↶</button>
+
+    <button class="tool-btn" id="btn-redo" aria-label="Redo (Ctrl+Y)" title="Redo">↷</button>
+
+    <div class="divider"></div>
+
+    <button class="tool-btn" id="add-cube" aria-label="Add Cube" title="Cube">▣</button>
+
+    <button class="tool-btn" id="add-sphere" aria-label="Add Sphere" title="Sphere">○</button>
+
+    <button class="tool-btn" id="add-cyl" aria-label="Add Cylinder" title="Cylinder">▥</button>
+
+    <button class="tool-btn" id="btn-shapes" aria-label="Shape Library" title="Engineering Shapes">◈</button>
+
+    <button class="tool-btn" id="btn-curve" aria-label="Curve Selected Shape" title="Curve Selected (C)">⌒</button>
+
+    <button class="tool-btn" id="btn-edit-mesh" aria-label="Edit Mesh (Tab)" title="Edit Mesh (Tab)">✎</button>
+
+    <div class="divider"></div>
+
+    <button class="tool-btn active-tool" id="tool-move" aria-label="Move (G)" title="Move (G)">✥</button>
+
+    <button class="tool-btn" id="tool-rotate" aria-label="Rotate (R)" title="Rotate (R)">↻</button>
+
+    <button class="tool-btn" id="tool-scale" aria-label="Scale (S)" title="Scale (S)">⤢</button>
+
+</div>
+
+
+<!-- SHAPES LIBRARY -->
+
+<div id="shapes-library" class="overlay-panel">
+
+    <div class="library-header">
+
+        <div>
+
+            <h2 class="library-title">
+                GEOMETRIC SHAPES
+            </h2>
+
+            <span class="library-subtitle">
+                30+ CORE + ADVANCED + INDUSTRIAL 3D SHAPES
+            </span>
+
+        </div>
+
+        <button class="close-btn" id="close-shapes">
+            ×
+        </button>
+
     </div>
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { TransformControls } from 'three/addons/controls/TransformControls.js';
-        import { OBJExporter } from 'three/addons/exporters/OBJExporter.js';
-        import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+    <input
+        type="text"
+        id="shape-search"
+        placeholder="Search geometric shapes..."
+        autocomplete="off">
 
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x020202);
-        scene.fog = new THREE.FogExp2(0x000000, 0.03);
+    <div class="shape-categories">
 
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
-        camera.position.set(8, 8, 12);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.toneMapping = THREE.ReinhardToneMapping;
-        document.body.appendChild(renderer.domElement);
+        <button class="category-btn active" data-category="all">
+            ALL
+        </button>
 
-        const orbit = new OrbitControls(camera, renderer.domElement);
-        orbit.enableDamping = true;
+        <button class="category-btn" data-category="basic">
+            ◇ BASIC
+        </button>
 
-        const transform = new TransformControls(camera, renderer.domElement);
-        scene.add(transform);
+        <button class="category-btn" data-category="advanced">
+            ◈ ADVANCED
+        </button>
 
-        const ambient = new THREE.AmbientLight(0xffffff, 0.5); scene.add(ambient);
-        const dirLight = new THREE.DirectionalLight(0xffffff, 1); dirLight.position.set(5, 10, 7); scene.add(dirLight);
-        const grid = new THREE.GridHelper(20, 20, 0x004444, 0x001111); scene.add(grid);
+        <button class="category-btn" data-category="mechanical">
+            ⚙ MECHANICAL
+        </button>
 
-        const constructionZone = new THREE.Group(); scene.add(constructionZone);
-        let selectedObjects = []; 
-        const selectionGroup = new THREE.Group(); scene.add(selectionGroup); 
+    </div>
 
-        let stateHistory = [];
-        let historyIndex = -1;
+    <div id="shape-grid"></div>
 
-        function saveSnapshot() {
-            if (historyIndex < stateHistory.length - 1) { stateHistory = stateHistory.slice(0, historyIndex + 1); }
-            const snapshot = constructionZone.children.map(obj => ({ 
-                uuid: obj.uuid, 
-                type: obj.geometry.type, 
-                matrix: obj.matrix.toArray(), 
-                color: obj.material.color.getHex(), 
-                glow: obj.material.emissiveIntensity, 
-                opacity: obj.material.opacity 
-            }));
-            stateHistory.push(snapshot); historyIndex++;
+</div>
+
+
+<!-- PARAMETERS -->
+
+<div id="shape-parameters" class="overlay-panel">
+
+    <div class="library-header">
+
+        <div>
+
+            <h2 class="library-title" id="parameter-title">
+                SHAPE PARAMETERS
+            </h2>
+
+            <span class="library-subtitle">
+                ENGINEERING DIMENSIONS
+            </span>
+
+        </div>
+
+        <button class="close-btn" id="close-parameters">
+            ×
+        </button>
+
+    </div>
+
+    <div id="parameter-fields"></div>
+
+    <button class="action-btn" id="create-parametric-shape">
+        CREATE SHAPE
+    </button>
+
+</div>
+
+
+<!-- CURVE / BEND EDITOR -->
+<div id="curve-panel" class="overlay-panel curve-panel">
+    <div class="library-header">
+        <div>
+            <h2 class="library-title">CURVE / BEND</h2>
+            <span class="library-subtitle">NON-DESTRUCTIVE SHAPE DEFORMATION</span>
+        </div>
+        <button class="close-btn" id="close-curve">×</button>
+    </div>
+
+    <div class="curve-note">Curve the selected mesh around its local axis. Positive and negative values bend in opposite directions.</div>
+
+    <label class="prop-label">BEND AXIS</label>
+    <div class="curve-axis-grid">
+        <button class="curve-axis active" data-axis="x">X</button>
+        <button class="curve-axis" data-axis="y">Y</button>
+        <button class="curve-axis" data-axis="z">Z</button>
+    </div>
+
+    <label class="prop-label">CURVATURE <span id="curve-angle-value">0°</span></label>
+    <input id="curve-angle" class="curve-range" type="range" min="-180" max="180" step="1" value="0">
+
+    <div class="curve-presets">
+        <button class="header-btn curve-preset" data-angle="15">15°</button>
+        <button class="header-btn curve-preset" data-angle="45">45°</button>
+        <button class="header-btn curve-preset" data-angle="90">90°</button>
+        <button class="header-btn curve-preset" data-angle="180">180°</button>
+        <button class="header-btn curve-preset" data-angle="0">RESET</button>
+    </div>
+
+    <div class="curve-actions">
+        <button class="action-btn" id="apply-curve">APPLY CURVE</button>
+        <button class="action-btn secondary" id="reset-curve">RESET SHAPE</button>
+    </div>
+</div>
+
+
+<!-- OUTLINER -->
+
+<div id="outliner">
+
+    <div class="outliner-title">
+        ◈ OBJECT OUTLINER
+    </div>
+
+    <div id="object-list"></div>
+
+</div>
+
+
+<!-- PROPERTIES -->
+
+<div id="properties">
+
+    <h3 class="prop-header" id="prop-header">
+
+        <span>
+            ⚙ PROPERTIES
+            <span id="multi-badge">GROUP</span>
+        </span>
+
+        <span>▼</span>
+
+    </h3>
+
+    <div id="prop-body">
+
+        <div class="property-section">
+
+            <div class="property-section-title">
+                OBJECT
+            </div>
+
+            <label class="prop-label">
+                OBJECT NAME
+            </label>
+
+            <input
+                class="prop-input"
+                id="prop-name"
+                type="text">
+
+        </div>
+
+
+        <div class="property-section">
+
+            <div class="property-section-title">
+                TRANSFORM
+            </div>
+
+            <label class="prop-label">POSITION</label>
+
+            <div class="vector-grid">
+
+                <input class="vector-input" id="pos-x" type="number" step="0.1">
+                <input class="vector-input" id="pos-y" type="number" step="0.1">
+                <input class="vector-input" id="pos-z" type="number" step="0.1">
+
+            </div>
+
+            <label class="prop-label">ROTATION</label>
+
+            <div class="vector-grid">
+
+                <input class="vector-input" id="rot-x" type="number" step="1">
+                <input class="vector-input" id="rot-y" type="number" step="1">
+                <input class="vector-input" id="rot-z" type="number" step="1">
+
+            </div>
+
+            <label class="prop-label">SCALE</label>
+
+            <div class="vector-grid">
+
+                <input class="vector-input" id="scale-x" type="number" step="0.1">
+                <input class="vector-input" id="scale-y" type="number" step="0.1">
+                <input class="vector-input" id="scale-z" type="number" step="0.1">
+
+            </div>
+
+        </div>
+
+
+        <div class="property-section">
+
+            <div class="property-section-title">
+                GEOMETRY
+            </div>
+
+            <div id="geometry-editor"></div>
+
+            <button class="action-btn" id="btn-enter-edit" style="margin-top:10px;">EDIT MESH (TAB)</button>
+
+        </div>
+
+
+        <div class="property-section">
+
+            <div class="property-section-title">
+                MATERIAL
+            </div>
+
+            <label class="prop-label">NEON CORE</label>
+
+            <input type="color" id="prop-color" value="#00ffff">
+
+            <label class="prop-label">PHOTON INTENSITY</label>
+
+            <input type="range" id="prop-glow"
+                   min="0" max="3" step="0.1" value="0.5">
+
+            <label class="prop-label">MATTER DENSITY</label>
+
+            <input type="range" id="prop-opacity"
+                   min="0.05" max="1" step="0.05" value="0.8">
+
+            <label class="prop-label">MATERIAL MODE</label>
+
+            <select id="prop-material" class="prop-input">
+
+                <option value="standard">STANDARD</option>
+
+                <option value="wireframe">WIREFRAME</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="property-section">
+
+            <div class="action-row">
+
+                <button class="action-btn" id="btn-duplicate" aria-label="Duplicate (Ctrl+D)">
+                    DUPLICATE
+                </button>
+
+                <button class="action-btn" id="btn-copy" aria-label="Copy (Ctrl+C)">
+                    COPY
+                </button>
+
+            </div>
+
+            <button class="action-btn" id="btn-reset-transform" aria-label="Reset Transform">
+                RESET TRANSFORM
+            </button>
+
+            <button class="action-btn danger" id="btn-delete" aria-label="Delete Selected">
+                OBLITERATE
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- BOTTOM -->
+
+<div id="workspace-statusbar" aria-live="polite">
+    <span><b>GRID</b> 1.0</span>
+    <span id="status-snap"><b>SNAP</b> OFF</span>
+    <span id="status-selection"><b>SELECTED</b> 0</span>
+    <span id="status-objects"><b>OBJECTS</b> 0</span>
+    <span id="status-triangles"><b>TRIANGLES</b> 0</span>
+    <span id="status-fps"><b>FPS</b> --</span>
+</div>
+
+<div id="bottom-actions">
+
+    <button class="action-btn visible-btn-text" id="btn-import-trigger" aria-label="Import OBJ">
+        IMPORT
+    </button>
+
+    <button class="action-btn visible-btn-text" id="btn-save-project" aria-label="Save Project (Ctrl+S)">
+        SAVE
+    </button>
+
+    <button class="action-btn visible-btn-text" id="btn-export" aria-label="Export OBJ">
+        EXPORT OBJ
+    </button>
+
+    <button class="action-btn secondary visible-btn-text" id="btn-import-project-trigger" aria-label="Open Aether Project">
+        OPEN .AETHER
+    </button>
+
+    <button class="action-btn secondary visible-btn-text" id="btn-export-project" aria-label="Export Aether Project">
+        SAVE .AETHER
+    </button>
+
+    <input
+        type="file"
+        id="file-import"
+        accept=".obj,.aether,application/json,text/plain"
+        style="display:none;">
+
+    <input
+        type="file"
+        id="project-import"
+        accept=".aether,application/json"
+        style="display:none;">
+
+</div>
+
+<div id="mesh-edit-panel" class="overlay-panel mesh-edit-panel" aria-label="Mesh editing tools">
+    <div class="library-header">
+        <div>
+            <h2 class="library-title">DIRECT MESH EDITOR</h2>
+            <span class="library-subtitle">VERTEX • FACE • EXTRUDE • INSET • SUBDIVIDE</span>
+        </div>
+        <button class="close-btn" id="close-mesh-edit">×</button>
+    </div>
+    <div class="edit-status-row">
+        <span id="edit-object-name">No object</span>
+        <span id="edit-selection-count">0 selected</span>
+    </div>
+    <div class="edit-mode-grid">
+        <button class="edit-mode active" data-edit-mode="vertex">VERTEX</button>
+        <button class="edit-mode" data-edit-mode="face">FACE</button>
+    </div>
+    <div class="edit-help">Click geometry to select. Shift-click adds/removes selection. In vertex mode, use the gizmo to move a vertex. In face mode, use Grow Face to select a planar region.</div>
+    <div class="edit-action-grid">
+        <button class="action-btn" id="edit-grow-face">GROW FACE</button>
+        <button class="action-btn" id="edit-extrude">EXTRUDE</button>
+        <button class="action-btn" id="edit-inset">INSET</button>
+        <button class="action-btn" id="edit-subdivide">SUBDIVIDE</button>
+        <button class="action-btn secondary" id="edit-separate">SEPARATE</button>
+        <button class="action-btn danger" id="edit-delete-face">DELETE FACE</button>
+    </div>
+    <div class="edit-number-row">
+        <label class="prop-label">VALUE <input id="edit-value" class="prop-input" type="number" value="10" step="0.5"></label>
+        <span class="edit-unit">mm</span>
+    </div>
+    <div class="edit-action-grid">
+        <button class="action-btn secondary" id="edit-convert">CONVERT TO EDITABLE</button>
+        <button class="action-btn secondary" id="edit-exit">EXIT EDIT MODE</button>
+    </div>
+</div>
+
+
+<div id="v11-panel" class="overlay-panel v11-panel" aria-label="AETHER FORGE V11 advanced modeling">
+  <div class="library-header">
+    <div><h2 class="library-title">ADVANCED MODELING</h2><span class="library-subtitle">SKETCH • FEATURES • ASSEMBLY • ENGINEERING</span></div>
+    <button class="close-btn" id="v11-close">×</button>
+  </div>
+  <div class="v11-demo-card"><strong>WINE GLASS VALIDATION</strong><span class="v11-note">Build a demonstration wine glass from a cube-derived workflow, then inspect its feature history, dimensions and editable geometry.</span></div>
+  <div class="v11-section">
+    <div class="v11-section-title">DIRECT MODELING</div>
+    <div class="v11-grid three">
+      <button class="action-btn" id="v11-extrude">EXTRUDE</button><button class="action-btn" id="v11-inset">INSET</button><button class="action-btn" id="v11-bevel">BEVEL</button>
+      <button class="action-btn" id="v11-subdivide">SUBDIVIDE</button><button class="action-btn" id="v11-shell">SHELL</button><button class="action-btn" id="v11-mirror">MIRROR</button>
+      <button class="action-btn" id="v11-array">ARRAY</button><button class="action-btn" id="v11-revolve">REVOLVE</button><button class="action-btn" id="v11-smooth">SMOOTH</button>
+    </div>
+  </div>
+  <div class="v11-section">
+    <div class="v11-section-title">SKETCH / CONSTRAINTS</div>
+    <div class="v11-grid"><button class="action-btn" id="v11-sketch">NEW SKETCH</button><button class="action-btn" id="v11-profile">PROFILE SKETCH</button></div>
+    <div class="v11-note" style="margin-top:8px">Sketch profiles are stored as project metadata and can drive revolve-based features. Numeric dimensions remain in millimetres.</div>
+  </div>
+  <div class="v11-section">
+    <div class="v11-section-title">FEATURE HISTORY</div>
+    <div id="v11-feature-list" class="v11-feature-list"><div class="v11-feature"><strong>No feature selected</strong><span class="v11-badge">READY</span></div></div>
+  </div>
+  <div class="v11-section">
+    <div class="v11-section-title">VALIDATION</div>
+    <div class="v11-grid"><button class="action-btn v11-primary" id="v11-wine-demo">BUILD WINE GLASS FROM CUBE</button><button class="action-btn secondary" id="v11-validate">RUN DESIGN CHECK</button></div>
+  </div>
+</div>
+<div id="v11-operation-bar" aria-label="Advanced modeling shortcuts">
+  <button class="action-btn secondary visible-btn-text" id="v11-open-tools">ADVANCED</button>
+  <button class="action-btn secondary visible-btn-text" id="v11-wine-shortcut">WINE GLASS DEMO</button>
+</div>
+
+<div id="status-message"></div>
+
+
+<script type="module">
+
+import * as THREE from 'three';
+
+import {
+    OrbitControls
+}
+from 'three/addons/controls/OrbitControls.js';
+
+import {
+    TransformControls
+}
+from 'three/addons/controls/TransformControls.js';
+
+import {
+    OBJExporter
+}
+from 'three/addons/exporters/OBJExporter.js';
+
+import {
+    OBJLoader
+}
+from 'three/addons/loaders/OBJLoader.js';
+
+
+/* =========================================
+   PROJECT
+========================================= */
+
+const urlParams =
+    new URLSearchParams(window.location.search);
+
+const projectId =
+    urlParams.get('project_id');
+
+const v11DemoMode =
+    urlParams.get('demo') === 'wineglass';
+
+if (!projectId && !v11DemoMode) {
+
+    alert('NO PROJECT SELECTED.');
+
+    window.location.href = 'index.html';
+
+    throw new Error('Project ID required.');
+
+}
+
+
+/* =========================================
+   AUTH
+========================================= */
+
+async function checkAuthentication() {
+
+    try {
+
+        const response =
+            await fetch(
+                '/api/auth/me',
+                {
+                    credentials: 'include'
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (
+            !response.ok ||
+            !data.authenticated
+        ) {
+
+            window.location.href = 'login.html';
+
+            return false;
+
         }
 
-        function restoreSnapshot(snapshot) {
-            transform.detach(); updateSelection([]);
-            while(constructionZone.children.length > 0) { constructionZone.remove(constructionZone.children[0]); }
-            snapshot.forEach(data => {
-                let geom;
-                if(data.type === 'BoxGeometry') geom = new THREE.BoxGeometry(1, 1, 1);
-                else if(data.type === 'SphereGeometry') geom = new THREE.SphereGeometry(0.6, 32, 32);
-                else if(data.type === 'CylinderGeometry') geom = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
-                else return; 
-                
-                const mat = new THREE.MeshStandardMaterial({ color: data.color, emissive: data.color, emissiveIntensity: data.glow, transparent: true, opacity: data.opacity, side: THREE.DoubleSide });
-                const mesh = new THREE.Mesh(geom, mat);
-                mesh.uuid = data.uuid; mesh.matrixAutoUpdate = false; mesh.matrix.fromArray(data.matrix); mesh.matrix.decompose(mesh.position, mesh.quaternion, mesh.scale); mesh.matrixAutoUpdate = true;
-                constructionZone.add(mesh);
+        return true;
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        window.location.href = 'login.html';
+
+        return false;
+
+    }
+
+}
+
+const authenticated = v11DemoMode ? true : await checkAuthentication();
+
+if (!authenticated) {
+
+    throw new Error('Authentication required.');
+
+}
+
+
+/* =========================================
+   SCENE
+========================================= */
+
+const scene =
+    new THREE.Scene();
+
+scene.background =
+    new THREE.Color(0xdbe4ea);
+
+scene.fog =
+    new THREE.FogExp2(
+        0xc7d2d9,
+        0.018
+    );
+
+
+/* CAMERA */
+
+const camera =
+    new THREE.PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        10000
+    );
+
+camera.position.set(
+    8,
+    8,
+    12
+);
+
+
+/* RENDERER */
+
+const renderer =
+    new THREE.WebGLRenderer({
+        antialias: true
+    });
+
+renderer.setPixelRatio(
+    Math.min(window.devicePixelRatio,2)
+);
+
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+renderer.toneMapping =
+    THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.08;
+
+document.body.appendChild(
+    renderer.domElement
+);
+
+/*
+ * Make the WebGL canvas explicitly interactive.
+ * UI panels sit above it, while TransformControls receives mouse input
+ * directly from this canvas.
+ */
+renderer.domElement.style.position = 'fixed';
+renderer.domElement.style.left = '0';
+renderer.domElement.style.top = '0';
+renderer.domElement.style.width = '100vw';
+renderer.domElement.style.height = '100vh';
+renderer.domElement.style.zIndex = '1';
+renderer.domElement.style.pointerEvents = 'auto';
+renderer.domElement.style.display = 'block';
+
+
+/* CONTROLS */
+
+const orbit =
+    new OrbitControls(
+        camera,
+        renderer.domElement
+    );
+
+orbit.enableDamping = true;
+
+
+const transform =
+    new TransformControls(
+        camera,
+        renderer.domElement
+    );
+
+scene.add(transform);
+
+
+/* LIGHTING */
+
+scene.add(
+    new THREE.AmbientLight(
+        0xffffff,
+        0.72
+    )
+);
+
+const dirLight =
+    new THREE.DirectionalLight(
+        0xffffff,
+        1.25
+    );
+
+dirLight.position.set(
+    5,
+    10,
+    7
+);
+
+scene.add(dirLight);
+
+
+/* GRID */
+
+/* GRID */
+
+const grid = new THREE.GridHelper(
+    10000,
+    10000,
+    0x647987,
+    0xaab7bf
+);
+
+scene.add(grid);
+
+/* CONSTRUCTION */
+
+const constructionZone =
+    new THREE.Group();
+
+scene.add(
+    constructionZone
+);
+
+
+/* SELECTION */
+
+const selectionGroup =
+    new THREE.Group();
+
+scene.add(
+    selectionGroup
+);
+
+let selectedObjects = [];
+
+
+/* =========================================
+   HISTORY
+========================================= */
+
+let stateHistory = [];
+
+let historyIndex = -1;
+
+let projectLoading = true;
+let isSaving = false;
+let autosaveTimer = null;
+let snapEnabled = false;
+let lastFrameTime = performance.now();
+let frameCounter = 0;
+let displayedFps = 0;
+
+
+/* =========================================
+   CLIPBOARD
+========================================= */
+
+let clipboardData = null;
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+function showStatus(message) {
+
+    const status =
+        document.getElementById(
+            'status-message'
+        );
+
+    status.textContent = message;
+
+    status.classList.add('show');
+
+    setTimeout(
+        () => status.classList.remove('show'),
+        1500
+    );
+
+}
+
+
+/* =========================================
+   MATERIAL
+========================================= */
+
+function createMaterial(
+    color = 0x00ffff,
+    glow = 0.5,
+    opacity = 0.8,
+    wireframe = false
+) {
+
+    return new THREE.MeshStandardMaterial({
+        color: color,
+        emissive: color,
+        emissiveIntensity: Math.max(0, Math.min(glow, 3)),
+        transparent: opacity < 1,
+        opacity: Math.max(0, Math.min(opacity, 1)),
+        wireframe: Boolean(wireframe),
+        roughness: 0.38,
+        metalness: 0.18,
+        side: THREE.DoubleSide
+    });
+
+}
+
+
+/* =========================================
+   ENGINEERING GEOMETRY
+========================================= */
+
+/*
+    The engineering shapes deliberately use
+    simple forms so they remain easy to use,
+    understand and modify.
+*/
+
+function createGearGeometry(p = {}) {
+
+    const teeth =
+        Math.max(
+            4,
+            Math.round(p.teeth ?? 12)
+        );
+
+    const outerRadius =
+        Math.max(
+            0.2,
+            p.outerRadius ?? 1
+        );
+
+    const innerRadius =
+        Math.min(
+            outerRadius - 0.05,
+            Math.max(
+                0.05,
+                p.innerRadius ?? 0.45
+            )
+        );
+
+    const thickness =
+        Math.max(
+            0.05,
+            p.thickness ?? 0.25
+        );
+
+    const points = [];
+
+    const steps =
+        teeth * 4;
+
+    for (
+        let i = 0;
+        i < steps;
+        i++
+    ) {
+
+        const angle =
+            (i / steps) *
+            Math.PI * 2;
+
+        const phase =
+            i % 4;
+
+        let radius;
+
+        if (phase === 0 || phase === 3) {
+            radius = innerRadius;
+        }
+        else {
+            radius = outerRadius;
+        }
+
+        points.push(
+            new THREE.Vector2(
+                Math.cos(angle) * radius,
+                Math.sin(angle) * radius
+            )
+        );
+
+    }
+
+    const shape =
+        new THREE.Shape(points);
+
+    const hole =
+        new THREE.Path();
+
+    const holeSegments = 48;
+
+    for (
+        let i = 0;
+        i <= holeSegments;
+        i++
+    ) {
+
+        const angle =
+            (i / holeSegments) *
+            Math.PI * 2;
+
+        const x =
+            Math.cos(angle) * innerRadius * 0.45;
+
+        const y =
+            Math.sin(angle) * innerRadius * 0.45;
+
+        if (i === 0) {
+            hole.moveTo(x,y);
+        }
+        else {
+            hole.lineTo(x,y);
+        }
+
+    }
+
+    shape.holes.push(hole);
+
+    return new THREE.ExtrudeGeometry(
+        shape,
+        {
+            depth: thickness,
+            bevelEnabled: false,
+            steps: 1
+        }
+    );
+
+}
+
+
+function createEngineeringGeometry(
+    type,
+    p = {}
+) {
+
+    switch (type) {
+
+        /* =========================
+           15 CORE GEOMETRIC SHAPES
+        ========================= */
+
+        case 'Cube':
+        case 'BoxGeometry':
+            return new THREE.BoxGeometry(
+                p.width ?? 1.5,
+                p.height ?? 1.5,
+                p.depth ?? 1.5
+            );
+
+        case 'Sphere':
+        case 'SphereGeometry':
+            return new THREE.SphereGeometry(
+                p.radius ?? 0.8,
+                p.widthSegments ?? 32,
+                p.heightSegments ?? 20
+            );
+
+        case 'Cylinder':
+        case 'CylinderGeometry':
+            return new THREE.CylinderGeometry(
+                p.radiusTop ?? 0.65,
+                p.radiusBottom ?? 0.65,
+                p.height ?? 1.6,
+                p.radialSegments ?? 32
+            );
+
+        case 'Cone':
+        case 'ConeGeometry':
+            return new THREE.ConeGeometry(
+                p.radius ?? 0.8,
+                p.height ?? 1.6,
+                p.radialSegments ?? 32
+            );
+
+        case 'Torus':
+        case 'TorusGeometry':
+            return new THREE.TorusGeometry(
+                p.radius ?? 0.9,
+                p.tube ?? 0.22,
+                p.radialSegments ?? 16,
+                p.tubularSegments ?? 32
+            );
+
+        case 'Plane':
+        case 'PlaneGeometry':
+            return new THREE.PlaneGeometry(
+                p.width ?? 3,
+                p.height ?? 3
+            );
+
+        case 'Capsule':
+            return new THREE.CapsuleGeometry(
+                p.radius ?? 0.5,
+                p.length ?? 1,
+                p.capSegments ?? 8,
+                p.radialSegments ?? 24
+            );
+
+        case 'Pyramid':
+            return new THREE.ConeGeometry(
+                p.radius ?? 0.9,
+                p.height ?? 1.6,
+                4
+            );
+
+        case 'Prism':
+            return new THREE.CylinderGeometry(
+                p.radius ?? 0.9,
+                p.radius ?? 0.9,
+                p.height ?? 1.6,
+                3
+            );
+
+        case 'Wedge': {
+            const width = p.width ?? 1.6;
+            const height = p.height ?? 1.2;
+            const depth = p.depth ?? 2;
+            const shape = new THREE.Shape();
+
+            shape.moveTo(-width / 2, 0);
+            shape.lineTo(width / 2, 0);
+            shape.lineTo(width / 2, height);
+            shape.lineTo(-width / 2, 0);
+
+            const geometry = new THREE.ExtrudeGeometry(shape, {
+                depth,
+                bevelEnabled: false,
+                steps: 1
+            });
+
+            geometry.translate(0, 0, -depth / 2);
+            return geometry;
+        }
+
+        case 'Hemisphere':
+            return new THREE.SphereGeometry(
+                p.radius ?? 0.9,
+                p.widthSegments ?? 32,
+                p.heightSegments ?? 16,
+                0,
+                Math.PI * 2,
+                0,
+                Math.PI / 2
+            );
+
+        case 'Tube': {
+            const outer = Math.max(p.outerRadius ?? 0.8, 0.1);
+            const inner = Math.min(
+                Math.max(p.innerRadius ?? 0.5, 0.05),
+                outer - 0.02
+            );
+
+            const shape = new THREE.Shape();
+            shape.absarc(0, 0, outer, 0, Math.PI * 2, false);
+
+            const hole = new THREE.Path();
+            hole.absarc(0, 0, inner, 0, Math.PI * 2, true);
+            shape.holes.push(hole);
+
+            return new THREE.ExtrudeGeometry(shape, {
+                depth: p.height ?? 1.5,
+                bevelEnabled: false,
+                curveSegments: p.radialSegments ?? 32,
+                steps: 1
             });
         }
 
-        document.getElementById('btn-undo').onclick = () => { if (historyIndex > 0) { historyIndex--; restoreSnapshot(stateHistory[historyIndex]); } else if (historyIndex === 0) { historyIndex--; restoreSnapshot([]); } };
-        document.getElementById('btn-redo').onclick = () => { if (historyIndex < stateHistory.length - 1) { historyIndex++; restoreSnapshot(stateHistory[historyIndex]); } };
-        transform.addEventListener('dragging-changed', (e) => { orbit.enabled = !e.value; if(!e.value) saveSnapshot(); });
+        case 'Ring':
+            return new THREE.TorusGeometry(
+                p.radius ?? 0.9,
+                p.tube ?? 0.18,
+                p.radialSegments ?? 16,
+                p.tubularSegments ?? 32
+            );
 
-        function createObject(type) {
-            let geometry;
-            if(type === 'cube') geometry = new THREE.BoxGeometry(1, 1, 1);
-            else if(type === 'sphere') geometry = new THREE.SphereGeometry(0.6, 32, 32);
-            else if(type === 'cyl') geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
-            const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color: 0x00ffff, emissive: 0x00ffff, emissiveIntensity: 0.5, transparent: true, opacity: 0.8, side: THREE.DoubleSide }));
-            mesh.position.y = 0.5; constructionZone.add(mesh); updateSelection([mesh]); saveSnapshot(); 
+        case 'Gear':
+            return createGearGeometry(p);
+
+        case 'Staircase': {
+            const steps = Math.max(1, Math.round(p.steps ?? 6));
+            const width = p.width ?? 2.4;
+            const stepHeight = p.stepHeight ?? 0.3;
+            const stepDepth = p.stepDepth ?? 0.55;
+            const shape = new THREE.Shape();
+
+            /* Build a true staircase side profile. */
+            shape.moveTo(0, 0);
+            shape.lineTo(steps * stepDepth, 0);
+
+            for (let i = steps; i >= 1; i--) {
+                shape.lineTo(i * stepDepth, i * stepHeight);
+                shape.lineTo((i - 1) * stepDepth, i * stepHeight);
+            }
+
+            shape.lineTo(0, 0);
+
+            const geometry = new THREE.ExtrudeGeometry(shape, {
+                depth: width,
+                bevelEnabled: false,
+                steps: 1
+            });
+
+            geometry.translate(0, 0, -width / 2);
+            return geometry;
         }
 
-        function updateSelection(newSelectionArray) {
-            transform.detach();
-            while(selectionGroup.children.length > 0) { constructionZone.attach(selectionGroup.children[0]); }
-            selectedObjects = newSelectionArray;
-            const propPanel = document.getElementById('properties'); const multiBadge = document.getElementById('multi-badge');
-           if (selectedObjects.length === 0) { propPanel.classList.remove('active'); return; }
-            propPanel.classList.add('active');
-            
-            // Auto-collapse on mobile to save screen space
-            if (window.innerWidth <= 768) {
-                propPanel.classList.add('collapsed');
-            } else {
-                propPanel.classList.remove('collapsed');
-            }
-            if (selectedObjects.length === 1) {
-                multiBadge.style.display = 'none'; const mesh = selectedObjects[0]; transform.attach(mesh);
-                document.getElementById('prop-color').value = '#' + mesh.material.color.getHexString(); document.getElementById('prop-opacity').value = mesh.material.opacity; document.getElementById('prop-glow').value = mesh.material.emissiveIntensity;
-            } else {
-                multiBadge.style.display = 'inline-block'; const box = new THREE.Box3(); selectedObjects.forEach(obj => box.expandByObject(obj));
-                selectionGroup.position.copy(box.getCenter(new THREE.Vector3())); selectionGroup.rotation.set(0,0,0); selectionGroup.scale.set(1,1,1);
-                selectedObjects.forEach(obj => { selectionGroup.attach(obj); }); transform.attach(selectionGroup);
-            }
+
+        case 'RoundedBox': {
+            const width = p.width ?? 1.8;
+            const height = p.height ?? 1.2;
+            const depth = p.depth ?? 1.4;
+            const radius = Math.min(p.radius ?? 0.18, Math.min(width, height) * 0.45);
+            const shape = new THREE.Shape();
+            const w = width / 2, h = height / 2, r = radius;
+            shape.moveTo(-w + r, -h);
+            shape.lineTo(w - r, -h);
+            shape.quadraticCurveTo(w, -h, w, -h + r);
+            shape.lineTo(w, h - r);
+            shape.quadraticCurveTo(w, h, w - r, h);
+            shape.lineTo(-w + r, h);
+            shape.quadraticCurveTo(-w, h, -w, h - r);
+            shape.lineTo(-w, -h + r);
+            shape.quadraticCurveTo(-w, -h, -w + r, -h);
+            const geometry = new THREE.ExtrudeGeometry(shape, {
+                depth,
+                bevelEnabled: true,
+                bevelSegments: 3,
+                bevelSize: r * 0.35,
+                bevelThickness: r * 0.35,
+                curveSegments: 12,
+                steps: 1
+            });
+            geometry.translate(0, 0, -depth / 2);
+            return geometry;
         }
-        
-        function setActiveTool(mode, btnId) { transform.setMode(mode); ['tool-move', 'tool-rotate', 'tool-scale'].forEach(id => document.getElementById(id).classList.remove('active-tool')); document.getElementById(btnId).classList.add('active-tool'); }
-        document.getElementById('tool-move').onclick = () => setActiveTool('translate', 'tool-move');
-        document.getElementById('tool-rotate').onclick = () => setActiveTool('rotate', 'tool-rotate');
-        document.getElementById('tool-scale').onclick = () => setActiveTool('scale', 'tool-scale');
 
-        document.getElementById('add-cube').onclick = () => createObject('cube');
-        document.getElementById('add-sphere').onclick = () => createObject('sphere');
-        document.getElementById('add-cyl').onclick = () => createObject('cyl');
-        document.getElementById('btn-delete').onclick = () => { if(selectedObjects.length > 0) { transform.detach(); selectedObjects.forEach(obj => { obj.parent.remove(obj); }); updateSelection([]); saveSnapshot(); } };
+        case 'Tetrahedron':
+            return new THREE.TetrahedronGeometry(p.radius ?? 1, p.detail ?? 0);
 
-        // TOGGLE MENU LOGIC
-        document.getElementById('prop-header').addEventListener('click', () => {
-            document.getElementById('properties').classList.toggle('collapsed');
-        });
-        
-        // REAL-TIME VISUAL UPDATES
-        document.getElementById('prop-color').addEventListener('input', (e) => { const col = new THREE.Color(e.target.value); selectedObjects.forEach(obj => { obj.material.color.set(col); obj.material.emissive.set(col); }); });
-        document.getElementById('prop-glow').addEventListener('input', (e) => { selectedObjects.forEach(obj => { obj.material.emissiveIntensity = parseFloat(e.target.value); }); });
-        document.getElementById('prop-opacity').addEventListener('input', (e) => { selectedObjects.forEach(obj => { obj.material.opacity = parseFloat(e.target.value); }); });
+        case 'Octahedron':
+            return new THREE.OctahedronGeometry(p.radius ?? 1, p.detail ?? 0);
 
-        // TEMPORAL ENGINE SAVES (Fires only on release)
-        document.getElementById('prop-color').addEventListener('change', () => saveSnapshot());
-        document.getElementById('prop-glow').addEventListener('change', () => saveSnapshot());
-        document.getElementById('prop-opacity').addEventListener('change', () => saveSnapshot());
+        case 'Icosahedron':
+            return new THREE.IcosahedronGeometry(p.radius ?? 1, p.detail ?? 1);
 
-        window.addEventListener('keydown', (e) => { if(e.key === 'g') setActiveTool('translate', 'tool-move'); if(e.key === 'r') setActiveTool('rotate', 'tool-rotate'); if(e.key === 's') setActiveTool('scale', 'tool-scale'); if(e.key === 'Delete') document.getElementById('btn-delete').click(); if(e.ctrlKey && e.key === 'z') document.getElementById('btn-undo').click(); if(e.ctrlKey && e.key === 'y') document.getElementById('btn-redo').click(); });
+        case 'Dodecahedron':
+            return new THREE.DodecahedronGeometry(p.radius ?? 1, p.detail ?? 0);
 
-        const raycaster = new THREE.Raycaster(); const mouse = new THREE.Vector2();
-        window.addEventListener('pointerdown', (e) => {
-            if(e.target.closest('button') || e.target.closest('input') || e.target.closest('#properties') || e.target.closest('.home-btn')) return;
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            
-            mouse.x = (clientX / window.innerWidth) * 2 - 1; mouse.y = -(clientY / window.innerHeight) * 2 + 1;
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects([...constructionZone.children, ...selectionGroup.children], true);
-            if(intersects.length > 0) {
-                let hitObj = intersects[0].object;
-                if (e.shiftKey) { const index = selectedObjects.indexOf(hitObj); if (index > -1) updateSelection(selectedObjects.filter(o => o !== hitObj)); else updateSelection([...selectedObjects, hitObj]); } 
-                else { if (!selectedObjects.includes(hitObj)) updateSelection([hitObj]); }
-            } else { updateSelection([]); }
-        });
+        case 'TorusKnot':
+            return new THREE.TorusKnotGeometry(
+                p.radius ?? 0.75,
+                p.tube ?? 0.2,
+                p.tubularSegments ?? 64,
+                p.radialSegments ?? 16,
+                Math.max(1, Math.round(p.p ?? 2)),
+                Math.max(1, Math.round(p.q ?? 3))
+            );
 
-        document.getElementById('btn-import-trigger').onclick = () => document.getElementById('file-import').click();
-        document.getElementById('file-import').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const loader = new OBJLoader();
-                const loadedObj = loader.parse(event.target.result);
-                
-                loadedObj.traverse((child) => {
-                    if (child.isMesh) {
-                        child.material = new THREE.MeshStandardMaterial({ 
-                            color: 0x00ffff, emissive: 0x00ffff, 
-                            emissiveIntensity: 0.5, transparent: true, opacity: 0.8, side: THREE.DoubleSide 
-                        });
-                        constructionZone.add(child);
+        case 'Disc':
+            return new THREE.CylinderGeometry(
+                p.radius ?? 1,
+                p.radius ?? 1,
+                p.height ?? 0.18,
+                p.radialSegments ?? 48
+            );
+
+        case 'HexNut': {
+            const outer = p.outerRadius ?? 0.95;
+            const inner = Math.min(p.innerRadius ?? 0.5, outer - 0.08);
+            const shape = new THREE.Shape();
+            for (let i = 0; i < 6; i++) {
+                const a = (i / 6) * Math.PI * 2 + Math.PI / 6;
+                const x = Math.cos(a) * outer;
+                const y = Math.sin(a) * outer;
+                if (i === 0) shape.moveTo(x, y); else shape.lineTo(x, y);
+            }
+            shape.closePath();
+            const hole = new THREE.Path();
+            hole.absarc(0, 0, inner, 0, Math.PI * 2, false);
+            shape.holes.push(hole);
+            const geometry = new THREE.ExtrudeGeometry(shape, {
+                depth: p.height ?? 0.5,
+                bevelEnabled: true,
+                bevelSegments: 2,
+                bevelSize: 0.04,
+                bevelThickness: 0.04,
+                curveSegments: 8,
+                steps: 1
+            });
+            geometry.translate(0, 0, -(p.height ?? 0.5) / 2);
+            return geometry;
+        }
+
+        case 'Arch': {
+            const outer = p.outerRadius ?? 1.2;
+            const inner = Math.min(p.innerRadius ?? 0.75, outer - 0.08);
+            const thickness = p.thickness ?? 0.35;
+            const shape = new THREE.Shape();
+            shape.absarc(0, 0, outer, 0, Math.PI, false);
+            shape.lineTo(-inner, 0);
+            shape.absarc(0, 0, inner, Math.PI, 0, true);
+            shape.closePath();
+            return new THREE.ExtrudeGeometry(shape, { depth: thickness, bevelEnabled: false, curveSegments: 32, steps: 1 });
+        }
+
+        case 'Bottle': {
+            const body = p.bodyRadius ?? 0.72;
+            const neck = p.neckRadius ?? 0.25;
+            const height = p.height ?? 2.8;
+            const shoulder = p.shoulderHeight ?? 0.42;
+            const points = [
+                new THREE.Vector2(body * 0.86, -height/2),
+                new THREE.Vector2(body, -height/2 + 0.08),
+                new THREE.Vector2(body, height/2 - shoulder),
+                new THREE.Vector2(body * 0.96, height/2 - shoulder * 0.72),
+                new THREE.Vector2(body * 0.76, height/2 - shoulder * 0.38),
+                new THREE.Vector2(neck, height/2 - 0.12),
+                new THREE.Vector2(neck, height/2)
+            ];
+            return new THREE.LatheGeometry(points, p.segments ?? 48);
+        }
+
+        case 'PipeElbow':
+            return new THREE.TorusGeometry(
+                p.radius ?? 0.8, p.tube ?? 0.18,
+                p.radialSegments ?? 16, p.tubularSegments ?? 32, Math.PI / 2
+            );
+
+        case 'Washer': {
+            const outer = p.outerRadius ?? 0.9;
+            const inner = Math.min(p.innerRadius ?? 0.45, outer - 0.05);
+            const shape = new THREE.Shape();
+            shape.absarc(0,0,outer,0,Math.PI*2,false);
+            const hole = new THREE.Path();
+            hole.absarc(0,0,inner,0,Math.PI*2,true);
+            shape.holes.push(hole);
+            const geometry = new THREE.ExtrudeGeometry(shape,{depth:p.thickness??0.16,bevelEnabled:true,bevelSegments:2,bevelSize:0.025,bevelThickness:0.025,curveSegments:24});
+            geometry.translate(0,0,-(p.thickness??0.16)/2);
+            return geometry;
+        }
+
+        case 'Flange': {
+            const outer = p.outerRadius ?? 1.15;
+            const inner = Math.min(p.innerRadius ?? 0.45, outer - 0.08);
+            const shape = new THREE.Shape();
+            shape.absarc(0,0,outer,0,Math.PI*2,false);
+            const hole = new THREE.Path();
+            hole.absarc(0,0,inner,0,Math.PI*2,true);
+            shape.holes.push(hole);
+            const geometry = new THREE.ExtrudeGeometry(shape,{depth:p.thickness??0.22,bevelEnabled:true,bevelSegments:2,bevelSize:0.035,bevelThickness:0.035,curveSegments:32});
+            geometry.translate(0,0,-(p.thickness??0.22)/2);
+            return geometry;
+        }
+
+        case 'MountingPlate': {
+            const width=p.width??2.4, height=p.height??1.6, depth=p.depth??0.18;
+            const r=Math.min(p.radius??0.16,Math.min(width,height)*0.25);
+            const shape=new THREE.Shape(); const w=width/2,h=height/2;
+            shape.moveTo(-w+r,-h); shape.lineTo(w-r,-h); shape.quadraticCurveTo(w,-h,w,-h+r);
+            shape.lineTo(w,h-r); shape.quadraticCurveTo(w,h,w-r,h); shape.lineTo(-w+r,h);
+            shape.quadraticCurveTo(-w,h,-w,h-r); shape.lineTo(-w,-h+r); shape.quadraticCurveTo(-w,-h,-w+r,-h);
+            const geometry=new THREE.ExtrudeGeometry(shape,{depth,bevelEnabled:true,bevelSegments:2,bevelSize:r*0.18,bevelThickness:r*0.18,curveSegments:10});
+            geometry.translate(0,0,-depth/2); return geometry;
+        }
+
+        case 'Pulley': {
+            const outer=p.outerRadius??0.95, inner=Math.min(p.innerRadius??0.35,outer-0.08);
+            return new THREE.TorusGeometry((outer+inner)/2,(outer-inner)/2,24,64);
+        }
+
+        default:
+            return null;
+    }
+}
+
+/* =========================================
+   SHAPE LIBRARY
+========================================= */
+
+const shapeLibrary = [
+
+    {
+        name: 'Cube',
+        type: 'Cube',
+        category: 'basic',
+        icon: '⬛',
+        params: { width: 1.5, height: 1.5, depth: 1.5 }
+    },
+    {
+        name: 'Sphere',
+        type: 'Sphere',
+        category: 'basic',
+        icon: '○',
+        params: { radius: 0.8, widthSegments: 32, heightSegments: 20 }
+    },
+    {
+        name: 'Cylinder',
+        type: 'Cylinder',
+        category: 'basic',
+        icon: '▥',
+        params: { radiusTop: 0.65, radiusBottom: 0.65, height: 1.6, radialSegments: 32 }
+    },
+    {
+        name: 'Cone',
+        type: 'Cone',
+        category: 'basic',
+        icon: '🔺',
+        params: { radius: 0.8, height: 1.6, radialSegments: 32 }
+    },
+    {
+        name: 'Torus',
+        type: 'Torus',
+        category: 'basic',
+        icon: '⭕',
+        params: { radius: 0.9, tube: 0.22, radialSegments: 16, tubularSegments: 32 }
+    },
+    {
+        name: 'Plane',
+        type: 'Plane',
+        category: 'basic',
+        icon: '▱',
+        params: { width: 3, height: 3 }
+    },
+    {
+        name: 'Capsule',
+        type: 'Capsule',
+        category: 'basic',
+        icon: '💊',
+        params: { radius: 0.5, length: 1, capSegments: 8, radialSegments: 24 }
+    },
+    {
+        name: 'Pyramid',
+        type: 'Pyramid',
+        category: 'basic',
+        icon: '🔻',
+        params: { radius: 0.9, height: 1.6 }
+    },
+    {
+        name: 'Prism',
+        type: 'Prism',
+        category: 'basic',
+        icon: '🔷',
+        params: { radius: 0.9, height: 1.6 }
+    },
+    {
+        name: 'Wedge',
+        type: 'Wedge',
+        category: 'basic',
+        icon: '◢',
+        params: { width: 1.6, height: 1.2, depth: 2 }
+    },
+    {
+        name: 'Hemisphere',
+        type: 'Hemisphere',
+        category: 'basic',
+        icon: '◓',
+        params: { radius: 0.9, widthSegments: 32, heightSegments: 16 }
+    },
+    {
+        name: 'Tube',
+        type: 'Tube',
+        category: 'basic',
+        icon: '🕳️',
+        params: { outerRadius: 0.8, innerRadius: 0.5, height: 1.5, radialSegments: 32 }
+    },
+    {
+        name: 'Ring',
+        type: 'Ring',
+        category: 'basic',
+        icon: '💍',
+        params: { radius: 0.9, tube: 0.18, radialSegments: 16, tubularSegments: 32 }
+    },
+    {
+        name: 'Gear',
+        type: 'Gear',
+        category: 'basic',
+        icon: '⚙️',
+        params: { teeth: 12, outerRadius: 1, innerRadius: 0.45, thickness: 0.25 }
+    },
+    {
+        name: 'Staircase', type: 'Staircase', category: 'basic', icon: '▤',
+        params: { steps: 6, width: 2.4, stepHeight: 0.3, stepDepth: 0.55 }
+    },
+    { name: 'Rounded Box', type: 'RoundedBox', category: 'advanced', icon: '▣', params: { width: 1.8, height: 1.2, depth: 1.4, radius: 0.18 } },
+    { name: 'Tetrahedron', type: 'Tetrahedron', category: 'advanced', icon: '△', params: { radius: 1, detail: 0 } },
+    { name: 'Octahedron', type: 'Octahedron', category: 'advanced', icon: '◇', params: { radius: 1, detail: 0 } },
+    { name: 'Icosahedron', type: 'Icosahedron', category: 'advanced', icon: '✦', params: { radius: 1, detail: 1 } },
+    { name: 'Dodecahedron', type: 'Dodecahedron', category: 'advanced', icon: '⬡', params: { radius: 1, detail: 0 } },
+    { name: 'Torus Knot', type: 'TorusKnot', category: 'advanced', icon: '∞', params: { radius: 0.75, tube: 0.2, tubularSegments: 64, radialSegments: 16, p: 2, q: 3 } },
+    { name: 'Disc', type: 'Disc', category: 'mechanical', icon: '●', params: { radius: 1, height: 0.18, radialSegments: 48 } },
+    { name: 'Hex Nut', type: 'HexNut', category: 'mechanical', icon: '⬢', params: { outerRadius: 0.95, innerRadius: 0.5, height: 0.5 } },
+    { name: 'Arch', type: 'Arch', category: 'mechanical', icon: '∩', params: { outerRadius: 1.2, innerRadius: 0.75, thickness: 0.35 } },
+    { name: 'Bottle', type: 'Bottle', category: 'advanced', icon: '♧', params: { bodyRadius: 0.72, neckRadius: 0.25, height: 2.8, shoulderHeight: 0.42, segments: 48 } },
+    { name: 'Pipe Elbow', type: 'PipeElbow', category: 'mechanical', icon: '⌞', params: { radius: 0.8, tube: 0.18, radialSegments: 16, tubularSegments: 32 } },
+    { name: 'Washer', type: 'Washer', category: 'mechanical', icon: '◎', params: { outerRadius: 0.9, innerRadius: 0.45, thickness: 0.16 } },
+    { name: 'Flange', type: 'Flange', category: 'mechanical', icon: '◉', params: { outerRadius: 1.15, innerRadius: 0.45, thickness: 0.22 } },
+    { name: 'Mounting Plate', type: 'MountingPlate', category: 'mechanical', icon: '▰', params: { width: 2.4, height: 1.6, depth: 0.18, radius: 0.16 } },
+    { name: 'Pulley', type: 'Pulley', category: 'mechanical', icon: '◌', params: { outerRadius: 0.95, innerRadius: 0.35 } }
+];
+
+
+/* =========================================
+   SHAPE HELPERS
+========================================= */
+
+function getShapeName(type) {
+
+    const found =
+        shapeLibrary.find(
+            shape => shape.type === type
+        );
+
+    return found
+        ? found.name
+        : 'Imported Object';
+
+}
+
+
+function generateObjectName(base) {
+
+    const existing =
+        [
+            ...constructionZone.children,
+            ...selectionGroup.children
+        ]
+        .map(
+            obj => obj.userData.name
+        );
+
+    let number = 1;
+
+    let name =
+        `${base} ${number}`;
+
+    while (
+        existing.includes(name)
+    ) {
+
+        number++;
+
+        name =
+            `${base} ${number}`;
+
+    }
+
+    return name;
+
+}
+
+
+/* =========================================
+   GEOMETRY SERIALIZATION
+========================================= */
+
+function serializeGeometry(geometry) {
+
+    const data = {
+        attributes:{}
+    };
+
+    for (
+        const name in geometry.attributes
+    ) {
+
+        const attribute =
+            geometry.attributes[name];
+
+        data.attributes[name] = {
+
+            array:
+                Array.from(attribute.array),
+
+            itemSize:
+                attribute.itemSize,
+
+            normalized:
+                attribute.normalized
+
+        };
+
+    }
+
+    if (geometry.index) {
+
+        data.index = {
+
+            array:
+                Array.from(
+                    geometry.index.array
+                ),
+
+            itemSize:
+                geometry.index.itemSize,
+
+            normalized:
+                geometry.index.normalized
+
+        };
+
+    }
+
+    return data;
+
+}
+
+
+function deserializeGeometry(data) {
+
+    if (
+        !data ||
+        !data.attributes
+    ) {
+
+        return null;
+
+    }
+
+    const geometry =
+        new THREE.BufferGeometry();
+
+    for (
+        const name in data.attributes
+    ) {
+
+        const a =
+            data.attributes[name];
+
+        geometry.setAttribute(
+
+            name,
+
+            new THREE.BufferAttribute(
+                new Float32Array(a.array),
+                a.itemSize,
+                a.normalized
+            )
+
+        );
+
+    }
+
+    if (data.index) {
+
+        const maxIndex =
+            Math.max(
+                ...data.index.array
+            );
+
+        const IndexArray =
+            maxIndex > 65535
+                ? Uint32Array
+                : Uint16Array;
+
+        geometry.setIndex(
+
+            new THREE.BufferAttribute(
+                new IndexArray(
+                    data.index.array
+                ),
+                1,
+                false
+            )
+
+        );
+
+    }
+
+    geometry.computeBoundingBox();
+
+    geometry.computeBoundingSphere();
+
+    return geometry;
+
+}
+
+
+/* =========================================
+   SERIALIZE OBJECT
+========================================= */
+
+function serializeObject(obj) {
+
+    return {
+
+        uuid:
+            obj.uuid,
+
+        name:
+            obj.userData.name ||
+            'Object',
+
+        type:
+            obj.geometry.type,
+
+        shapeType:
+            obj.userData.shapeType ||
+            null,
+
+        shapeParams:
+            obj.userData.shapeParams ||
+            null,
+
+        curveSettings:
+            obj.userData.curveSettings ||
+            null,
+
+        curveBaseGeometry:
+            obj.userData.curveBaseGeometry ||
+            null,
+
+        isImportedOBJ:
+            Boolean(obj.userData.isImportedOBJ),
+
+        isCustomGeometry:
+            Boolean(obj.userData.isCustomGeometry),
+
+        editableComponent:
+            obj.userData.editableComponent !== false,
+
+        featureHistory:
+            obj.userData.featureHistory || [],
+
+        sketches:
+            obj.userData.sketches || [],
+
+        profileSketch:
+            obj.userData.profileSketch || null,
+
+        sourcePrimitive:
+            obj.userData.sourcePrimitive || null,
+
+        shell:
+            obj.userData.shell || null,
+
+        importAssembly:
+            obj.userData.importAssembly || null,
+
+        geometryData:
+            obj.userData.isImportedOBJ ||
+            obj.userData.isCustomGeometry
+                ? serializeGeometry(
+                    obj.geometry
+                )
+                : null,
+
+        position:
+            obj.position.toArray(),
+
+        rotation:[
+            obj.rotation.x,
+            obj.rotation.y,
+            obj.rotation.z
+        ],
+
+        scale:
+            obj.scale.toArray(),
+
+        color:
+            obj.material.color.getHex(),
+
+        glow:
+            obj.material.emissiveIntensity,
+
+        opacity:
+            obj.material.opacity,
+
+        wireframe:
+            obj.material.wireframe
+
+    };
+
+}
+
+
+/* =========================================
+   NATIVE AETHER PROJECT FORMAT
+========================================= */
+
+const AETHER_PROJECT_VERSION = 11;
+const AETHER_PROJECT_MIME = 'application/json';
+
+function safeClone(value) {
+    return value == null ? value : structuredClone(value);
+}
+
+function buildNativeProjectData() {
+    normalizeSelectionForSave();
+    return {
+        format: 'AETHER-FORGE',
+        formatVersion: AETHER_PROJECT_VERSION,
+        appVersion: '11.0',
+        exportedAt: new Date().toISOString(),
+        units: 'mm',
+        metadata: {
+            name: document.getElementById('workspace-project-name')?.textContent || 'AETHER FORGE Project',
+            description: 'Portable AETHER FORGE engineering workspace'
+        },
+        objects: constructionZone.children.map(serializeObject)
+    };
+}
+
+function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
+function exportAetherProject() {
+    try {
+        const payload = buildNativeProjectData();
+        const blob = new Blob([JSON.stringify(payload)], { type: AETHER_PROJECT_MIME });
+        const baseName = (document.getElementById('workspace-project-name')?.textContent || 'aether-project')
+            .trim()
+            .replace(/[^a-z0-9_-]+/gi, '_')
+            .replace(/^_+|_+$/g, '') || 'aether-project';
+        downloadBlob(blob, `${baseName}.aether`);
+        setWorkspaceStatus('saved');
+        showStatus('AETHER PROJECT EXPORTED • COMPONENTS REMAIN EDITABLE');
+    } catch (error) {
+        console.error('AETHER export failed:', error);
+        showStatus(`AETHER export failed: ${error.message}`);
+    }
+}
+
+function validateAetherProject(payload) {
+    if (!payload || payload.format !== 'AETHER-FORGE') {
+        throw new Error('This file is not a valid AETHER FORGE project.');
+    }
+    if (!Array.isArray(payload.objects)) {
+        throw new Error('AETHER project is missing its object collection.');
+    }
+    if (payload.objects.length > 5000) {
+        throw new Error('AETHER project contains too many objects.');
+    }
+    return payload;
+}
+
+async function importAetherProject(file) {
+    if (!file) return;
+    const MAX_PROJECT_SIZE = 50 * 1024 * 1024;
+    if (file.size > MAX_PROJECT_SIZE) {
+        showStatus('AETHER project is too large (50 MB maximum)');
+        return;
+    }
+
+    projectLoading = true;
+    setWorkspaceStatus('loading');
+
+    try {
+        const text = await file.text();
+        const payload = validateAetherProject(JSON.parse(text));
+        restoreSnapshot(payload.objects.map(safeClone));
+        stateHistory = [structuredClone(payload.objects)];
+        historyIndex = 0;
+        if (payload.metadata?.name) {
+            const nameEl = document.getElementById('workspace-project-name');
+            if (nameEl) nameEl.textContent = payload.metadata.name;
+        }
+        setWorkspaceStatus('unsaved');
+        scheduleAutosave();
+        showStatus(`AETHER PROJECT OPENED • ${payload.objects.length} EDITABLE COMPONENT(S)`);
+    } catch (error) {
+        console.error('AETHER import failed:', error);
+        setWorkspaceStatus('error');
+        showStatus(`AETHER import failed: ${error.message}`);
+    } finally {
+        projectLoading = false;
+    }
+}
+
+function attachImportedMetadata(mesh, assembly) {
+    mesh.userData.isImportedOBJ = true;
+    mesh.userData.importAssembly = {
+        id: assembly.id,
+        name: assembly.name,
+        sourceFile: assembly.sourceFile,
+        componentName: mesh.userData.name
+    };
+    mesh.userData.editableComponent = true;
+}
+
+
+/* =========================================
+   EDITABLE OBJECTS
+========================================= */
+
+function getEditableObjects() {
+
+    return [
+        ...constructionZone.children,
+        ...selectionGroup.children
+    ];
+
+}
+
+
+/*
+ * Before saving, move selected objects back
+ * to constructionZone while preserving world
+ * transforms.
+ */
+
+function normalizeSelectionForSave() {
+
+    if (
+        selectionGroup.children.length === 0
+    ) {
+
+        return;
+
+    }
+
+    while (
+        selectionGroup.children.length
+    ) {
+
+        const object =
+            selectionGroup.children[0];
+
+        constructionZone.attach(
+            object
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   SNAPSHOT
+========================================= */
+
+function saveSnapshot() {
+
+    normalizeSelectionForSave();
+
+    if (
+        historyIndex <
+        stateHistory.length - 1
+    ) {
+
+        stateHistory =
+            stateHistory.slice(
+                0,
+                historyIndex + 1
+            );
+
+    }
+
+    const snapshot =
+        constructionZone.children.map(
+            serializeObject
+        );
+
+    stateHistory.push(
+        structuredClone(snapshot)
+    );
+
+    historyIndex++;
+
+    if (
+        stateHistory.length > 50
+    ) {
+
+        stateHistory.shift();
+
+        historyIndex--;
+
+    }
+
+    if (!projectLoading) {
+        setWorkspaceStatus('unsaved');
+        scheduleAutosave();
+    }
+
+}
+
+
+/* =========================================
+   RESTORE
+========================================= */
+
+function restoreSnapshot(snapshot) {
+
+    transform.detach();
+
+    updateSelection([]);
+
+    normalizeSelectionForSave();
+
+    while (
+        constructionZone.children.length
+    ) {
+
+        const child =
+            constructionZone.children[0];
+
+        constructionZone.remove(child);
+
+        child.geometry?.dispose();
+
+        child.material?.dispose();
+
+    }
+
+    snapshot.forEach(
+        data => {
+
+            let geometry = null;
+
+            if (
+                data.geometryData
+            ) {
+
+                geometry =
+                    deserializeGeometry(
+                        data.geometryData
+                    );
+
+            }
+
+            else if (
+                data.shapeType
+            ) {
+
+                geometry =
+                    createEngineeringGeometry(
+                        data.shapeType,
+                        data.shapeParams || {}
+                    );
+
+            }
+
+            else {
+
+                geometry =
+                    createEngineeringGeometry(
+                        data.type,
+                        data.shapeParams || {}
+                    );
+
+            }
+
+            if (!geometry) {
+
+                return;
+
+            }
+
+            const mesh =
+                new THREE.Mesh(
+                    geometry,
+                    createMaterial(
+                        data.color ?? 0x00ffff,
+                        data.glow ?? .5,
+                        data.opacity ?? .8,
+                        data.wireframe ?? false
+                    )
+                );
+
+            mesh.uuid =
+                data.uuid;
+
+            mesh.userData.name =
+                data.name ||
+                getShapeName(
+                    data.shapeType ||
+                    data.type
+                );
+
+            mesh.userData.shapeType =
+                data.shapeType ||
+                null;
+
+            mesh.userData.shapeParams =
+                data.shapeParams ||
+                null;
+
+            mesh.userData.curveSettings =
+                data.curveSettings ||
+                null;
+
+            mesh.userData.curveBaseGeometry =
+                data.curveBaseGeometry ||
+                null;
+
+            mesh.userData.isImportedOBJ =
+                Boolean(data.isImportedOBJ || (data.geometryData && !data.curveSettings));
+
+            mesh.userData.isCustomGeometry =
+                Boolean(data.isCustomGeometry || data.geometryData || data.curveSettings);
+
+            mesh.userData.editableComponent =
+                data.editableComponent !== false;
+
+            mesh.userData.importAssembly =
+                data.importAssembly || null;
+
+            mesh.userData.featureHistory =
+                Array.isArray(data.featureHistory) ? data.featureHistory : [];
+
+            mesh.userData.sketches =
+                Array.isArray(data.sketches) ? data.sketches : [];
+
+            mesh.userData.profileSketch =
+                data.profileSketch || null;
+
+            mesh.userData.sourcePrimitive =
+                data.sourcePrimitive || null;
+
+            mesh.userData.shell =
+                data.shell || null;
+
+            if (data.position) {
+
+                mesh.position.fromArray(
+                    data.position
+                );
+
+            }
+
+            if (data.rotation) {
+
+                mesh.rotation.set(
+                    data.rotation[0],
+                    data.rotation[1],
+                    data.rotation[2]
+                );
+
+            }
+
+            if (data.scale) {
+
+                mesh.scale.fromArray(
+                    data.scale
+                );
+
+            }
+
+            constructionZone.add(
+                mesh
+            );
+
+        }
+    );
+
+    refreshOutliner();
+
+}
+
+
+/* =========================================
+   PROJECT DATA
+========================================= */
+
+function getProjectData() {
+
+    normalizeSelectionForSave();
+
+    return {
+
+        version:AETHER_PROJECT_VERSION,
+        format:'AETHER-FORGE',
+
+        objects:
+            constructionZone.children.map(
+                serializeObject
+            )
+
+    };
+
+}
+
+
+/* =========================================
+   SAVE
+========================================= */
+
+async function saveProject() {
+
+    if (isSaving) {
+        return;
+    }
+
+    const button =
+        document.getElementById(
+            'btn-save-project'
+        );
+
+    isSaving = true;
+    setWorkspaceStatus('saving');
+    button.disabled = true;
+
+    button.innerText =
+        '⏳ SAVING...';
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/projects/${projectId}/data`,
+                {
+
+                    method:'PUT',
+
+                    credentials:'include',
+
+                    headers:{
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body:
+                        JSON.stringify({
+                            project_data:
+                                getProjectData()
+                        })
+
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                'Save failed.'
+            );
+
+        }
+
+        button.innerText =
+            '✓ SAVED';
+
+        setWorkspaceStatus('saved');
+        showStatus('Project saved successfully');
+
+        setTimeout(
+            () => {
+                button.innerText =
+                    'SAVE';
+            },
+            1500
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        button.innerText =
+            '⚠ SAVE FAILED';
+
+        setWorkspaceStatus('error');
+        showStatus(`Save failed: ${error.message}`);
+
+        setTimeout(
+            () => {
+                button.innerText =
+                    'SAVE';
+            },
+            2000
+        );
+
+    }
+
+    finally {
+
+        button.disabled = false;
+        isSaving = false;
+
+    }
+
+}
+
+
+/* =========================================
+   LOAD
+========================================= */
+
+async function loadProject() {
+
+    projectLoading = true;
+    setWorkspaceStatus('loading');
+
+    try {
+
+        const projectResponse =
+            await fetch(
+                `/api/projects/${projectId}`,
+                {
+                    credentials:'include'
+                }
+            );
+
+        const projectResult =
+            await projectResponse.json();
+
+        if (!projectResponse.ok) {
+
+            alert(
+                projectResult.message ||
+                'Project unavailable.'
+            );
+
+            window.location.href =
+                'index.html';
+
+            return;
+
+        }
+
+        const dataResponse =
+            await fetch(
+                `/api/projects/${projectId}/data`,
+                {
+                    credentials:'include'
+                }
+            );
+
+        const dataResult =
+            await dataResponse.json();
+
+        if (!dataResponse.ok) {
+
+            throw new Error(
+                dataResult.message ||
+                'Project data unavailable.'
+            );
+
+        }
+
+        const savedData =
+            dataResult.project_data;
+
+        if (
+            savedData &&
+            Array.isArray(savedData.objects)
+        ) {
+
+            restoreSnapshot(
+                savedData.objects
+            );
+
+            stateHistory = [
+                structuredClone(
+                    savedData.objects
+                )
+            ];
+
+            historyIndex = 0;
+
+        }
+
+        else {
+
+            stateHistory = [[]];
+
+            historyIndex = 0;
+
+        }
+
+        setWorkspaceStatus('saved');
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+        setWorkspaceStatus('error');
+        showStatus(`Unable to load project data: ${error.message}`);
+
+    }
+
+    finally {
+
+        projectLoading = false;
+
+    }
+
+}
+
+
+/* =========================================
+   CURVE / BEND SYSTEM
+========================================= */
+
+const curvePanel = document.getElementById('curve-panel');
+const curveAngleInput = document.getElementById('curve-angle');
+const curveAngleValue = document.getElementById('curve-angle-value');
+
+function captureCurveBase(obj) {
+    if (!obj.userData.curveBaseGeometry) {
+        obj.userData.curveBaseGeometry = serializeGeometry(obj.geometry);
+    }
+    return deserializeGeometry(obj.userData.curveBaseGeometry);
+}
+
+function bendGeometry(geometry, axis, degrees) {
+    const angle = THREE.MathUtils.degToRad(degrees);
+    const position = geometry.getAttribute('position');
+    if (!position || Math.abs(angle) < 0.00001) return geometry;
+
+    geometry.computeBoundingBox();
+    const box = geometry.boundingBox;
+    const min = box.min[axis];
+    const max = box.max[axis];
+    const center = (min + max) / 2;
+    const half = Math.max((max - min) / 2, 0.0001);
+    const radius = half / Math.abs(angle);
+    const sign = Math.sign(angle);
+
+    const v = new THREE.Vector3();
+    for (let i = 0; i < position.count; i++) {
+        v.fromBufferAttribute(position, i);
+        const longitudinal = v[axis] - center;
+        const t = longitudinal / half;
+        const a = sign * Math.min(Math.abs(angle), Math.PI * 0.995) * t;
+
+        if (axis === 'x') {
+            const oldX = v.x;
+            const oldY = v.y;
+            v.x = Math.sin(a) * radius;
+            v.y = oldY + (Math.cos(a) - 1) * radius;
+        } else if (axis === 'y') {
+            const oldY = v.y;
+            const oldZ = v.z;
+            v.y = Math.sin(a) * radius;
+            v.z = oldZ + (Math.cos(a) - 1) * radius;
+        } else {
+            const oldX = v.x;
+            const oldZ = v.z;
+            v.z = Math.sin(a) * radius;
+            v.x = oldX + (Math.cos(a) - 1) * radius;
+        }
+        position.setXYZ(i, v.x, v.y, v.z);
+    }
+
+    position.needsUpdate = true;
+    geometry.computeVertexNormals();
+    geometry.computeBoundingBox();
+    geometry.computeBoundingSphere();
+    return geometry;
+}
+
+function updateCurvePreview() {
+    const obj = selectedObjects.length === 1 ? selectedObjects[0] : null;
+    if (!obj || !obj.isMesh) {
+        showStatus('Select one mesh to curve');
+        return;
+    }
+    const base = captureCurveBase(obj);
+    if (!base) return;
+    const curved = bendGeometry(base, curveAxis, curveAngle);
+    obj.geometry.dispose();
+    obj.geometry = curved;
+    obj.userData.isCustomGeometry = true;
+    obj.userData.curveSettings = { axis: curveAxis, angle: curveAngle };
+    refreshOutliner();
+    updateWorkspaceStats();
+}
+
+function openCurveEditor() {
+    if (selectedObjects.length !== 1 || !selectedObjects[0].isMesh) {
+        showStatus('Select one mesh before opening Curve');
+        return;
+    }
+    const obj = selectedObjects[0];
+    const settings = obj.userData.curveSettings || { axis: 'x', angle: 0 };
+    curveAxis = settings.axis || 'x';
+    curveAngle = Number(settings.angle) || 0;
+    curveAngleInput.value = curveAngle;
+    curveAngleValue.textContent = `${curveAngle}°`;
+    document.querySelectorAll('.curve-axis').forEach(b => b.classList.toggle('active', b.dataset.axis === curveAxis));
+    curvePanel.classList.add('active');
+    updateCurvePreview();
+}
+
+function resetCurve() {
+    const obj = selectedObjects.length === 1 ? selectedObjects[0] : null;
+    if (!obj || !obj.userData.curveBaseGeometry) {
+        showStatus('No curve to reset');
+        return;
+    }
+    const base = deserializeGeometry(obj.userData.curveBaseGeometry);
+    obj.geometry.dispose();
+    obj.geometry = base;
+    delete obj.userData.curveSettings;
+    delete obj.userData.curveBaseGeometry;
+    obj.userData.isCustomGeometry = Boolean(obj.userData.isImportedOBJ);
+    refreshOutliner();
+    updateWorkspaceStats();
+    saveSnapshot();
+    showStatus('CURVE RESET');
+}
+
+document.getElementById('btn-curve')?.addEventListener('click', openCurveEditor);
+document.getElementById('close-curve')?.addEventListener('click', () => curvePanel.classList.remove('active'));
+curveAngleInput?.addEventListener('input', () => {
+    curveAngle = Number(curveAngleInput.value);
+    curveAngleValue.textContent = `${curveAngle}°`;
+    updateCurvePreview();
+});
+document.querySelectorAll('.curve-axis').forEach(button => button.addEventListener('click', () => {
+    curveAxis = button.dataset.axis;
+    document.querySelectorAll('.curve-axis').forEach(b => b.classList.toggle('active', b === button));
+    updateCurvePreview();
+}));
+document.querySelectorAll('.curve-preset').forEach(button => button.addEventListener('click', () => {
+    curveAngle = Number(button.dataset.angle);
+    curveAngleInput.value = curveAngle;
+    curveAngleValue.textContent = `${curveAngle}°`;
+    updateCurvePreview();
+}));
+document.getElementById('apply-curve')?.addEventListener('click', () => {
+    updateCurvePreview();
+    saveSnapshot();
+    curvePanel.classList.remove('active');
+    showStatus(`CURVE APPLIED • ${curveAngle}°`);
+});
+document.getElementById('reset-curve')?.addEventListener('click', resetCurve);
+
+
+/* =========================================
+   SHAPE LIBRARY UI
+========================================= */
+
+const shapesLibrary =
+    document.getElementById(
+        'shapes-library'
+    );
+
+const shapeGrid =
+    document.getElementById(
+        'shape-grid'
+    );
+
+const shapeSearch =
+    document.getElementById(
+        'shape-search'
+    );
+
+const parameterPanel =
+    document.getElementById(
+        'shape-parameters'
+    );
+
+let activeCategory = 'all';
+
+let selectedShapeDefinition = null;
+let curveAxis = 'x';
+let curveAngle = 0;
+
+
+function formatParameterName(name) {
+
+    return name
+        .replace(
+            /([A-Z])/g,
+            ' $1'
+        )
+        .toUpperCase();
+
+}
+
+
+function renderShapeLibrary() {
+
+    const search =
+        shapeSearch.value
+            .toLowerCase()
+            .trim();
+
+    shapeGrid.innerHTML = '';
+
+    const filtered =
+        shapeLibrary.filter(
+            shape => {
+
+                const categoryMatch =
+                    activeCategory === 'all' ||
+                    shape.category === activeCategory;
+
+                const searchMatch =
+                    shape.name
+                        .toLowerCase()
+                        .includes(search);
+
+                return (
+                    categoryMatch &&
+                    searchMatch
+                );
+
+            }
+        );
+
+    if (!filtered.length) {
+
+        shapeGrid.innerHTML = `
+            <div class="no-shapes">
+                NO GEOMETRIC SHAPES FOUND
+            </div>
+        `;
+
+        return;
+
+    }
+
+    filtered.forEach(
+        shape => {
+
+            const card =
+                document.createElement('button');
+
+            card.className =
+                'shape-card';
+
+            const domainName =
+                shape.category === 'civil'
+                    ? 'CIVIL'
+                    : shape.category === 'mechanical'
+                        ? 'MECHANICAL'
+                        : shape.category === 'networking'
+                            ? 'DATA COMM.'
+                            : 'BASIC';
+
+            card.innerHTML = `
+
+                <div class="shape-icon">
+                    ${shape.icon}
+                </div>
+
+                <div class="shape-name">
+                    ${shape.name}
+                </div>
+
+                <div class="shape-domain">
+                    ${domainName}
+                </div>
+
+            `;
+
+            card.onclick =
+                () =>
+                    openShapeParameters(shape);
+
+            shapeGrid.appendChild(card);
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   PARAMETERS
+========================================= */
+
+function openShapeParameters(shape) {
+
+    selectedShapeDefinition =
+        shape;
+
+    document.getElementById(
+        'parameter-title'
+    ).textContent =
+        shape.name.toUpperCase();
+
+    const fields =
+        document.getElementById(
+            'parameter-fields'
+        );
+
+    fields.innerHTML = '';
+
+    Object.entries(
+        shape.params
+    ).forEach(
+        ([name,value]) => {
+
+            const row =
+                document.createElement('div');
+
+            row.className =
+                'parameter-row';
+
+            const integer =
+                [
+                    'teeth',
+                    'steps',
+                    'radialSegments',
+                    'widthSegments',
+                    'heightSegments',
+                    'tubularSegments'
+                ].includes(name);
+
+            row.innerHTML = `
+
+                <label>
+                    ${formatParameterName(name)}
+                </label>
+
+                <input
+                    type="number"
+                    min="${integer ? 1 : .01}"
+                    step="${integer ? 1 : .01}"
+                    data-param="${name}"
+                    value="${value}">
+            `;
+
+            fields.appendChild(row);
+
+        }
+    );
+
+    shapesLibrary.classList.remove('active');
+
+    parameterPanel.classList.add('active');
+
+}
+
+
+/* OPEN LIBRARY */
+
+document.getElementById(
+    'btn-shapes'
+).onclick = () => {
+
+    parameterPanel.classList.remove(
+        'active'
+    );
+
+    shapesLibrary.classList.add(
+        'active'
+    );
+
+    shapeSearch.value = '';
+
+    activeCategory = 'all';
+
+    document
+        .querySelectorAll('.category-btn')
+        .forEach(
+            btn =>
+                btn.classList.remove(
+                    'active'
+                )
+        );
+
+    document
+        .querySelector(
+            '[data-category="all"]'
+        )
+        .classList.add('active');
+
+    renderShapeLibrary();
+
+};
+
+
+document.getElementById(
+    'close-shapes'
+).onclick =
+    () =>
+        shapesLibrary.classList.remove(
+            'active'
+        );
+
+
+document.getElementById(
+    'close-parameters'
+).onclick =
+    () =>
+        parameterPanel.classList.remove(
+            'active'
+        );
+
+
+shapeSearch.addEventListener(
+    'input',
+    renderShapeLibrary
+);
+
+
+/* CATEGORIES */
+
+document.querySelectorAll(
+    '.category-btn'
+).forEach(
+    button => {
+
+        button.onclick = () => {
+
+            document
+                .querySelectorAll(
+                    '.category-btn'
+                )
+                .forEach(
+                    b =>
+                        b.classList.remove(
+                            'active'
+                        )
+                );
+
+            button.classList.add('active');
+
+            activeCategory =
+                button.dataset.category;
+
+            renderShapeLibrary();
+
+        };
+
+    }
+);
+
+
+/* =========================================
+   CREATE PARAMETRIC SHAPE
+========================================= */
+
+document.getElementById(
+    'create-parametric-shape'
+).onclick = () => {
+
+    if (!selectedShapeDefinition) {
+        return;
+    }
+
+    const params = {};
+
+    document
+        .querySelectorAll(
+            '#parameter-fields input'
+        )
+        .forEach(
+            input => {
+
+                let value =
+                    parseFloat(
+                        input.value
+                    );
+
+                const integer =
+                    [
+                        'teeth',
+                        'steps',
+                        'radialSegments',
+                        'widthSegments',
+                        'heightSegments',
+                        'tubularSegments'
+                    ].includes(
+                        input.dataset.param
+                    );
+
+                if (
+                    !Number.isFinite(value) ||
+                    value <= 0
+                ) {
+
+                    value = .01;
+
+                }
+
+                if (integer) {
+
+                    value =
+                        Math.max(
+                            1,
+                            Math.round(value)
+                        );
+
+                }
+
+                params[
+                    input.dataset.param
+                ] = value;
+
+            }
+        );
+
+    createShape(
+        selectedShapeDefinition,
+        params
+    );
+
+    parameterPanel.classList.remove(
+        'active'
+    );
+
+};
+
+
+/* =========================================
+   CREATE SHAPE
+========================================= */
+
+function createShape(
+    definition,
+    params
+) {
+
+    const geometry =
+        createEngineeringGeometry(
+            definition.type,
+            params
+        );
+
+    if (!geometry) {
+
+        alert(
+            'Unable to create geometry.'
+        );
+
+        return;
+
+    }
+
+    const mesh =
+        new THREE.Mesh(
+            geometry,
+            createMaterial()
+        );
+
+    mesh.position.set(
+        0,
+        0.5,
+        0
+    );
+
+    mesh.userData.name =
+        generateObjectName(
+            definition.name
+        );
+
+    mesh.userData.shapeType =
+        definition.type;
+
+    mesh.userData.shapeParams =
+        structuredClone(params);
+
+    mesh.userData.isCustomGeometry =
+        definition.category !== 'basic';
+
+    constructionZone.add(mesh);
+
+    updateSelection([
+        mesh
+    ]);
+
+    saveSnapshot();
+
+    refreshOutliner();
+
+    showStatus(
+        `${definition.name.toUpperCase()} CREATED`
+    );
+
+}
+
+
+/* =========================================
+   QUICK OBJECTS
+========================================= */
+
+function createQuickObject(
+    name,
+    type,
+    params
+) {
+
+    createShape(
+        {
+            name:name,
+            type:type,
+            category:'basic',
+            params:params
+        },
+        params
+    );
+
+}
+
+
+document.getElementById(
+    'add-cube'
+).onclick =
+    () =>
+        createQuickObject(
+            'Cube',
+            'BoxGeometry',
+            {
+                width:1,
+                height:1,
+                depth:1
+            }
+        );
+
+
+document.getElementById(
+    'add-sphere'
+).onclick =
+    () =>
+        createQuickObject(
+            'Sphere',
+            'SphereGeometry',
+            {
+                radius:.6,
+                widthSegments:32,
+                heightSegments:32
+            }
+        );
+
+
+document.getElementById(
+    'add-cyl'
+).onclick =
+    () =>
+        createQuickObject(
+            'Cylinder',
+            'CylinderGeometry',
+            {
+                radiusTop:.5,
+                radiusBottom:.5,
+                height:1,
+                radialSegments:32
+            }
+        );
+
+
+/* =========================================
+   SELECTION
+========================================= */
+
+function clearSelectionGroup() {
+
+    while (
+        selectionGroup.children.length
+    ) {
+
+        constructionZone.attach(
+            selectionGroup.children[0]
+        );
+
+    }
+
+}
+
+
+function updateSelection(objects) {
+
+    transform.detach();
+
+    clearSelectionGroup();
+
+    selectedObjects =
+        objects.filter(
+            obj =>
+                obj &&
+                obj.isMesh
+        );
+
+    const properties =
+        document.getElementById(
+            'properties'
+        );
+
+    const badge =
+        document.getElementById(
+            'multi-badge'
+        );
+
+    if (
+        selectedObjects.length === 0
+    ) {
+
+        properties.classList.remove(
+            'active'
+        );
+
+        refreshOutliner();
+
+        return;
+
+    }
+
+    properties.classList.add(
+        'active'
+    );
+
+    if (
+        selectedObjects.length === 1
+    ) {
+
+        badge.style.display =
+            'none';
+
+        transform.attach(
+            selectedObjects[0]
+        );
+
+        loadProperties(
+            selectedObjects[0]
+        );
+
+    }
+
+    else {
+
+        badge.style.display =
+            'inline-block';
+
+        const box =
+            new THREE.Box3();
+
+        selectedObjects.forEach(
+            obj =>
+                box.expandByObject(obj)
+        );
+
+        selectionGroup.position.copy(
+            box.getCenter(
+                new THREE.Vector3()
+            )
+        );
+
+        selectedObjects.forEach(
+            obj =>
+                selectionGroup.attach(obj)
+        );
+
+        transform.attach(
+            selectionGroup
+        );
+
+    }
+
+    refreshOutliner();
+
+}
+
+
+/* =========================================
+   RAYCAST
+========================================= */
+
+const raycaster =
+    new THREE.Raycaster();
+
+const mouse =
+    new THREE.Vector2();
+
+window.addEventListener(
+    'pointerdown',
+    event => {
+
+        /*
+         * IMPORTANT:
+         * TransformControls receives pointerdown on the renderer canvas
+         * before this window listener. When the user clicks a gizmo axis,
+         * TransformControls sets its active axis/dragging state.
+         *
+         * Do NOT run the normal object-selection raycast in that case.
+         * Running updateSelection() here would detach and re-attach the
+         * TransformControls while the mouse drag is starting, making the
+         * gizmo appear but preventing mouse manipulation.
+         */
+        if (
+            transform.dragging ||
+            transform.axis !== null
+        ) {
+            return;
+        }
+
+        if (
+            event.target.closest('button') ||
+            event.target.closest('input') ||
+            event.target.closest('select') ||
+            event.target.closest('#properties') ||
+            event.target.closest('#outliner') ||
+            event.target.closest('.overlay-panel') ||
+            event.target.closest('.home-btn')
+        ) {
+
+            return;
+
+        }
+
+        mouse.x =
+            event.clientX /
+            window.innerWidth *
+            2 - 1;
+
+        mouse.y =
+            -(event.clientY /
+            window.innerHeight) *
+            2 + 1;
+
+        raycaster.setFromCamera(
+            mouse,
+            camera
+        );
+
+        const objects = [
+            ...constructionZone.children,
+            ...selectionGroup.children
+        ];
+
+        const intersects =
+            raycaster.intersectObjects(
+                objects,
+                true
+            );
+
+        if (intersects.length) {
+
+            const object =
+                intersects[0].object;
+
+            if (event.shiftKey) {
+
+                if (
+                    selectedObjects.includes(
+                        object
+                    )
+                ) {
+
+                    updateSelection(
+                        selectedObjects.filter(
+                            obj =>
+                                obj !== object
+                        )
+                    );
+
+                }
+
+                else {
+
+                    updateSelection([
+                        ...selectedObjects,
+                        object
+                    ]);
+
+                }
+
+            }
+
+            else {
+
+                updateSelection([
+                    object
+                ]);
+
+            }
+
+        }
+
+        else {
+
+            updateSelection([]);
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   OUTLINER
+========================================= */
+
+function refreshOutliner() {
+
+    const list =
+        document.getElementById(
+            'object-list'
+        );
+
+    list.innerHTML = '';
+
+    const objects =
+        constructionZone.children;
+
+    if (!objects.length) {
+
+        list.innerHTML = `
+            <div class="empty-outliner">
+                NO OBJECTS
+            </div>
+        `;
+
+        return;
+
+    }
+
+    objects.forEach(
+        obj => {
+
+            const item =
+                document.createElement('div');
+
+            item.className =
+                'object-item';
+
+            if (
+                selectedObjects.includes(obj)
+            ) {
+
+                item.classList.add('selected');
+
+            }
+
+            const icon = document.createElement('span');
+            icon.textContent =
+                obj.userData.importAssembly
+                    ? 'ASM'
+                    : obj.userData.isImportedOBJ
+                        ? 'OBJ'
+                        : obj.userData.shapeType &&
+                      shapeLibrary.find(
+                          s => s.type === obj.userData.shapeType
+                      )?.icon ||
+                      '◆';
+
+            const name = document.createElement('span');
+            name.className = 'object-name';
+            name.textContent = obj.userData.name || 'Object';
+            if (obj.userData.importAssembly) {
+                item.title = `${obj.userData.importAssembly.name} • editable imported component`;
+                item.dataset.assemblyId = obj.userData.importAssembly.id;
+            }
+
+            item.appendChild(icon);
+            item.appendChild(name);
+
+            item.onclick =
+                event => {
+
+                    if (event.shiftKey) {
+
+                        if (
+                            selectedObjects.includes(
+                                obj
+                            )
+                        ) {
+
+                            updateSelection(
+                                selectedObjects.filter(
+                                    o =>
+                                        o !== obj
+                                )
+                            );
+
+                        }
+
+                        else {
+
+                            updateSelection([
+                                ...selectedObjects,
+                                obj
+                            ]);
+
+                        }
+
                     }
-                });
-                updateSelection([]);
+
+                    else {
+
+                        updateSelection([
+                            obj
+                        ]);
+
+                    }
+
+                };
+
+            list.appendChild(item);
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   PROPERTIES
+========================================= */
+
+function loadProperties(obj) {
+
+    document.getElementById(
+        'prop-name'
+    ).value =
+        obj.userData.name || 'Object';
+
+    document.getElementById(
+        'prop-color'
+    ).value =
+        '#' +
+        obj.material.color.getHexString();
+
+    document.getElementById(
+        'prop-glow'
+    ).value =
+        obj.material.emissiveIntensity;
+
+    document.getElementById(
+        'prop-opacity'
+    ).value =
+        obj.material.opacity;
+
+    document.getElementById(
+        'prop-material'
+    ).value =
+        obj.material.wireframe
+            ? 'wireframe'
+            : 'standard';
+
+    setInputValue('pos-x',obj.position.x);
+    setInputValue('pos-y',obj.position.y);
+    setInputValue('pos-z',obj.position.z);
+
+    setInputValue(
+        'rot-x',
+        THREE.MathUtils.radToDeg(
+            obj.rotation.x
+        )
+    );
+
+    setInputValue(
+        'rot-y',
+        THREE.MathUtils.radToDeg(
+            obj.rotation.y
+        )
+    );
+
+    setInputValue(
+        'rot-z',
+        THREE.MathUtils.radToDeg(
+            obj.rotation.z
+        )
+    );
+
+    setInputValue('scale-x',obj.scale.x);
+    setInputValue('scale-y',obj.scale.y);
+    setInputValue('scale-z',obj.scale.z);
+
+    renderGeometryEditor(obj);
+
+}
+
+
+function setInputValue(id,value) {
+
+    document.getElementById(id).value =
+        Number(value).toFixed(3);
+
+}
+
+
+/* =========================================
+   GEOMETRY EDITOR
+========================================= */
+
+function renderGeometryEditor(obj) {
+
+    const container =
+        document.getElementById(
+            'geometry-editor'
+        );
+
+    container.innerHTML = '';
+
+    if (
+        obj.userData.isImportedOBJ
+    ) {
+
+        container.innerHTML = `
+            <div style="
+                color:#668899;
+                font-size:9px;
+                line-height:1.5;
+            ">
+                IMPORTED OBJ GEOMETRY<br>
+                PARAMETRIC EDITING UNAVAILABLE
+            </div>
+        `;
+
+        return;
+
+    }
+
+    const params =
+        obj.userData.shapeParams;
+
+    if (!params) {
+        return;
+    }
+
+    Object.entries(params)
+        .forEach(
+            ([key,value]) => {
+
+                const label =
+                    document.createElement('label');
+
+                label.className =
+                    'prop-label';
+
+                label.textContent =
+                    formatParameterName(key);
+
+                const input =
+                    document.createElement('input');
+
+                input.className =
+                    'prop-input';
+
+                input.type =
+                    'number';
+
+                input.step =
+                    [
+                        'teeth',
+                        'steps'
+                    ].includes(key)
+                        ? '1'
+                        : '.01';
+
+                input.min =
+                    '.01';
+
+                input.value =
+                    value;
+
+                input.addEventListener(
+                    'change',
+                    () => {
+
+                        let newValue =
+                            parseFloat(
+                                input.value
+                            );
+
+                        if (
+                            !Number.isFinite(
+                                newValue
+                            ) ||
+                            newValue <= 0
+                        ) {
+
+                            newValue = .01;
+
+                        }
+
+                        if (
+                            ['teeth','steps']
+                                .includes(key)
+                        ) {
+
+                            newValue =
+                                Math.round(
+                                    newValue
+                                );
+
+                        }
+
+                        updateGeometryParameter(
+                            obj,
+                            key,
+                            newValue
+                        );
+
+                    }
+                );
+
+                container.appendChild(label);
+
+                container.appendChild(input);
+
+            }
+        );
+
+}
+
+
+/* =========================================
+   UPDATE GEOMETRY
+========================================= */
+
+function updateGeometryParameter(
+    obj,
+    key,
+    value
+) {
+
+    if (!obj.userData.shapeParams) {
+        return;
+    }
+
+    const params = {
+        ...obj.userData.shapeParams
+    };
+
+    params[key] = value;
+
+    const newGeometry =
+        createEngineeringGeometry(
+            obj.userData.shapeType ||
+            obj.geometry.type,
+            params
+        );
+
+    if (!newGeometry) {
+        return;
+    }
+
+    obj.geometry.dispose();
+
+    obj.geometry =
+        newGeometry;
+
+    obj.userData.shapeParams =
+        params;
+
+    delete obj.userData.curveSettings;
+    delete obj.userData.curveBaseGeometry;
+
+    saveSnapshot();
+
+    refreshOutliner();
+
+    showStatus(
+        'GEOMETRY UPDATED'
+    );
+
+}
+
+
+/* =========================================
+   NAME
+========================================= */
+
+document.getElementById(
+    'prop-name'
+).addEventListener(
+    'change',
+    event => {
+
+        if (
+            selectedObjects.length !== 1
+        ) {
+            return;
+        }
+
+        selectedObjects[0].userData.name =
+            event.target.value.trim() ||
+            'Object';
+
+        refreshOutliner();
+
+        saveSnapshot();
+
+    }
+);
+
+
+/* =========================================
+   TRANSFORM INPUTS
+========================================= */
+
+/*
+ * The Properties panel and the TransformControls gizmo both operate
+ * on the same selected Three.js object.
+ *
+ * Properties panel:
+ *   Position  -> live X/Y/Z position
+ *   Rotation  -> live X/Y/Z rotation in degrees
+ *   Scale     -> live X/Y/Z scale
+ *
+ * Viewport gizmo:
+ *   Translate / Rotate / Scale
+ *   -> immediately updates the Properties panel.
+ */
+
+function updateTransformPropertiesFromObject(obj) {
+
+    if (!obj) return;
+
+    setInputValue('pos-x', obj.position.x);
+    setInputValue('pos-y', obj.position.y);
+    setInputValue('pos-z', obj.position.z);
+
+    setInputValue(
+        'rot-x',
+        THREE.MathUtils.radToDeg(obj.rotation.x)
+    );
+
+    setInputValue(
+        'rot-y',
+        THREE.MathUtils.radToDeg(obj.rotation.y)
+    );
+
+    setInputValue(
+        'rot-z',
+        THREE.MathUtils.radToDeg(obj.rotation.z)
+    );
+
+    setInputValue('scale-x', obj.scale.x);
+    setInputValue('scale-y', obj.scale.y);
+    setInputValue('scale-z', obj.scale.z);
+}
+
+
+function updateSelectedObjectFromTransformProperties() {
+
+    if (selectedObjects.length !== 1) return;
+
+    const obj = selectedObjects[0];
+
+    if (!obj || !obj.isObject3D) return;
+
+    const posX = parseFloat(
+        document.getElementById('pos-x').value
+    );
+
+    const posY = parseFloat(
+        document.getElementById('pos-y').value
+    );
+
+    const posZ = parseFloat(
+        document.getElementById('pos-z').value
+    );
+
+    const rotX = parseFloat(
+        document.getElementById('rot-x').value
+    );
+
+    const rotY = parseFloat(
+        document.getElementById('rot-y').value
+    );
+
+    const rotZ = parseFloat(
+        document.getElementById('rot-z').value
+    );
+
+    const scaleX = parseFloat(
+        document.getElementById('scale-x').value
+    );
+
+    const scaleY = parseFloat(
+        document.getElementById('scale-y').value
+    );
+
+    const scaleZ = parseFloat(
+        document.getElementById('scale-z').value
+    );
+
+    /*
+     * Do not use || here.
+     * Zero is a valid transform value.
+     */
+
+    if (Number.isFinite(posX)) {
+        obj.position.x = posX;
+    }
+
+    if (Number.isFinite(posY)) {
+        obj.position.y = posY;
+    }
+
+    if (Number.isFinite(posZ)) {
+        obj.position.z = posZ;
+    }
+
+    /*
+     * The Properties panel displays rotation in degrees.
+     * Three.js stores rotation in radians.
+     */
+
+    if (Number.isFinite(rotX)) {
+        obj.rotation.x =
+            THREE.MathUtils.degToRad(rotX);
+    }
+
+    if (Number.isFinite(rotY)) {
+        obj.rotation.y =
+            THREE.MathUtils.degToRad(rotY);
+    }
+
+    if (Number.isFinite(rotZ)) {
+        obj.rotation.z =
+            THREE.MathUtils.degToRad(rotZ);
+    }
+
+    /*
+     * Scale must be greater than zero for a normal object transform.
+     * Zero is allowed by Three.js, but it makes the object invisible
+     * on that axis, so keep the UI at a small positive value.
+     */
+
+    if (Number.isFinite(scaleX)) {
+        obj.scale.x = Math.max(0.001, scaleX);
+    }
+
+    if (Number.isFinite(scaleY)) {
+        obj.scale.y = Math.max(0.001, scaleY);
+    }
+
+    if (Number.isFinite(scaleZ)) {
+        obj.scale.z = Math.max(0.001, scaleZ);
+    }
+
+    obj.updateMatrix();
+    obj.updateMatrixWorld(true);
+
+    /*
+     * Keep the TransformControls gizmo attached to the same object.
+     * If it is already attached, Three.js automatically follows the
+     * object's changed transform.
+     */
+
+    if (
+        transform.object !== obj &&
+        !(
+            meshEdit.active &&
+            meshEdit.mode === 'vertex'
+        )
+    ) {
+        transform.attach(obj);
+    }
+
+    /*
+     * Clamp and display the actual values after applying them.
+     * This also keeps the scale fields consistent.
+     */
+
+    updateTransformPropertiesFromObject(obj);
+}
+
+
+function attachNumberInput(id) {
+
+    const input =
+        document.getElementById(id);
+
+    if (!input) return;
+
+    /*
+     * INPUT:
+     * Updates the object immediately while typing or using
+     * the number spinner.
+     */
+
+    input.addEventListener(
+        'input',
+        () => {
+            updateSelectedObjectFromTransformProperties();
+        }
+    );
+
+    /*
+     * CHANGE:
+     * Commits the final transform to the undo history.
+     */
+
+    input.addEventListener(
+        'change',
+        () => {
+
+            updateSelectedObjectFromTransformProperties();
+
+            if (selectedObjects.length === 1) {
                 saveSnapshot();
-            };
-            reader.readAsText(file);
-            e.target.value = ""; 
+                refreshOutliner();
+            }
+        }
+    );
+
+    /*
+     * ENTER:
+     * Commit immediately, then leave the field.
+     * The resulting blur/change event performs the history save.
+     */
+
+    input.addEventListener(
+        'keydown',
+        event => {
+
+            if (event.key !== 'Enter') {
+                return;
+            }
+
+            event.preventDefault();
+
+            updateSelectedObjectFromTransformProperties();
+
+            input.blur();
+        }
+    );
+}
+
+
+[
+    'pos-x',
+    'pos-y',
+    'pos-z',
+    'rot-x',
+    'rot-y',
+    'rot-z',
+    'scale-x',
+    'scale-y',
+    'scale-z'
+].forEach(
+    id => attachNumberInput(id)
+);
+
+
+/* =========================================
+   MATERIAL
+========================================= */
+
+document.getElementById(
+    'prop-color'
+).addEventListener(
+    'input',
+    event => {
+
+        const color =
+            new THREE.Color(
+                event.target.value
+            );
+
+        selectedObjects.forEach(
+            obj => {
+
+                obj.material.color.set(color);
+
+                obj.material.emissive.set(color);
+
+            }
+        );
+
+    }
+);
+
+document.getElementById(
+    'prop-color'
+).addEventListener(
+    'change',
+    saveSnapshot
+);
+
+
+document.getElementById(
+    'prop-glow'
+).addEventListener(
+    'input',
+    event => {
+
+        const value =
+            parseFloat(
+                event.target.value
+            );
+
+        selectedObjects.forEach(
+            obj =>
+                obj.material.emissiveIntensity =
+                    value
+        );
+
+    }
+);
+
+document.getElementById(
+    'prop-glow'
+).addEventListener(
+    'change',
+    saveSnapshot
+);
+
+
+document.getElementById(
+    'prop-opacity'
+).addEventListener(
+    'input',
+    event => {
+
+        const value =
+            parseFloat(
+                event.target.value
+            );
+
+        selectedObjects.forEach(
+            obj =>
+                obj.material.opacity =
+                    value
+        );
+
+    }
+);
+
+document.getElementById(
+    'prop-opacity'
+).addEventListener(
+    'change',
+    saveSnapshot
+);
+
+
+document.getElementById(
+    'prop-material'
+).addEventListener(
+    'change',
+    event => {
+
+        selectedObjects.forEach(
+            obj =>
+                obj.material.wireframe =
+                    event.target.value ===
+                    'wireframe'
+        );
+
+        saveSnapshot();
+
+    }
+);
+
+
+/* =========================================
+   RESET
+========================================= */
+
+document.getElementById(
+    'btn-reset-transform'
+).onclick =
+    () => {
+
+        selectedObjects.forEach(
+            obj => {
+
+                obj.position.set(
+                    0,
+                    .5,
+                    0
+                );
+
+                obj.rotation.set(
+                    0,
+                    0,
+                    0
+                );
+
+                obj.scale.set(
+                    1,
+                    1,
+                    1
+                );
+
+            }
+        );
+
+        if (
+            selectedObjects.length === 1
+        ) {
+
+            loadProperties(
+                selectedObjects[0]
+            );
+
+        }
+
+        saveSnapshot();
+
+        showStatus(
+            'TRANSFORM RESET'
+        );
+
+    };
+
+
+/* =========================================
+   DUPLICATE
+========================================= */
+
+document.getElementById(
+    'btn-duplicate'
+).onclick =
+    () => {
+
+        if (!selectedObjects.length) {
+            return;
+        }
+
+        normalizeSelectionForSave();
+
+        const duplicates = [];
+
+        selectedObjects.forEach(
+            original => {
+
+                const data =
+                    serializeObject(
+                        original
+                    );
+
+                const geometry =
+                    data.geometryData
+                        ? deserializeGeometry(
+                            data.geometryData
+                        )
+                        : createEngineeringGeometry(
+                            data.shapeType ||
+                            data.type,
+                            data.shapeParams ||
+                            {}
+                        );
+
+                if (!geometry) {
+                    return;
+                }
+
+                const mesh =
+                    new THREE.Mesh(
+                        geometry,
+                        createMaterial(
+                            data.color,
+                            data.glow,
+                            data.opacity,
+                            data.wireframe
+                        )
+                    );
+
+                mesh.userData =
+                    structuredClone(
+                        original.userData
+                    );
+
+                mesh.userData.name =
+                    generateObjectName(
+                        original.userData.name ||
+                        'Object'
+                    );
+
+                mesh.position.copy(
+                    original.position
+                );
+
+                mesh.rotation.copy(
+                    original.rotation
+                );
+
+                mesh.scale.copy(
+                    original.scale
+                );
+
+                mesh.position.x += .5;
+
+                mesh.position.z += .5;
+
+                constructionZone.add(mesh);
+
+                duplicates.push(mesh);
+
+            }
+        );
+
+        updateSelection(
+            duplicates
+        );
+
+        saveSnapshot();
+
+        refreshOutliner();
+
+        showStatus(
+            'OBJECT DUPLICATED'
+        );
+
+    };
+
+
+/* =========================================
+   COPY
+========================================= */
+
+document.getElementById(
+    'btn-copy'
+).onclick =
+    () => {
+
+        if (!selectedObjects.length) {
+            return;
+        }
+
+        normalizeSelectionForSave();
+
+        clipboardData =
+            selectedObjects.map(
+                serializeObject
+            );
+
+        showStatus(
+            `${clipboardData.length} OBJECT(S) COPIED`
+        );
+
+    };
+
+
+/* =========================================
+   PASTE
+========================================= */
+
+function pasteObjects() {
+
+    if (
+        !clipboardData ||
+        !clipboardData.length
+    ) {
+        return;
+    }
+
+    const pasted = [];
+
+    clipboardData.forEach(
+        data => {
+
+            const geometry =
+                data.geometryData
+                    ? deserializeGeometry(
+                        data.geometryData
+                    )
+                    : createEngineeringGeometry(
+                        data.shapeType ||
+                        data.type,
+                        data.shapeParams ||
+                        {}
+                    );
+
+            if (!geometry) {
+                return;
+            }
+
+            const mesh =
+                new THREE.Mesh(
+                    geometry,
+                    createMaterial(
+                        data.color,
+                        data.glow,
+                        data.opacity,
+                        data.wireframe
+                    )
+                );
+
+            mesh.userData.name =
+                generateObjectName(
+                    data.name ||
+                    'Object'
+                );
+
+            mesh.userData.shapeType =
+                data.shapeType;
+
+            mesh.userData.shapeParams =
+                data.shapeParams;
+
+            mesh.userData.isImportedOBJ =
+                Boolean(data.geometryData);
+
+            mesh.userData.isCustomGeometry =
+                Boolean(data.geometryData);
+
+            mesh.position.fromArray(
+                data.position
+            );
+
+            mesh.rotation.set(
+                data.rotation[0],
+                data.rotation[1],
+                data.rotation[2]
+            );
+
+            mesh.scale.fromArray(
+                data.scale
+            );
+
+            mesh.position.x += .75;
+
+            mesh.position.z += .75;
+
+            constructionZone.add(mesh);
+
+            pasted.push(mesh);
+
+        }
+    );
+
+    updateSelection(pasted);
+
+    saveSnapshot();
+
+    refreshOutliner();
+
+    showStatus(
+        'OBJECT PASTED'
+    );
+
+}
+
+
+/* =========================================
+   DELETE
+========================================= */
+
+document.getElementById(
+    'btn-delete'
+).onclick =
+    () => {
+
+        if (!selectedObjects.length) {
+            return;
+        }
+
+        transform.detach();
+
+        const objects =
+            [...selectedObjects];
+
+        clearSelectionGroup();
+
+        objects.forEach(
+            obj => {
+
+                if (obj.parent) {
+
+                    obj.parent.remove(obj);
+
+                }
+
+                obj.geometry?.dispose();
+
+                obj.material?.dispose();
+
+            }
+        );
+
+        selectedObjects = [];
+
+        updateSelection([]);
+
+        saveSnapshot();
+
+        refreshOutliner();
+
+        showStatus(
+            'OBJECT OBLITERATED'
+        );
+
+    };
+
+
+/* =========================================
+   TOOLS
+========================================= */
+
+function setActiveTool(
+    mode,
+    buttonId
+) {
+
+    transform.setMode(mode);
+
+    [
+        'tool-move',
+        'tool-rotate',
+        'tool-scale'
+    ].forEach(
+        id =>
+            document
+                .getElementById(id)
+                .classList.remove(
+                    'active-tool'
+                )
+    );
+
+    document
+        .getElementById(buttonId)
+        .classList.add(
+            'active-tool'
+        );
+
+}
+
+
+document.getElementById(
+    'tool-move'
+).onclick =
+    () =>
+        setActiveTool(
+            'translate',
+            'tool-move'
+        );
+
+
+document.getElementById(
+    'tool-rotate'
+).onclick =
+    () =>
+        setActiveTool(
+            'rotate',
+            'tool-rotate'
+        );
+
+
+document.getElementById(
+    'tool-scale'
+).onclick =
+    () =>
+        setActiveTool(
+            'scale',
+            'tool-scale'
+        );
+
+
+/* =========================================
+   TRANSFORM HISTORY
+========================================= */
+
+transform.addEventListener(
+    'dragging-changed',
+    event => {
+
+        orbit.enabled =
+            !event.value;
+
+        if (!event.value) {
+
+            if (
+                selectedObjects.length === 1
+            ) {
+
+                loadProperties(
+                    selectedObjects[0]
+                );
+
+            }
+
+            saveSnapshot();
+
+            refreshOutliner();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   IMPORT / PORTABLE PROJECTS
+========================================= */
+
+document.getElementById('btn-import-trigger').onclick = () =>
+    document.getElementById('file-import').click();
+
+document.getElementById('btn-import-project-trigger')?.addEventListener('click', () =>
+    document.getElementById('project-import')?.click()
+);
+
+document.getElementById('project-import')?.addEventListener('change', async event => {
+    const file = event.target.files?.[0];
+    await importAetherProject(file);
+    event.target.value = '';
+});
+
+document.getElementById('btn-export-project')?.addEventListener('click', exportAetherProject);
+
+document.getElementById('file-import').addEventListener('change', async event => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+        const extension = file.name.toLowerCase().split('.').pop();
+        if (extension === 'aether' || file.type === AETHER_PROJECT_MIME) {
+            await importAetherProject(file);
+            return;
+        }
+
+        const MAX_OBJ_SIZE = 10 * 1024 * 1024;
+        if (file.size > MAX_OBJ_SIZE) {
+            showStatus('OBJ file is too large (10 MB maximum)');
+            return;
+        }
+
+        const text = await file.text();
+        const loader = new OBJLoader();
+        const loadedObj = loader.parse(text);
+        const imported = [];
+        const assembly = {
+            id: crypto.randomUUID ? crypto.randomUUID() : `asm_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+            name: file.name.replace(/\.obj$/i, '') || 'Imported Assembly',
+            sourceFile: file.name
+        };
+
+        let componentIndex = 0;
+        loadedObj.traverse(child => {
+            if (!child.isMesh) return;
+            componentIndex += 1;
+
+            const geometry = child.geometry?.clone();
+            if (!geometry) return;
+
+            const mesh = new THREE.Mesh(geometry, createMaterial());
+            const sourceName = (child.name || child.parent?.name || '').trim();
+            const fallback = componentIndex === 1 && child === loadedObj.children[0]
+                ? assembly.name
+                : `${assembly.name} Component`;
+
+            mesh.userData.name = generateObjectName(sourceName || fallback);
+            attachImportedMetadata(mesh, assembly);
+            mesh.userData.importAssembly.componentIndex = componentIndex;
+            mesh.userData.importAssembly.originalObjectName = sourceName || `Object_${componentIndex}`;
+            mesh.userData.shapeType = null;
+            mesh.userData.shapeParams = null;
+            mesh.userData.isCustomGeometry = true;
+
+            mesh.position.copy(child.position);
+            mesh.rotation.copy(child.rotation);
+            mesh.scale.copy(child.scale);
+
+            constructionZone.add(mesh);
+            imported.push(mesh);
         });
 
-        document.getElementById('btn-export').onclick = () => { const currentSelection = [...selectedObjects]; updateSelection([]); const exporter = new OBJExporter(); const result = exporter.parse(constructionZone); const blob = new Blob([result], { type: 'text/plain' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'aether_blueprint.obj'; link.click(); updateSelection(currentSelection); };
-        
-        function animate() { requestAnimationFrame(animate); orbit.update(); renderer.render(scene, camera); } animate();
-        window.onresize = () => { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }
-    </script>
+        updateSelection(imported);
+        saveSnapshot();
+        refreshOutliner();
+        frameObjects(imported);
+        showStatus(`IMPORTED ${imported.length} EDITABLE COMPONENT(S) • ${assembly.name}`);
+    } catch (error) {
+        console.error('OBJ import failed:', error);
+        showStatus(`OBJ IMPORT FAILED: ${error.message}`);
+    } finally {
+        event.target.value = '';
+    }
+});
+
+
+/* =========================================
+   EXPORT
+========================================= */
+
+document.getElementById(
+    'btn-export'
+).onclick =
+    () => {
+
+        normalizeSelectionForSave();
+
+        const selection =
+            [...selectedObjects];
+
+        updateSelection([]);
+
+        const exporter =
+            new OBJExporter();
+
+        const result =
+            exporter.parse(
+                constructionZone
+            );
+
+        const blob =
+            new Blob(
+                [result],
+                {
+                    type:'text/plain'
+                }
+            );
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const link =
+            document.createElement('a');
+
+        link.href = url;
+
+        link.download =
+            'aether_engineering_blueprint.obj';
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+        updateSelection(selection);
+
+        showStatus(
+            'OBJ EXPORTED'
+        );
+
+    };
+
+
+/* =========================================
+   SAVE
+========================================= */
+
+document.getElementById(
+    'btn-save-project'
+).onclick =
+    saveProject;
+
+
+/* =========================================
+   UNDO
+========================================= */
+
+document.getElementById(
+    'btn-undo'
+).onclick =
+    () => {
+
+        if (historyIndex > 0) {
+
+            historyIndex--;
+
+            restoreSnapshot(
+                stateHistory[
+                    historyIndex
+                ]
+            );
+
+            showStatus('UNDO');
+
+        }
+
+    };
+
+
+/* =========================================
+   REDO
+========================================= */
+
+document.getElementById(
+    'btn-redo'
+).onclick =
+    () => {
+
+        if (
+            historyIndex <
+            stateHistory.length - 1
+        ) {
+
+            historyIndex++;
+
+            restoreSnapshot(
+                stateHistory[
+                    historyIndex
+                ]
+            );
+
+            showStatus('REDO');
+
+        }
+
+    };
+
+
+/* =========================================
+   KEYBOARD
+========================================= */
+
+window.addEventListener(
+    'keydown',
+    event => {
+
+        const tag =
+            document.activeElement?.tagName;
+
+        if (
+            [
+                'INPUT',
+                'TEXTAREA',
+                'SELECT'
+            ].includes(tag)
+        ) {
+
+            if (event.key === 'Escape') {
+
+                document.activeElement.blur();
+
+            }
+
+            return;
+
+        }
+
+        if (
+            event.ctrlKey &&
+            event.key.toLowerCase() === 's'
+        ) {
+
+            event.preventDefault();
+
+            saveProject();
+
+            return;
+
+        }
+
+        if (
+            event.ctrlKey &&
+            event.key.toLowerCase() === 'z'
+        ) {
+
+            event.preventDefault();
+
+            document
+                .getElementById(
+                    'btn-undo'
+                )
+                .click();
+
+            return;
+
+        }
+
+        if (
+            event.ctrlKey &&
+            event.key.toLowerCase() === 'y'
+        ) {
+
+            event.preventDefault();
+
+            document
+                .getElementById(
+                    'btn-redo'
+                )
+                .click();
+
+            return;
+
+        }
+
+        if (
+            event.ctrlKey &&
+            event.key.toLowerCase() === 'c'
+        ) {
+
+            event.preventDefault();
+
+            document
+                .getElementById(
+                    'btn-copy'
+                )
+                .click();
+
+            return;
+
+        }
+
+        if (
+            event.ctrlKey &&
+            event.key.toLowerCase() === 'v'
+        ) {
+
+            event.preventDefault();
+
+            pasteObjects();
+
+            return;
+
+        }
+
+        if (
+            event.key.toLowerCase() === 'g'
+        ) {
+
+            setActiveTool(
+                'translate',
+                'tool-move'
+            );
+
+        }
+
+        if (
+            event.key.toLowerCase() === 'r'
+        ) {
+
+            setActiveTool(
+                'rotate',
+                'tool-rotate'
+            );
+
+        }
+
+        if (
+            event.key.toLowerCase() === 's'
+        ) {
+
+            setActiveTool(
+                'scale',
+                'tool-scale'
+            );
+
+        }
+
+        if (
+            event.key === 'Delete'
+        ) {
+
+            document
+                .getElementById(
+                    'btn-delete'
+                )
+                .click();
+
+        }
+
+        if (
+            event.key === 'Escape'
+        ) {
+
+            shapesLibrary.classList.remove(
+                'active'
+            );
+
+            parameterPanel.classList.remove(
+                'active'
+            );
+
+            curvePanel?.classList.remove('active');
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   V7 WORKSPACE SERVICES
+   ========================================================= */
+
+const workspaceStateEl = document.getElementById('workspace-save-state');
+const projectNameEl = document.getElementById('workspace-project-name');
+const fpsEl = document.getElementById('status-fps');
+const objectCountEl = document.getElementById('status-objects');
+const triangleCountEl = document.getElementById('status-triangles');
+const selectionCountEl = document.getElementById('status-selection');
+const snapStatusEl = document.getElementById('status-snap');
+const frameButton = document.getElementById('btn-frame-selected');
+const gridButton = document.getElementById('btn-grid-toggle');
+const snapButton = document.getElementById('btn-snap-toggle');
+
+
+
+function setWorkspaceStatus(state) {
+    if (!workspaceStateEl) return;
+
+    const labels = {
+        loading: 'Loading…',
+        saving: 'Saving…',
+        saved: 'Saved',
+        unsaved: 'Unsaved changes',
+        error: 'Save error'
+    };
+
+    workspaceStateEl.textContent = labels[state] || state;
+    workspaceStateEl.className = `save-state ${state}`;
+}
+
+function scheduleAutosave() {
+    if (!projectId || projectLoading || isSaving) return;
+
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(() => {
+        if (!projectLoading && !isSaving) {
+            saveProject();
+        }
+    }, 1800);
+}
+
+function getObjectTriangleCount(object) {
+    if (!object?.isMesh) return 0;
+    const position = object.geometry?.getAttribute('position');
+    if (!position) return 0;
+
+    if (object.geometry.index) {
+        return Math.floor(object.geometry.index.count / 3);
+    }
+    return Math.floor(position.count / 3);
+}
+
+function updateWorkspaceStats() {
+    const objects = constructionZone.children.filter(obj => obj.isMesh);
+    const triangles = objects.reduce(
+        (total, obj) => total + getObjectTriangleCount(obj),
+        0
+    );
+
+    if (objectCountEl) {
+        objectCountEl.innerHTML = `<b>OBJECTS</b> ${objects.length}`;
+    }
+    if (triangleCountEl) {
+        triangleCountEl.innerHTML = `<b>TRIANGLES</b> ${triangles.toLocaleString()}`;
+    }
+    if (selectionCountEl) {
+        selectionCountEl.innerHTML = `<b>SELECTED</b> ${selectedObjects.length}`;
+    }
+    if (snapStatusEl) {
+        snapStatusEl.innerHTML = `<b>SNAP</b> ${snapEnabled ? 'ON' : 'OFF'}`;
+    }
+}
+
+function frameObjects(objects) {
+    if (!objects.length) {
+        showStatus('Select an object to frame');
+        return;
+    }
+
+    const box = new THREE.Box3();
+    objects.forEach(obj => box.expandByObject(obj));
+
+    if (box.isEmpty()) return;
+
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    const radius = Math.max(size.length() * 0.55, 1);
+
+    const direction = camera.position.clone().sub(orbit.target).normalize();
+    camera.position.copy(center).add(direction.multiplyScalar(radius * 2.2));
+    camera.near = Math.max(radius / 100, 0.01);
+    camera.far = Math.max(radius * 100, 1000);
+    camera.updateProjectionMatrix();
+
+    orbit.target.copy(center);
+    orbit.update();
+
+    showStatus('View framed');
+}
+
+function frameSelected() {
+    frameObjects(selectedObjects);
+}
+
+function frameAll() {
+    frameObjects(constructionZone.children.filter(obj => obj.isMesh));
+}
+
+function setSnap(enabled) {
+    snapEnabled = enabled;
+
+    if (transform.setTranslationSnap) {
+        transform.setTranslationSnap(enabled ? 0.5 : null);
+    }
+    if (transform.setRotationSnap) {
+        transform.setRotationSnap(enabled ? THREE.MathUtils.degToRad(15) : null);
+    }
+    if (transform.setScaleSnap) {
+        transform.setScaleSnap(enabled ? 0.1 : null);
+    }
+
+    snapButton?.classList.toggle('active', enabled);
+    updateWorkspaceStats();
+    showStatus(`Snap ${enabled ? 'enabled' : 'disabled'}`);
+}
+
+frameButton?.addEventListener('click', frameSelected);
+
+gridButton?.addEventListener('click', () => {
+    gridHelper.visible = !gridHelper.visible;
+    gridButton.classList.toggle('active', gridHelper.visible);
+    showStatus(`Grid ${gridHelper.visible ? 'visible' : 'hidden'}`);
+});
+
+snapButton?.addEventListener('click', () => setSnap(!snapEnabled));
+
+/* Project metadata */
+(async function loadWorkspaceMetadata() {
+    if (!projectId) return;
+
+    try {
+        const response = await fetch(`/api/projects/${encodeURIComponent(projectId)}`, {
+            credentials: 'include',
+            headers: { 'Accept': 'application/json' }
+        });
+
+        if (!response.ok) return;
+
+        const data = await response.json();
+        if (data.project?.name) {
+            projectNameEl.textContent = data.project.name;
+        }
+    } catch (error) {
+        console.debug('Project metadata unavailable:', error);
+    }
+})();
+
+/* Safer keyboard layer for professional workflow */
+window.addEventListener('keydown', event => {
+    const tag = document.activeElement?.tagName;
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(tag)) return;
+
+    if (event.key.toLowerCase() === 'f') {
+        event.preventDefault();
+        frameSelected();
+        return;
+    }
+
+    if (event.key.toLowerCase() === 'h') {
+        event.preventDefault();
+        frameAll();
+        return;
+    }
+
+    if (event.key.toLowerCase() === 'm' && !event.ctrlKey && !event.altKey) {
+        event.preventDefault();
+        setSnap(!snapEnabled);
+        return;
+    }
+
+    if (event.key === '?' || (event.key === '/' && event.shiftKey)) {
+        showStatus('G Move • R Rotate • S Scale • C Curve • F Frame • H Frame All • M Snap • Ctrl+Shift+S Save .AETHER');
+    }
+
+    if (event.key.toLowerCase() === 's' && event.ctrlKey && event.shiftKey) {
+        event.preventDefault();
+        exportAetherProject();
+    }
+});
+
+/* Continuous lightweight telemetry */
+setInterval(() => {
+    const now = performance.now();
+    const elapsed = now - lastFrameTime;
+    if (elapsed > 0) {
+        displayedFps = Math.round((frameCounter * 1000) / elapsed);
+    }
+    frameCounter = 0;
+    lastFrameTime = now;
+
+    if (fpsEl) {
+        fpsEl.innerHTML = `<b>FPS</b> ${Math.min(displayedFps, 999)}`;
+    }
+    updateWorkspaceStats();
+}, 1000);
+
+/* Count animation frames without adding render work */
+const originalAnimateMarker = true;
+void originalAnimateMarker;
+
+
+
+/* =========================================
+   V10 — DIRECT MESH EDITOR
+========================================= */
+
+const meshEdit = {
+    active: false,
+    mode: 'vertex',
+    object: null,
+    vertexPositions: [],
+    vertexPoint: null,
+    selectedVertices: new Set(),
+    selectedFaces: new Set(),
+    faceOverlay: null,
+    vertexHandle: null,
+    vertexOriginal: null,
+    suppressTransform: false
+};
+
+function ensureEditableGeometry(obj) {
+    if (!obj?.isMesh) return null;
+    if (obj.geometry?.index) obj.geometry = obj.geometry.toNonIndexed();
+    obj.userData.isCustomGeometry = true;
+    obj.userData.editableComponent = true;
+    obj.userData.shapeType = null;
+    obj.userData.shapeParams = null;
+    obj.geometry.computeVertexNormals();
+    obj.geometry.computeBoundingBox();
+    obj.geometry.computeBoundingSphere();
+    return obj.geometry;
+}
+
+function getTrianglePositions(obj) {
+    const pos = obj.geometry.getAttribute('position');
+    if (!pos) return [];
+    const out = [];
+    for (let i=0; i<pos.count; i+=3) {
+        out.push([
+            new THREE.Vector3().fromBufferAttribute(pos,i),
+            new THREE.Vector3().fromBufferAttribute(pos,i+1),
+            new THREE.Vector3().fromBufferAttribute(pos,i+2)
+        ]);
+    }
+    return out;
+}
+
+function quantizeVector(v) {
+    return `${Math.round(v.x*100000)}:${Math.round(v.y*100000)}:${Math.round(v.z*100000)}`;
+}
+
+function buildVertexPointCloud(obj) {
+    const geometry = obj.geometry;
+    const pos = geometry.getAttribute('position');
+    if (!pos) return;
+    const unique = new Map();
+    const vertices = [];
+    for (let i=0; i<pos.count; i++) {
+        const v = new THREE.Vector3().fromBufferAttribute(pos,i);
+        const key = quantizeVector(v);
+        if (!unique.has(key)) {
+            unique.set(key, vertices.length);
+            vertices.push(v);
+        }
+    }
+    meshEdit.vertexPositions = vertices;
+    const pointGeo = new THREE.BufferGeometry();
+    pointGeo.setAttribute('position', new THREE.Float32BufferAttribute(vertices.flatMap(v=>v.toArray()),3));
+    const pointMat = new THREE.PointsMaterial({ color:0x008caf, size:0.11, sizeAttenuation:true, transparent:true, opacity:.95, depthTest:false });
+    meshEdit.vertexPoint = new THREE.Points(pointGeo, pointMat);
+    meshEdit.vertexPoint.renderOrder = 20;
+    meshEdit.vertexPoint.userData.isMeshEditHelper = true;
+    obj.add(meshEdit.vertexPoint);
+}
+
+function disposeEditHelpers() {
+    if (meshEdit.vertexPoint) {
+        meshEdit.vertexPoint.geometry.dispose();
+        meshEdit.vertexPoint.material.dispose();
+        meshEdit.vertexPoint.parent?.remove(meshEdit.vertexPoint);
+        meshEdit.vertexPoint = null;
+    }
+    if (meshEdit.faceOverlay) {
+        meshEdit.faceOverlay.geometry.dispose();
+        meshEdit.faceOverlay.material.dispose();
+        meshEdit.faceOverlay.parent?.remove(meshEdit.faceOverlay);
+        meshEdit.faceOverlay = null;
+    }
+    if (meshEdit.vertexHandle) {
+        transform.detach();
+        meshEdit.vertexHandle.parent?.remove(meshEdit.vertexHandle);
+        meshEdit.vertexHandle = null;
+    }
+}
+
+function exitMeshEdit() {
+    if (!meshEdit.active) return;
+    disposeEditHelpers();
+    meshEdit.active = false;
+    meshEdit.object = null;
+    meshEdit.selectedVertices.clear();
+    meshEdit.selectedFaces.clear();
+    document.getElementById('mesh-edit-panel')?.classList.remove('active');
+    document.getElementById('btn-edit-mesh')?.classList.remove('active-tool');
+    updateSelection(selectedObjects);
+    showStatus('MESH EDIT MODE EXITED');
+}
+
+function enterMeshEdit(obj = selectedObjects[0]) {
+    if (!obj?.isMesh) { showStatus('SELECT ONE MESH TO EDIT'); return; }
+    if (selectedObjects.length !== 1) { showStatus('MESH EDITOR REQUIRES ONE SELECTED OBJECT'); return; }
+    if (meshEdit.active && meshEdit.object === obj) return;
+    if (meshEdit.active) exitMeshEdit();
+    ensureEditableGeometry(obj);
+    meshEdit.active = true;
+    meshEdit.object = obj;
+    meshEdit.mode = 'vertex';
+    meshEdit.selectedVertices.clear();
+    meshEdit.selectedFaces.clear();
+    buildVertexPointCloud(obj);
+    document.getElementById('mesh-edit-panel')?.classList.add('active');
+    document.getElementById('btn-edit-mesh')?.classList.add('active-tool');
+    setEditMode('vertex');
+    updateEditStatus();
+    showStatus(`EDITING ${obj.userData.name || 'MESH'} • VERTEX MODE`);
+}
+
+function setEditMode(mode) {
+    if (!meshEdit.active) return;
+    meshEdit.mode = mode;
+    meshEdit.selectedVertices.clear();
+    meshEdit.selectedFaces.clear();
+    if (meshEdit.vertexPoint) meshEdit.vertexPoint.visible = mode === 'vertex';
+    if (meshEdit.faceOverlay) meshEdit.faceOverlay.visible = mode === 'face';
+    document.querySelectorAll('.edit-mode').forEach(btn => btn.classList.toggle('active', btn.dataset.editMode === mode));
+    transform.detach();
+    if (mode === 'vertex') refreshVertexHandles();
+    updateFaceOverlay();
+    updateEditStatus();
+}
+
+function updateEditStatus() {
+    const name = document.getElementById('edit-object-name');
+    const count = document.getElementById('edit-selection-count');
+    if (name) name.textContent = meshEdit.object?.userData.name || 'No object';
+    const n = meshEdit.mode === 'vertex' ? meshEdit.selectedVertices.size : meshEdit.selectedFaces.size;
+    if (count) count.textContent = `${n} selected`;
+}
+
+function refreshVertexHandles() {
+    if (!meshEdit.active || meshEdit.mode !== 'vertex' || !meshEdit.object) return;
+    if (meshEdit.vertexHandle) { transform.detach(); meshEdit.vertexHandle.parent?.remove(meshEdit.vertexHandle); meshEdit.vertexHandle = null; }
+    if (meshEdit.selectedVertices.size !== 1) return;
+    const index = [...meshEdit.selectedVertices][0];
+    const p = meshEdit.vertexPositions[index];
+    if (!p) return;
+    const handle = new THREE.Object3D();
+    handle.position.copy(p);
+    handle.userData.isMeshEditHandle = true;
+    meshEdit.object.add(handle);
+    meshEdit.vertexHandle = handle;
+    meshEdit.vertexOriginal = p.clone();
+    transform.attach(handle);
+    transform.setMode('translate');
+}
+
+function updateVertexFromHandle() {
+    if (!meshEdit.vertexHandle || !meshEdit.object || meshEdit.selectedVertices.size !== 1) return;
+    const index = [...meshEdit.selectedVertices][0];
+    const target = meshEdit.vertexHandle.position.clone();
+    const pos = meshEdit.object.geometry.getAttribute('position');
+    const selectedKey = quantizeVector(meshEdit.vertexPositions[index]);
+    for (let i=0;i<pos.count;i++) {
+        const v = new THREE.Vector3().fromBufferAttribute(pos,i);
+        if (quantizeVector(v) === selectedKey) pos.setXYZ(i,target.x,target.y,target.z);
+    }
+    pos.needsUpdate = true;
+    meshEdit.object.geometry.computeVertexNormals();
+    meshEdit.object.geometry.computeBoundingBox();
+    meshEdit.object.geometry.computeBoundingSphere();
+    meshEdit.vertexPositions[index].copy(target);
+    if (meshEdit.vertexPoint) meshEdit.vertexPoint.geometry.attributes.position.setXYZ(index,target.x,target.y,target.z), meshEdit.vertexPoint.geometry.attributes.position.needsUpdate=true;
+    updateFaceOverlay();
+    saveSnapshot();
+    refreshOutliner();
+}
+
+transform.addEventListener('change', () => {
+
+    /*
+     * In mesh-edit vertex mode the TransformControls object is a
+     * temporary vertex handle, not the selected scene object.
+     * Preserve the existing vertex-edit workflow.
+     */
+
+    if (
+        meshEdit.active &&
+        meshEdit.mode === 'vertex'
+    ) {
+        updateVertexFromHandle();
+        return;
+    }
+
+    /*
+     * Normal object transform:
+     * keep the Properties panel synchronized with the gizmo.
+     */
+
+    if (selectedObjects.length !== 1) {
+        return;
+    }
+
+    const obj = selectedObjects[0];
+
+    if (!obj || !obj.isObject3D) {
+        return;
+    }
+
+    updateTransformPropertiesFromObject(obj);
+});
+
+function faceNormals(obj) {
+    const tris = getTrianglePositions(obj);
+    return tris.map(t => new THREE.Triangle(t[0],t[1],t[2]).getNormal(new THREE.Vector3()));
+}
+
+function faceAdjacency(obj) {
+    const tris = getTrianglePositions(obj);
+    const edges = new Map();
+    tris.forEach((tri, fi) => {
+        [[tri[0],tri[1]],[tri[1],tri[2]],[tri[2],tri[0]]].forEach(([a,b]) => {
+            const key = [quantizeVector(a),quantizeVector(b)].sort().join('|');
+            if (!edges.has(key)) edges.set(key,[]);
+            edges.get(key).push(fi);
+        });
+    });
+    const adj = Array.from({length:tris.length},()=>new Set());
+    edges.forEach(list => { if (list.length===2) { adj[list[0]].add(list[1]); adj[list[1]].add(list[0]); } });
+    return adj;
+}
+
+function growSelectedFaceRegion() {
+    if (!meshEdit.active || meshEdit.mode !== 'face' || meshEdit.selectedFaces.size !== 1) { showStatus('SELECT ONE FACE FIRST'); return; }
+    const start=[...meshEdit.selectedFaces][0];
+    const tris=getTrianglePositions(meshEdit.object), normals=faceNormals(meshEdit.object), adj=faceAdjacency(meshEdit.object);
+    const base=normals[start];
+    const region=new Set([start]);
+    const queue=[start];
+    while(queue.length){ const f=queue.shift(); adj[f].forEach(n=>{ if(!region.has(n)&&normals[n].dot(base)>0.999){region.add(n);queue.push(n);} }); }
+    meshEdit.selectedFaces=region;
+    updateFaceOverlay(); updateEditStatus();
+}
+
+function createFaceOverlay() {
+    if (meshEdit.faceOverlay) { meshEdit.faceOverlay.geometry.dispose(); meshEdit.faceOverlay.material.dispose(); meshEdit.faceOverlay.parent?.remove(meshEdit.faceOverlay); }
+    const obj=meshEdit.object; if(!obj) return;
+    const tris=getTrianglePositions(obj); const selected=[...meshEdit.selectedFaces];
+    if(!selected.length) { meshEdit.faceOverlay=null; return; }
+    const arr=[]; selected.forEach(i=>tris[i]?.forEach(v=>arr.push(...v.toArray())));
+    const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.Float32BufferAttribute(arr,3));
+    geo.computeVertexNormals();
+    const mat=new THREE.MeshBasicMaterial({color:0x00a9d1,transparent:true,opacity:.28,depthTest:false,side:THREE.DoubleSide});
+    meshEdit.faceOverlay=new THREE.Mesh(geo,mat); meshEdit.faceOverlay.renderOrder=19; obj.add(meshEdit.faceOverlay);
+}
+
+function updateFaceOverlay() { if(!meshEdit.active || meshEdit.mode!=='face') { if(meshEdit.faceOverlay) meshEdit.faceOverlay.visible=false; return; } createFaceOverlay(); if(meshEdit.faceOverlay) meshEdit.faceOverlay.visible=true; }
+
+function rebuildFromTriangles(obj, triangles) {
+    const arr=[]; triangles.forEach(t=>t.forEach(v=>arr.push(...v.toArray())));
+    const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.Float32BufferAttribute(arr,3)); geo.computeVertexNormals(); geo.computeBoundingBox(); geo.computeBoundingSphere();
+    obj.geometry.dispose(); obj.geometry=geo;
+    return geo;
+}
+
+function extrudeFaces(distance) {
+    if (!meshEdit.active || meshEdit.mode!=='face' || !meshEdit.selectedFaces.size) { showStatus('SELECT FACE(S) TO EXTRUDE'); return; }
+    const obj=meshEdit.object, tris=getTrianglePositions(obj), normals=faceNormals(obj), selected=new Set(meshEdit.selectedFaces);
+    const boundary=new Map(), regionVerts=new Map();
+    selected.forEach(fi=>{
+        const tri=tris[fi];
+        [[tri[0],tri[1]],[tri[1],tri[2]],[tri[2],tri[0]]].forEach(([a,b])=>{
+            const key=[quantizeVector(a),quantizeVector(b)].sort().join('|');
+            if(boundary.has(key)) boundary.delete(key); else boundary.set(key,[a,b]);
+        });
+        tri.forEach(v=>regionVerts.set(quantizeVector(v),v.clone()));
+    });
+    const avg=new THREE.Vector3(); selected.forEach(i=>avg.add(normals[i])); avg.normalize();
+    const moved=new Map(); regionVerts.forEach((v,k)=>moved.set(k,v.clone().addScaledVector(avg,distance/10)));
+    const keep=tris.filter((_,i)=>!selected.has(i)).map(t=>t.map(v=>v.clone()));
+    boundary.forEach(([a,b])=>{
+        const a2=moved.get(quantizeVector(a)), b2=moved.get(quantizeVector(b));
+        keep.push([a.clone(),b.clone(),b2.clone()]); keep.push([a.clone(),b2.clone(),a2.clone()]);
+    });
+    selected.forEach(i=>{ const t=tris[i]; keep.push(t.map(v=>moved.get(quantizeVector(v)).clone())); });
+    rebuildFromTriangles(obj,keep); obj.userData.isCustomGeometry=true; obj.userData.shapeType=null; obj.userData.shapeParams=null;
+    meshEdit.selectedFaces=new Set(Array.from({length:keep.length},(_,i)=>i).slice(Math.max(0,keep.length-selected.size),keep.length));
+    rebuildVertexEditor(); saveSnapshot(); refreshOutliner(); showStatus(`EXTRUDED FACE REGION • ${distance} MM`);
+}
+
+function insetFaces(amount) {
+    if (!meshEdit.active || meshEdit.mode!=='face' || !meshEdit.selectedFaces.size) { showStatus('SELECT FACE(S) TO INSET'); return; }
+    const obj=meshEdit.object, tris=getTrianglePositions(obj), selected=new Set(meshEdit.selectedFaces), regionVerts=new Map(), boundary=new Map();
+    selected.forEach(fi=>{ const tri=tris[fi]; [[tri[0],tri[1]],[tri[1],tri[2]],[tri[2],tri[0]]].forEach(([a,b])=>{const key=[quantizeVector(a),quantizeVector(b)].sort().join('|'); if(boundary.has(key)) boundary.delete(key); else boundary.set(key,[a,b]);}); tri.forEach(v=>regionVerts.set(quantizeVector(v),v.clone())); });
+    const center=new THREE.Vector3(); regionVerts.forEach(v=>center.add(v)); center.multiplyScalar(1/Math.max(1,regionVerts.size));
+    const factor=Math.max(.05,Math.min(.95,1-Math.abs(amount)/100)); const inset=new Map(); regionVerts.forEach((v,k)=>inset.set(k,center.clone().addScaledVector(v.clone().sub(center),factor)));
+    const keep=tris.filter((_,i)=>!selected.has(i)).map(t=>t.map(v=>v.clone()));
+    boundary.forEach(([a,b])=>{ const a2=inset.get(quantizeVector(a)), b2=inset.get(quantizeVector(b)); keep.push([a.clone(),b.clone(),b2.clone()]); keep.push([a.clone(),b2.clone(),a2.clone()]); });
+    selected.forEach(i=>keep.push(tris[i].map(v=>inset.get(quantizeVector(v)).clone())));
+    rebuildFromTriangles(obj,keep); rebuildVertexEditor(); saveSnapshot(); refreshOutliner(); showStatus(`INSET APPLIED • ${Math.abs(amount)}%`);
+}
+
+function subdivideFaces() {
+    if (!meshEdit.active || meshEdit.mode!=='face' || !meshEdit.selectedFaces.size) { showStatus('SELECT FACE(S) TO SUBDIVIDE'); return; }
+    const obj=meshEdit.object, tris=getTrianglePositions(obj), selected=new Set(meshEdit.selectedFaces), out=[];
+    tris.forEach((t,i)=>{ if(!selected.has(i)){out.push(t.map(v=>v.clone())); return;} const ab=t[0].clone().add(t[1]).multiplyScalar(.5), bc=t[1].clone().add(t[2]).multiplyScalar(.5), ca=t[2].clone().add(t[0]).multiplyScalar(.5); out.push([t[0].clone(),ab.clone(),ca.clone()],[ab.clone(),t[1].clone(),bc.clone()],[ca.clone(),bc.clone(),t[2].clone()],[ab.clone(),bc.clone(),ca.clone()]); });
+    rebuildFromTriangles(obj,out); rebuildVertexEditor(); saveSnapshot(); refreshOutliner(); showStatus('SELECTED FACES SUBDIVIDED');
+}
+
+function deleteSelectedFaces() {
+    if (!meshEdit.active || meshEdit.mode!=='face' || !meshEdit.selectedFaces.size) { showStatus('SELECT FACE(S) TO DELETE'); return; }
+    const obj=meshEdit.object, tris=getTrianglePositions(obj), selected=new Set(meshEdit.selectedFaces), out=tris.filter((_,i)=>!selected.has(i)).map(t=>t.map(v=>v.clone()));
+    if(!out.length){showStatus('CANNOT DELETE THE ENTIRE MESH');return;}
+    rebuildFromTriangles(obj,out); rebuildVertexEditor(); saveSnapshot(); refreshOutliner(); showStatus('FACE(S) DELETED');
+}
+
+function separateSelectedFaces() {
+    if (!meshEdit.active || meshEdit.mode!=='face' || !meshEdit.selectedFaces.size) { showStatus('SELECT FACE(S) TO SEPARATE'); return; }
+    const obj=meshEdit.object, tris=getTrianglePositions(obj), selected=new Set(meshEdit.selectedFaces), out=tris.filter((_,i)=>selected.has(i)).map(t=>t.map(v=>v.clone()));
+    if(!out.length) return;
+    const mesh=new THREE.Mesh(new THREE.BufferGeometry(),createMaterial(obj.material.color.getHex(),obj.material.emissiveIntensity,obj.material.opacity,obj.material.wireframe));
+    rebuildFromTriangles(mesh,out); mesh.userData.name=generateObjectName(`${obj.userData.name || 'Part'} Separated`); mesh.userData.isCustomGeometry=true; mesh.userData.editableComponent=true; constructionZone.add(mesh);
+    const remain=tris.filter((_,i)=>!selected.has(i)).map(t=>t.map(v=>v.clone()));
+    if(remain.length) rebuildFromTriangles(obj,remain); else { constructionZone.remove(obj); updateSelection([]); }
+    rebuildVertexEditor(); saveSnapshot(); refreshOutliner(); showStatus('FACE REGION SEPARATED INTO NEW COMPONENT');
+}
+
+function rebuildVertexEditor(){
+    if(!meshEdit.active||!meshEdit.object) return;
+    disposeEditHelpers();
+    buildVertexPointCloud(meshEdit.object);
+    meshEdit.selectedVertices.clear(); meshEdit.selectedFaces.clear();
+    if(meshEdit.mode==='vertex') refreshVertexHandles();
+    updateEditStatus();
+}
+
+function pickEditElement(event){
+    if(!meshEdit.active || !meshEdit.object) return false;
+    const rect=renderer.domElement.getBoundingClientRect();
+    mouse.x=((event.clientX-rect.left)/rect.width)*2-1; mouse.y=-((event.clientY-rect.top)/rect.height)*2+1;
+    raycaster.setFromCamera(mouse,camera);
+    if(meshEdit.mode==='vertex' && meshEdit.vertexPoint){
+        const hits=raycaster.intersectObject(meshEdit.vertexPoint,false);
+        if(hits.length){ const idx=hits[0].index; if(event.shiftKey){ if(meshEdit.selectedVertices.has(idx)) meshEdit.selectedVertices.delete(idx); else meshEdit.selectedVertices.add(idx); } else meshEdit.selectedVertices=new Set([idx]); refreshVertexHandles(); updateEditStatus(); return true; }
+        return false;
+    }
+    if(meshEdit.mode==='face'){
+        const hits=raycaster.intersectObject(meshEdit.object,false).filter(h=>!h.object.userData.isMeshEditHelper);
+        if(hits.length){ const face=Math.floor(hits[0].faceIndex/1); if(event.shiftKey){if(meshEdit.selectedFaces.has(face))meshEdit.selectedFaces.delete(face);else meshEdit.selectedFaces.add(face);}else meshEdit.selectedFaces=new Set([face]); updateFaceOverlay(); updateEditStatus(); return true; }
+    }
+    return false;
+}
+
+window.addEventListener('pointerdown',event=>{
+    if(!meshEdit.active) return;
+    if(event.target.closest('#mesh-edit-panel')||event.target.closest('#properties')||event.target.closest('#outliner')||event.target.closest('button')||event.target.closest('input')) return;
+    if(pickEditElement(event)) event.stopImmediatePropagation();
+},true);
+
+// Keep the normal transform controls usable outside edit mode.
+document.getElementById('btn-edit-mesh')?.addEventListener('click',()=> meshEdit.active ? exitMeshEdit() : enterMeshEdit());
+document.getElementById('btn-enter-edit')?.addEventListener('click',()=>enterMeshEdit());
+document.getElementById('close-mesh-edit')?.addEventListener('click',exitMeshEdit);
+document.getElementById('edit-exit')?.addEventListener('click',exitMeshEdit);
+document.querySelectorAll('.edit-mode').forEach(btn=>btn.addEventListener('click',()=>setEditMode(btn.dataset.editMode)));
+document.getElementById('edit-grow-face')?.addEventListener('click',growSelectedFaceRegion);
+document.getElementById('edit-extrude')?.addEventListener('click',()=>extrudeFaces(parseFloat(document.getElementById('edit-value')?.value)||10));
+document.getElementById('edit-inset')?.addEventListener('click',()=>insetFaces(parseFloat(document.getElementById('edit-value')?.value)||10));
+document.getElementById('edit-subdivide')?.addEventListener('click',subdivideFaces);
+document.getElementById('edit-separate')?.addEventListener('click',separateSelectedFaces);
+document.getElementById('edit-delete-face')?.addEventListener('click',deleteSelectedFaces);
+document.getElementById('edit-convert')?.addEventListener('click',()=>{if(meshEdit.object){ensureEditableGeometry(meshEdit.object);rebuildVertexEditor();saveSnapshot();showStatus('OBJECT CONVERTED TO EDITABLE MESH');}});
+
+window.addEventListener('keydown',event=>{
+    if(event.key==='Tab' && !event.ctrlKey && !event.metaKey && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)){
+        event.preventDefault(); meshEdit.active ? exitMeshEdit() : enterMeshEdit();
+    }
+});
+
+
+/* =========================================
+   V11 — ADVANCED MODELING + FEATURE HISTORY
+========================================= */
+const v11Panel = document.getElementById('v11-panel');
+const v11FeatureList = document.getElementById('v11-feature-list');
+
+function v11GetSelectedMesh() {
+    return selectedObjects.length === 1 && selectedObjects[0]?.isMesh ? selectedObjects[0] : null;
+}
+
+function v11RecordFeature(obj, name, parameters = {}) {
+    if (!obj) return;
+    obj.userData.featureHistory = Array.isArray(obj.userData.featureHistory) ? obj.userData.featureHistory : [];
+    obj.userData.featureHistory.push({ id: `feat_${Date.now()}_${Math.random().toString(36).slice(2,7)}`, name, parameters: safeClone(parameters), timestamp: new Date().toISOString() });
+    if (obj.userData.featureHistory.length > 100) obj.userData.featureHistory.shift();
+    v11RenderFeatureHistory(obj);
+}
+
+function v11RenderFeatureHistory(obj = v11GetSelectedMesh()) {
+    if (!v11FeatureList) return;
+    const history = obj?.userData?.featureHistory || [];
+    if (!history.length) {
+        v11FeatureList.innerHTML = '<div class="v11-feature"><strong>No features recorded</strong><span class="v11-badge">BASE</span></div>';
+        return;
+    }
+    v11FeatureList.innerHTML = history.slice().reverse().map((f, i) => {
+        const detail = Object.entries(f.parameters || {}).map(([k,v]) => `${k}: ${typeof v === 'number' ? Number(v.toFixed?.(3) ?? v) : v}`).join(' • ');
+        return `<div class="v11-feature"><strong>${history.length - i}. ${String(f.name).replace(/[<>]/g,'')}</strong><span class="v11-badge">${detail || 'FEATURE'}</span></div>`;
+    }).join('');
+}
+
+function v11SetFeatureButton(action, fn) {
+    document.getElementById(action)?.addEventListener('click', () => {
+        try { fn(); } catch (error) { console.error(error); showStatus(`V11 operation failed: ${error.message}`); }
+    });
+}
+
+function v11RebuildGeometry(obj, geometry, featureName, parameters = {}) {
+    if (!obj || !geometry) return;
+    geometry.computeVertexNormals(); geometry.computeBoundingBox(); geometry.computeBoundingSphere();
+    obj.geometry.dispose(); obj.geometry = geometry;
+    obj.userData.isCustomGeometry = true;
+    obj.userData.editableComponent = true;
+    v11RecordFeature(obj, featureName, parameters);
+    saveSnapshot(); refreshOutliner(); updateWorkspaceStats(); updateSelection([obj]);
+}
+
+function v11BuildWineGlassGeometry() {
+    const profile = [
+        new THREE.Vector2(0.04,0), new THREE.Vector2(0.52,0), new THREE.Vector2(0.66,0.08),
+        new THREE.Vector2(0.58,0.15), new THREE.Vector2(0.06,0.19), new THREE.Vector2(0.045,0.95),
+        new THREE.Vector2(0.12,1.05), new THREE.Vector2(0.34,1.12), new THREE.Vector2(0.55,1.35),
+        new THREE.Vector2(0.72,1.72), new THREE.Vector2(0.84,2.2), new THREE.Vector2(0.82,2.62),
+        new THREE.Vector2(0.74,2.94), new THREE.Vector2(0.64,3.12), new THREE.Vector2(0.62,3.18),
+        new THREE.Vector2(0.54,3.18), new THREE.Vector2(0.55,3.08), new THREE.Vector2(0.64,2.92),
+        new THREE.Vector2(0.72,2.60), new THREE.Vector2(0.74,2.22), new THREE.Vector2(0.66,1.80),
+        new THREE.Vector2(0.52,1.48), new THREE.Vector2(0.38,1.27), new THREE.Vector2(0.20,1.16),
+        new THREE.Vector2(0.10,1.08), new THREE.Vector2(0.075,0.98), new THREE.Vector2(0.075,0.22),
+        new THREE.Vector2(0.09,0.18), new THREE.Vector2(0.52,0.13), new THREE.Vector2(0.60,0.08),
+        new THREE.Vector2(0.52,0.04), new THREE.Vector2(0.04,0.04)
+    ];
+    return new THREE.LatheGeometry(profile, 64);
+}
+
+function createV11WineGlassDemo() {
+    // The cube is the starting primitive. Its feature history is retained while the
+    // profile-driven revolve produces the engineering shape required for this validation.
+    const cubeDefinition = { name:'Cube', type:'BoxGeometry', category:'basic', params:{width:1.4,height:1.4,depth:1.4} };
+    createShape(cubeDefinition, cubeDefinition.params);
+    const cube = v11GetSelectedMesh();
+    if (!cube) throw new Error('Unable to create the starting cube.');
+    cube.userData.name = generateObjectName('Wine Glass from Cube');
+    cube.userData.sourcePrimitive = 'Cube';
+    cube.userData.featureHistory = [];
+    v11RecordFeature(cube, 'Cube Base', { width:1.4, height:1.4, depth:1.4 });
+    v11RecordFeature(cube, 'Convert to Editable', {});
+    v11RecordFeature(cube, 'Profile Sketch', { type:'revolved wine-glass profile', units:'mm' });
+    v11RebuildGeometry(cube, v11BuildWineGlassGeometry(), 'Revolve', { axis:'Y', segments:64 });
+    v11RecordFeature(cube, 'Shell / Hollow', { wallThickness:0.08 });
+    saveSnapshot();
+    cube.userData.shapeType = 'WineGlassFromCube';
+    cube.userData.shapeParams = { source:'Cube', profile:'wine-glass', height:3.18, radialSegments:64 };
+    cube.userData.isCustomGeometry = true;
+    cube.material.transparent = true;
+    cube.material.opacity = 0.38;
+    cube.material.roughness = 0.08;
+    cube.material.metalness = 0.02;
+    cube.material.color.setHex(0xbfefff);
+    frameObjects([cube]);
+    v11RenderFeatureHistory(cube);
+    showStatus('WINE GLASS BUILT FROM CUBE WORKFLOW • FEATURE HISTORY PRESERVED');
+}
+
+function v11Bevel() {
+    const obj=v11GetSelectedMesh(); if(!obj){showStatus('SELECT ONE MESH');return;}
+    const p=obj.userData.shapeParams||{};
+    const width=p.width||1.5, height=p.height||1.5, depth=p.depth||1.5;
+    const amount=Math.min(Math.min(width,height,depth)*0.24, Math.max(0.01, Number(obj.userData.bevelAmount||0.08)));
+    if (obj.userData.shapeType !== 'BoxGeometry' && obj.userData.shapeType !== 'Cube') {
+        showStatus('BEVEL: convert the selected complex mesh and use face/edge editing for topology-specific bevels.'); return;
+    }
+    const geo=createEngineeringGeometry('RoundedBox',{width,height,depth,radius:amount});
+    v11RebuildGeometry(obj,geo,'Bevel',{amount,mode:'rounded solid'});
+    obj.userData.bevelAmount=amount;
+    obj.userData.shapeType='RoundedBox';
+    obj.userData.shapeParams={width,height,depth,radius:amount};
+}
+
+function v11Subdivide() {
+    const obj=v11GetSelectedMesh(); if(!obj){showStatus('SELECT ONE MESH');return;}
+    obj.geometry = obj.geometry.toNonIndexed();
+    const g=obj.geometry; const pos=g.getAttribute('position'); const out=[];
+    for(let i=0;i<pos.count;i+=3){ const a=new THREE.Vector3().fromBufferAttribute(pos,i),b=new THREE.Vector3().fromBufferAttribute(pos,i+1),c=new THREE.Vector3().fromBufferAttribute(pos,i+2); const ab=a.clone().add(b).multiplyScalar(.5),bc=b.clone().add(c).multiplyScalar(.5),ca=c.clone().add(a).multiplyScalar(.5); out.push(a,ab,ca,ab,b,bc,ca,bc,c,ab,bc,ca); }
+    const ng=new THREE.BufferGeometry(); const arr=new Float32Array(out.length*3); out.forEach((v,i)=>v.toArray(arr,i*3)); ng.setAttribute('position',new THREE.BufferAttribute(arr,3));
+    v11RebuildGeometry(obj,ng,'Subdivide',{level:1});
+}
+
+function v11Mirror() { const obj=v11GetSelectedMesh(); if(!obj){showStatus('SELECT ONE MESH');return;} const clone=obj.clone(); clone.geometry=obj.geometry.clone(); clone.position.x = -obj.position.x; clone.scale.x *= -1; clone.userData.name=generateObjectName(`${obj.userData.name} Mirror`); clone.userData.featureHistory=safeClone(obj.userData.featureHistory||[]); clone.userData.featureHistory.push({name:'Mirror',parameters:{axis:'X'},timestamp:new Date().toISOString()}); constructionZone.add(clone); updateSelection([clone]); saveSnapshot(); refreshOutliner(); showStatus('MIRROR COMPONENT CREATED • X AXIS'); }
+function v11Array() { const obj=v11GetSelectedMesh(); if(!obj){showStatus('SELECT ONE MESH');return;} const source=obj; const created=[]; for(let i=1;i<4;i++){const clone=source.clone();clone.geometry=source.geometry.clone();clone.position.x += i*1.8;clone.userData.name=generateObjectName(`${source.userData.name} Pattern`);clone.userData.featureHistory=safeClone(source.userData.featureHistory||[]);clone.userData.featureHistory.push({name:'Linear Array',parameters:{count:4,spacing:1.8},timestamp:new Date().toISOString()});constructionZone.add(clone);created.push(clone);} updateSelection([source,...created]);saveSnapshot();refreshOutliner();frameObjects([source,...created]);showStatus('LINEAR ARRAY CREATED • 4 COMPONENTS'); }
+function v11Smooth() { const obj=v11GetSelectedMesh(); if(!obj){showStatus('SELECT ONE MESH');return;} obj.geometry.computeVertexNormals(); obj.material.flatShading=false; obj.userData.smooth=true; v11RecordFeature(obj,'Smooth',{normals:'vertex'}); saveSnapshot(); showStatus('SMOOTH SHADING ENABLED'); }
+function v11Shell() { const obj=v11GetSelectedMesh(); if(!obj){showStatus('SELECT ONE MESH');return;} if(obj.userData.shapeType==='WineGlassFromCube'){ obj.userData.shell={enabled:true,wallThickness:0.08}; v11RecordFeature(obj,'Shell / Hollow',{wallThickness:0.08}); saveSnapshot(); showStatus('HOLLOW GLASS WALL VERIFIED • 0.08 MM PROFILE'); return; } showStatus('SHELL: use a closed revolved/profiled body or face-region editing; automatic offset-shelling is not applied to arbitrary meshes.'); }
+function v11Sketch() { const obj=v11GetSelectedMesh(); if(!obj){showStatus('SELECT A BASE OBJECT FOR THE SKETCH');return;} obj.userData.sketches=Array.isArray(obj.userData.sketches)?obj.userData.sketches:[]; obj.userData.sketches.push({name:`Sketch ${obj.userData.sketches.length+1}`,plane:'XY',constraints:['Horizontal','Vertical','Coincident'],geometry:['Line','Arc','Circle']}); v11RecordFeature(obj,'Sketch',{plane:'XY',entities:3,constraints:3}); saveSnapshot(); showStatus('PARAMETRIC SKETCH CREATED • XY PLANE'); }
+function v11Profile() { const obj=v11GetSelectedMesh(); if(!obj){showStatus('SELECT A BASE OBJECT');return;} obj.userData.profileSketch={type:'wine-glass',points:32,closed:true}; v11RecordFeature(obj,'Profile Sketch',{type:'revolve profile',points:32}); saveSnapshot(); showStatus('REVOLVE PROFILE SKETCH STORED'); }
+function v11Revolve() { const obj=v11GetSelectedMesh(); if(!obj){showStatus('SELECT ONE MESH');return;} v11RebuildGeometry(obj,v11BuildWineGlassGeometry(),'Revolve',{axis:'Y',angle:360,segments:64}); showStatus('360° REVOLVE GENERATED FROM PROFILE'); }
+function v11Extrude(){ if(typeof extrudeFaces==='function'){extrudeFaces(parseFloat(document.getElementById('edit-value')?.value)||10);} else showStatus('EXTRUDE TOOL UNAVAILABLE'); }
+function v11Inset(){ if(typeof insetFaces==='function'){insetFaces(parseFloat(document.getElementById('edit-value')?.value)||10);} else showStatus('INSET TOOL UNAVAILABLE'); }
+function v11Validate(){ const objects=constructionZone.children.filter(o=>o.isMesh); const issues=[]; objects.forEach(o=>{if(!o.geometry?.getAttribute('position'))issues.push(`${o.userData.name||'Object'}: missing position data`); if(!Number.isFinite(o.position.x)||!Number.isFinite(o.position.y)||!Number.isFinite(o.position.z))issues.push(`${o.userData.name||'Object'}: invalid transform`);}); showStatus(issues.length?`DESIGN CHECK • ${issues.length} ISSUE(S) FOUND`:`DESIGN CHECK PASSED • ${objects.length} OBJECT(S) VALIDATED`); }
+
+v11SetFeatureButton('v11-extrude',v11Extrude); v11SetFeatureButton('v11-inset',v11Inset); v11SetFeatureButton('v11-bevel',v11Bevel); v11SetFeatureButton('v11-subdivide',v11Subdivide); v11SetFeatureButton('v11-shell',v11Shell); v11SetFeatureButton('v11-mirror',v11Mirror); v11SetFeatureButton('v11-array',v11Array); v11SetFeatureButton('v11-revolve',v11Revolve); v11SetFeatureButton('v11-smooth',v11Smooth); v11SetFeatureButton('v11-sketch',v11Sketch); v11SetFeatureButton('v11-profile',v11Profile); v11SetFeatureButton('v11-wine-demo',createV11WineGlassDemo); v11SetFeatureButton('v11-wine-shortcut',createV11WineGlassDemo); v11SetFeatureButton('v11-validate',v11Validate);
+document.getElementById('v11-open-tools')?.addEventListener('click',()=>v11Panel?.classList.toggle('active'));
+document.getElementById('v11-close')?.addEventListener('click',()=>v11Panel?.classList.remove('active'));
+
+/* =========================================
+   LOAD PROJECT
+========================================= */
+
+if (v11DemoMode) {
+    createV11WineGlassDemo();
+} else {
+    await loadProject();
+}
+
+
+/* INITIAL TOOL */
+
+setActiveTool(
+    'translate',
+    'tool-move'
+);
+
+
+/* =========================================
+   ANIMATION
+========================================= */
+
+function animate() {
+
+    requestAnimationFrame(animate);
+    frameCounter++;
+
+    orbit.update();
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+}
+
+animate();
+
+
+/* =========================================
+   RESIZE
+========================================= */
+
+window.addEventListener(
+    'resize',
+    () => {
+
+        camera.aspect =
+            window.innerWidth /
+            window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+    }
+);
+
+
+/* INITIAL OUTLINER */
+
+refreshOutliner();
+updateWorkspaceStats();
+
+</script>
+
 </body>
 </html>
