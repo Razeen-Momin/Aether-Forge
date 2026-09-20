@@ -8,10 +8,14 @@ from backend.models.user import User
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
+
+# --------------------------------------------------
 # Register a new user
+# --------------------------------------------------
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
+
     data = request.get_json(silent=True) or {}
 
     username = data.get("username", "").strip()
@@ -32,7 +36,9 @@ def register():
             "message": "Password must contain at least 6 characters."
         }), 400
 
-    existing_user = User.query.filter_by(username=username).first()
+    existing_user = User.query.filter_by(
+        username=username
+    ).first()
 
     if existing_user:
         return jsonify({
@@ -43,7 +49,7 @@ def register():
 
     new_user = User(
         username=username,
-        password=hashed_password
+        password_hash=hashed_password
     )
 
     db.session.add(new_user)
@@ -53,10 +59,14 @@ def register():
         "message": "Account created successfully."
     }), 201
 
-#Login an existing user
+
+# --------------------------------------------------
+# Login an existing user
+# --------------------------------------------------
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
+
     data = request.get_json(silent=True) or {}
 
     username = data.get("username", "").strip()
@@ -67,9 +77,14 @@ def login():
             "message": "Username and password are required."
         }), 400
 
-    user = User.query.filter_by(username=username).first()
+    user = User.query.filter_by(
+        username=username
+    ).first()
 
-    if not user or not check_password_hash(user.password, password):
+    if not user or not check_password_hash(
+        user.password_hash,
+        password
+    ):
         return jsonify({
             "message": "Invalid username or password."
         }), 401
@@ -87,20 +102,28 @@ def login():
         }
     }), 200
 
+
+# --------------------------------------------------
 # Logout the current user
+# --------------------------------------------------
 
 @auth_bp.route("/logout", methods=["POST"])
 def logout():
+
     session.clear()
 
     return jsonify({
         "message": "Logout successful."
     }), 200
 
+
+# --------------------------------------------------
 # Get information about the current user
+# --------------------------------------------------
 
 @auth_bp.route("/me", methods=["GET"])
 def current_user():
+
     user_id = session.get("user_id")
 
     if not user_id:
