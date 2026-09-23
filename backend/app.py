@@ -113,6 +113,13 @@ def create_app():
             "projects.html"
     )
 
+    @app.route("/contact.html")
+    def contact_page():
+        return send_from_directory(
+            PROJECT_ROOT,
+            "contact.html"
+        )
+
     @app.route("/logo.png")
     def logo():
         return send_from_directory(
