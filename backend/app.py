@@ -64,7 +64,6 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(projects_bp)
 
-    print("🔥 PROJECT BLUEPRINT REGISTERED 🔥")
     # -----------------------------
     # Frontend files
     # -----------------------------
@@ -147,16 +146,6 @@ def create_app():
                     )
 
                     connection.commit()
-     # -----------------------------
-    # Debug: Show registered routes
-    # -----------------------------
-
-    print("\n========== REGISTERED ROUTES ==========")
-
-    for rule in app.url_map.iter_rules():
-        print(rule)
-
-    print("========================================\n")
 
     return app
 
@@ -164,8 +153,6 @@ def create_app():
 # -----------------------------
 # Create Flask application
 # -----------------------------
-
-print("🔥🔥🔥 AETHER FORGE APP.PY IS RUNNING 🔥🔥🔥")
 
 app = create_app()
 
