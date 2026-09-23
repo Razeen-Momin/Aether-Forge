@@ -106,6 +106,13 @@ def create_app():
             "AetherForge.html"
         )
 
+    @app.route("/projects.html")
+    def projects_page():
+        return send_from_directory(
+            PROJECT_ROOT,
+            "projects.html"
+    )
+
     @app.route("/logo.png")
     def logo():
         return send_from_directory(

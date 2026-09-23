@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>AETHER FORGE | Home</title>
+    <title>AETHER FORGE | Projects</title>
 
     <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -48,11 +50,15 @@
             top: -50%;
 
             background-image:
-                linear-gradient(rgba(0, 255, 255, 0.1) 1px,
-                    transparent 1px),
-                linear-gradient(90deg,
+                linear-gradient(
                     rgba(0, 255, 255, 0.1) 1px,
-                    transparent 1px);
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(0, 255, 255, 0.1) 1px,
+                    transparent 1px
+                );
 
             background-size: 50px 50px;
 
@@ -72,6 +78,10 @@
         }
 
 
+        /* =========================================
+           GLOW
+        ========================================= */
+
         .glow-orb {
             position: fixed;
 
@@ -82,9 +92,11 @@
             height: 60vw;
 
             background:
-                radial-gradient(circle,
+                radial-gradient(
+                    circle,
                     rgba(0, 200, 255, 0.15) 0%,
-                    transparent 60%);
+                    transparent 60%
+                );
 
             transform:
                 translate(-50%, -50%);
@@ -132,7 +144,6 @@
             z-index: 100;
         }
 
-
         .logo-block {
             display: flex;
 
@@ -145,7 +156,6 @@
             cursor: pointer;
         }
 
-
         .logo-img {
             height: 80px;
             width: auto;
@@ -153,7 +163,10 @@
             opacity: 0.85;
 
             filter:
-                drop-shadow(0 0 10px rgba(0, 255, 255, 0.4));
+                drop-shadow(
+                    0 0 10px
+                    rgba(0, 255, 255, 0.4)
+                );
 
             transition:
                 transform 0.3s ease,
@@ -161,16 +174,17 @@
                 filter 0.3s;
         }
 
-
         .logo-block:hover .logo-img {
             transform: scale(1.05);
 
             opacity: 1;
 
             filter:
-                drop-shadow(0 0 15px rgba(0, 255, 255, 0.7));
+                drop-shadow(
+                    0 0 15px
+                    rgba(0, 255, 255, 0.7)
+                );
         }
-
 
         .nav-links {
             display: flex;
@@ -179,7 +193,6 @@
 
             align-items: center;
         }
-
 
         .nav-link {
             color: #88ccdd;
@@ -201,16 +214,15 @@
             padding-bottom: 5px;
         }
 
-
         .nav-link:hover,
         .nav-link.active {
 
             color: #00ffff;
 
             text-shadow:
-                0 0 10px rgba(0, 255, 255, 0.6);
+                0 0 10px
+                rgba(0, 255, 255, 0.6);
         }
-
 
         .nav-link::after {
             content: '';
@@ -232,12 +244,15 @@
                 width 0.3s ease;
         }
 
-
         .nav-link:hover::after,
         .nav-link.active::after {
             width: 100%;
         }
 
+
+        /* =========================================
+           AUTH
+        ========================================= */
 
         #auth-section {
             display: flex;
@@ -246,7 +261,6 @@
 
             align-items: center;
         }
-
 
         .btn-nav-login,
         .btn-nav-register,
@@ -265,7 +279,6 @@
             transition: 0.4s;
         }
 
-
         .btn-nav-login {
 
             background:
@@ -278,7 +291,6 @@
 
             text-decoration: none;
         }
-
 
         .btn-nav-register {
 
@@ -293,7 +305,6 @@
             text-decoration: none;
         }
 
-
         .btn-nav-login:hover,
         .btn-nav-register:hover {
 
@@ -302,12 +313,12 @@
             color: #000;
 
             box-shadow:
-                0 0 20px rgba(0, 255, 255, 0.6);
+                0 0 20px
+                rgba(0, 255, 255, 0.6);
 
             transform:
                 translateY(-2px);
         }
-
 
         .btn-nav-logout {
 
@@ -322,7 +333,6 @@
             cursor: pointer;
         }
 
-
         .btn-nav-logout:hover {
 
             background: #ff3333;
@@ -330,12 +340,12 @@
             color: #fff;
 
             box-shadow:
-                0 0 20px rgba(255, 51, 51, 0.6);
+                0 0 20px
+                rgba(255, 51, 51, 0.6);
 
             transform:
                 translateY(-2px);
         }
-
 
         .operative-badge {
 
@@ -358,126 +368,52 @@
 
 
         /* =========================================
-           HERO
+           PAGE HEADER
         ========================================= */
 
-        header {
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
+        .page-header {
 
             text-align: center;
 
-            padding: 100px 20px 70px;
-
-            transform-style: preserve-3d;
-
-            animation:
-                float 6s ease-in-out infinite;
+            padding:
+                80px 20px 45px;
 
             position: relative;
 
             z-index: 10;
         }
 
+        .page-header h1 {
 
-        @keyframes float {
+            font-size: 3.5rem;
 
-            0%,
-            100% {
-                transform:
-                    translateY(0) rotateX(2deg);
-            }
-
-            50% {
-                transform:
-                    translateY(-15px) rotateX(-2deg);
-            }
-
-        }
-
-
-        h1 {
-
-            font-size: 5rem;
-
-            letter-spacing: 12px;
-
-            margin-bottom: 20px;
+            letter-spacing: 10px;
 
             text-transform: uppercase;
 
             color: #fff;
 
+            margin-bottom: 15px;
+
             text-shadow:
-                0 0 30px rgba(0, 255, 255, 0.3);
+                0 0 30px
+                rgba(0, 255, 255, 0.35);
         }
 
+        .page-header h1 span {
 
-        h1 span {
             color: #00ffff;
         }
 
-
-        p.subtitle {
+        .page-header p {
 
             color: #88ccdd;
 
-            font-size: 1.2rem;
+            font-size: 1rem;
 
-            max-width: 600px;
+            letter-spacing: 2px;
 
-            line-height: 1.8;
-
-            margin-bottom: 40px;
-        }
-
-
-        .btn-launch {
-
-            display: inline-block;
-
-            background:
-                rgba(0, 20, 30, 0.8);
-
-            border:
-                2px solid #00ffff;
-
-            color: #00ffff;
-
-            padding: 18px 60px;
-
-            font-size: 1.2rem;
-
-            letter-spacing: 4px;
-
-            text-transform: uppercase;
-
-            text-decoration: none;
-
-            border-radius: 6px;
-
-            transition:
-                all 0.4s ease;
-
-            cursor: pointer;
-        }
-
-
-        .btn-launch:hover {
-
-            background: #00ffff;
-
-            color: #000;
-
-            box-shadow:
-                0 0 40px rgba(0, 255, 255, 0.8);
-
-            transform:
-                scale(1.05);
+            line-height: 1.7;
         }
 
 
@@ -512,11 +448,14 @@
                 blur(15px);
 
             box-shadow:
-                0 20px 60px rgba(0, 0, 0, 0.5);
-
-            display: none;
+                0 20px 60px
+                rgba(0, 0, 0, 0.5);
         }
 
+
+        /* =========================================
+           PROJECT HEADER
+        ========================================= */
 
         .projects-header {
 
@@ -532,9 +471,9 @@
             padding-bottom: 20px;
 
             border-bottom:
-                1px solid rgba(0, 255, 255, 0.15);
+                1px solid
+                rgba(0, 255, 255, 0.15);
         }
-
 
         .projects-title {
 
@@ -548,9 +487,9 @@
                 uppercase;
 
             text-shadow:
-                0 0 10px rgba(0, 255, 255, 0.4);
+                0 0 10px
+                rgba(0, 255, 255, 0.4);
         }
-
 
         .project-count {
 
@@ -559,8 +498,14 @@
             font-size: 11px;
 
             letter-spacing: 2px;
+
+            margin-top: 7px;
         }
 
+
+        /* =========================================
+           CREATE BUTTON
+        ========================================= */
 
         .create-project-btn {
 
@@ -570,7 +515,7 @@
             border:
                 1px solid #00ffff;
 
-            color: #00ffff;
+            color: #ffffff;
 
             padding:
                 10px 18px;
@@ -589,7 +534,6 @@
             transition: 0.3s;
         }
 
-
         .create-project-btn:hover {
 
             background: #00ffff;
@@ -597,21 +541,32 @@
             color: #000;
 
             box-shadow:
-                0 0 20px rgba(0, 255, 255, 0.5);
+                0 0 20px
+                rgba(0, 255, 255, 0.5);
         }
 
+
+        /* =========================================
+           PROJECT GRID
+        ========================================= */
 
         #projects-grid {
 
             display: grid;
 
             grid-template-columns:
-                repeat(auto-fit,
-                    minmax(260px, 1fr));
+                repeat(
+                    auto-fit,
+                    minmax(260px, 1fr)
+                );
 
             gap: 22px;
         }
 
+
+        /* =========================================
+           PROJECT CARD
+        ========================================= */
 
         .project-card {
 
@@ -619,7 +574,8 @@
                 rgba(0, 20, 30, 0.65);
 
             border:
-                1px solid rgba(0, 255, 255, 0.18);
+                1px solid
+                rgba(0, 255, 255, 0.18);
 
             border-radius: 10px;
 
@@ -635,7 +591,6 @@
             overflow: hidden;
         }
 
-
         .project-card::before {
 
             content: '';
@@ -649,14 +604,15 @@
             height: 2px;
 
             background:
-                linear-gradient(90deg,
+                linear-gradient(
+                    90deg,
                     transparent,
                     #00ffff,
-                    transparent);
+                    transparent
+                );
 
             opacity: 0.5;
         }
-
 
         .project-card:hover {
 
@@ -667,9 +623,14 @@
                 rgba(0, 255, 255, 0.7);
 
             box-shadow:
-                0 15px 35px rgba(0, 255, 255, 0.12);
+                0 15px 35px
+                rgba(0, 255, 255, 0.12);
         }
 
+
+        /* =========================================
+           PROJECT ICON
+        ========================================= */
 
         .project-icon {
 
@@ -682,7 +643,8 @@
             justify-content: center;
 
             border:
-                1px solid rgba(0, 255, 255, 0.3);
+                1px solid
+                rgba(0, 255, 255, 0.3);
 
             border-radius: 8px;
 
@@ -695,7 +657,6 @@
             background:
                 rgba(0, 255, 255, 0.05);
         }
-
 
         .project-name {
 
@@ -711,7 +672,6 @@
                 break-word;
         }
 
-
         .project-description {
 
             color: #88ccdd;
@@ -725,7 +685,6 @@
             margin-bottom: 15px;
         }
 
-
         .project-date {
 
             color: #557f88;
@@ -738,6 +697,10 @@
         }
 
 
+        /* =========================================
+           PROJECT ACTIONS
+        ========================================= */
+
         .project-actions {
 
             display: flex;
@@ -745,12 +708,12 @@
             gap: 8px;
         }
 
-
         .project-btn {
 
             flex: 1;
 
-            padding: 9px 5px;
+            padding:
+                9px 5px;
 
             border-radius: 4px;
 
@@ -766,7 +729,6 @@
             transition: 0.3s;
         }
 
-
         .open-project {
 
             background:
@@ -775,9 +737,8 @@
             border:
                 1px solid #00ffff;
 
-            color: #00ffff;
+            color: #ffffff;
         }
-
 
         .open-project:hover {
 
@@ -785,7 +746,6 @@
 
             color: #000;
         }
-
 
         .rename-project {
 
@@ -795,9 +755,8 @@
             border:
                 1px solid #557f88;
 
-            color: #88ccdd;
+            color: #ffffff;
         }
-
 
         .rename-project:hover {
 
@@ -805,7 +764,6 @@
 
             color: #fff;
         }
-
 
         .delete-project {
 
@@ -818,7 +776,6 @@
             color: #ff5555;
         }
 
-
         .delete-project:hover {
 
             background: #ff3333;
@@ -827,15 +784,19 @@
         }
 
 
+        /* =========================================
+           EMPTY STATE
+        ========================================= */
+
         .empty-projects {
 
             text-align: center;
 
-            padding: 60px 20px;
+            padding:
+                70px 20px;
 
             color: #88ccdd;
         }
-
 
         .empty-projects-icon {
 
@@ -845,7 +806,6 @@
 
             opacity: 0.6;
         }
-
 
         .empty-projects h3 {
 
@@ -858,7 +818,6 @@
             font-size: 18px;
         }
 
-
         .empty-projects p {
 
             font-size: 12px;
@@ -870,402 +829,32 @@
 
 
         /* =========================================
-           FEATURES
+           LOADING
         ========================================= */
 
-        .features {
+        .loading-projects {
 
-            display: flex;
-
-            justify-content: center;
-
-            gap: 40px;
-
-            padding:
-                40px 50px 100px;
-
-            perspective: 1000px;
-
-            position: relative;
-
-            z-index: 10;
-        }
-
-
-        .feature-card {
-
-            background:
-                rgba(0, 10, 20, 0.7);
-
-            border:
-                1px solid rgba(0, 255, 255, 0.2);
-
-            padding: 40px;
-
-            border-radius: 12px;
-
-            width: 300px;
-
-            backdrop-filter:
-                blur(10px);
-
-            transition:
-                transform 0.5s cubic-bezier(0.2,
-                    0.8,
-                    0.2,
-                    1),
-                border-color 0.3s;
-
-            transform-style:
-                preserve-3d;
-        }
-
-
-        .feature-card:hover {
-
-            transform:
-                translateZ(40px) rotateX(10deg) rotateY(-5deg);
-
-            border-color: #00ffff;
-
-            box-shadow:
-                -15px 15px 30px rgba(0, 255, 255, 0.15);
-        }
-
-
-        .feature-icon {
-
-            font-size: 2.5rem;
-
-            margin-bottom: 20px;
-
-            color: #00ffff;
-
-            transition: 0.4s;
-
-            display: inline-block;
-        }
-
-
-        .feature-title {
-
-            color: #fff;
-
-            font-size: 1.2rem;
-
-            margin-bottom: 15px;
-
-            letter-spacing: 2px;
-
-            text-transform:
-                uppercase;
-        }
-
-
-        .feature-desc {
-
-            color: #88ccdd;
-
-            font-size: 0.95rem;
-
-            line-height: 1.6;
-        }
-
-
-        /* =========================================
-           SPLASH SCREEN
-        ========================================= */
-
-        #splash-screen {
-
-            position: fixed;
-
-            top: 0;
-            left: 0;
-
-            width: 100vw;
-            height: 100vh;
-
-            background: #020202;
-
-            z-index: 9999;
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            transition:
-                opacity 1s,
-                visibility 1s;
-        }
-
-
-        .splash-content {
             text-align: center;
-        }
 
-
-        .logo-assembler {
-
-            position: relative;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 20px;
-
-            margin: 0 auto;
-
-            width: 100%;
-
-            max-width: 90vw;
-        }
-
-
-        .forge-wireframe {
-
-            width: 180px;
-            height: 180px;
-
-            fill:
-                rgba(0, 255, 255, 0);
-
-            stroke-width: 0.5;
-
-            filter:
-                drop-shadow(0 0 10px #00ffff);
-
-            stroke-dasharray: 400;
-
-            stroke-dashoffset: 400;
-
-            animation:
-                blueprintDraw 3.5s ease-out forwards,
-                solidifyAnvil 1s ease 3s forwards,
-                logoPulse 2s infinite alternate 4.5s;
-        }
-
-
-        .splash-text-container {
-
-            display: inline-block;
-
-            overflow: hidden;
-
-            white-space: nowrap;
-
-            border-right:
-                4px solid #00ffff;
-
-            max-width: 0;
-
-            opacity: 0;
-
-            animation:
-                revealCursor 0s 2.5s forwards,
-                typing 1.5s steps(12, end) 2.5s forwards,
-                blinkCaret 0.5s step-end 4,
-                hideCaret 0s 4.5s forwards;
-        }
-
-
-        .splash-typewriter {
+            padding: 60px;
 
             color: #00ffff;
-
-            font-family:
-                'Courier New',
-                Courier,
-                monospace;
-
-            font-size: 55px;
-
-            letter-spacing: 6px;
-
-            font-weight: bold;
-
-            text-shadow:
-                0 0 20px rgba(0, 255, 255, 0.8);
-        }
-
-
-        .aether-surge {
-
-            position: absolute;
-
-            top: 50%;
-            left: 50%;
-
-            width: 10px;
-            height: 10px;
-
-            background: #00ffff;
-
-            border-radius: 50%;
-
-            transform:
-                translate(-50%, -50%);
-
-            opacity: 0;
-
-            filter: blur(15px);
-
-            animation:
-                energySurge 1.5s cubic-bezier(0.1,
-                    1,
-                    0.1,
-                    1) 3.5s forwards;
-        }
-
-
-        .constructor-data {
-
-            color: #88ccdd;
-
-            font-size: 11px;
 
             letter-spacing: 3px;
 
-            text-transform:
-                uppercase;
-
-            margin-top: 30px;
-
-            font-family: monospace;
+            font-size: 12px;
 
             animation:
-                dataFlicker 0.1s infinite alternate;
+                loadingPulse 1.5s infinite alternate;
         }
 
-
-        @keyframes blueprintDraw {
-
-            100% {
-                stroke-dashoffset: 0;
-            }
-
-        }
-
-
-        @keyframes solidifyAnvil {
-
-            100% {
-
-                fill:
-                    rgba(0, 255, 255, 0.2);
-
-                stroke-width: 1;
-            }
-
-        }
-
-
-        @keyframes revealCursor {
-
-            to {
-                opacity: 1;
-            }
-
-        }
-
-
-        @keyframes typing {
+        @keyframes loadingPulse {
 
             from {
-                max-width: 0;
+                opacity: 0.35;
             }
 
             to {
-                max-width: 1000px;
-            }
-
-        }
-
-
-        @keyframes blinkCaret {
-
-            50% {
-                border-color:
-                    transparent;
-            }
-
-        }
-
-
-        @keyframes hideCaret {
-
-            to {
-                border-color:
-                    transparent;
-            }
-
-        }
-
-
-        @keyframes logoPulse {
-
-            0% {
-
-                opacity: 0.8;
-
-                filter:
-                    drop-shadow(0 0 10px #00ffff);
-            }
-
-            100% {
-
-                opacity: 1;
-
-                filter:
-                    drop-shadow(0 0 25px #00ffff);
-            }
-
-        }
-
-
-        @keyframes energySurge {
-
-            0% {
-
-                opacity: 0;
-
-                width: 10px;
-                height: 10px;
-            }
-
-            50% {
-
-                opacity: 0.5;
-
-                width: 800px;
-                height: 800px;
-
-                filter: blur(5px);
-            }
-
-            100% {
-
-                opacity: 0;
-
-                width: 10px;
-                height: 10px;
-            }
-
-        }
-
-
-        @keyframes dataFlicker {
-
-            0% {
-                opacity: 0.9;
-            }
-
-            100% {
                 opacity: 1;
             }
 
@@ -1287,7 +876,6 @@
                 padding: 20px;
             }
 
-
             .logo-block {
 
                 flex-direction: column;
@@ -1295,11 +883,10 @@
                 gap: 5px;
             }
 
-
             .logo-img {
+
                 height: 60px;
             }
-
 
             .nav-links {
 
@@ -1314,61 +901,35 @@
                 margin-bottom: 10px;
             }
 
-
             .nav-link {
+
                 font-size: 12px;
             }
 
-
             #auth-section {
+
                 flex-wrap: wrap;
 
-                justify-content:
-                    center;
+                justify-content: center;
             }
 
-
-            header {
+            .page-header {
 
                 padding:
-                    70px 20px 50px;
+                    60px 20px 35px;
             }
 
+            .page-header h1 {
 
-            h1 {
-
-                font-size: 3rem;
+                font-size: 2.5rem;
 
                 letter-spacing: 5px;
             }
 
+            .page-header p {
 
-            p.subtitle {
-
-                font-size: 1rem;
+                font-size: 0.85rem;
             }
-
-
-            .features {
-
-                flex-direction: column;
-
-                align-items: center;
-
-                padding:
-                    40px 20px;
-
-                gap: 20px;
-            }
-
-
-            .feature-card {
-
-                width: 100%;
-
-                max-width: 350px;
-            }
-
 
             #projects-section {
 
@@ -1379,7 +940,6 @@
                 margin-bottom: 60px;
             }
 
-
             .projects-header {
 
                 flex-direction: column;
@@ -1389,49 +949,31 @@
                 gap: 15px;
             }
 
-
-            .projects-header .create-project-btn {
+            .projects-header
+            .create-project-btn {
 
                 width: 100%;
             }
 
-
             #projects-grid {
 
-                grid-template-columns:
-                    1fr;
+                grid-template-columns: 1fr;
             }
 
+            .project-actions {
 
-            .logo-assembler {
-
-                flex-direction: column;
-
-                gap: 10px;
+                flex-wrap: wrap;
             }
 
+            .project-btn {
 
-            .forge-wireframe {
-
-                width: 120px;
-                height: 120px;
-            }
-
-
-            .splash-typewriter {
-
-                font-size: 30px;
-            }
-
-
-            .splash-text-container {
-
-                border-right:
-                    2px solid #00ffff;
+                min-width: 30%;
             }
 
         }
+
     </style>
+
 </head>
 
 
@@ -1439,52 +981,8 @@
 
 
     <!-- =========================================
-         SPLASH SCREEN
+         BACKGROUND
     ========================================= -->
-
-    <div id="splash-screen">
-
-        <div class="splash-content">
-
-            <div class="logo-assembler">
-
-                <svg class="forge-wireframe" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-
-                    <path stroke="#00ffff"
-                        d="M10,80 L20,80 L15,60 C15,60 10,60 10,55 L10,35 C10,35 10,30 15,30 L85,30 C85,30 90,30 90,35 L90,55 C90,55 90,60 85,60 L80,60 L75,80 L10,80 Z" />
-
-                    <path stroke="rgba(0, 255, 255, 0.15)"
-                        d="M50,15 L50,10 M50,10 L60,10 M60,10 L60,15 M60,15 L50,15 Z" />
-
-                </svg>
-
-
-                <div class="splash-text-container">
-
-                    <span class="splash-typewriter">
-                        AETHER FORGE
-                    </span>
-
-                </div>
-
-
-                <div class="aether-surge"></div>
-
-            </div>
-
-
-            <div class="constructor-data" id="dynamic-log">
-
-                SYNTHESIZING TOPOLOGY_V3...
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- BACKGROUND -->
 
     <div class="grid-container">
 
@@ -1501,33 +999,57 @@
 
     <nav>
 
-        <a href="index.html" class="logo-block">
+        <a href="index.html"
+           class="logo-block">
 
-            <img src="logo.png" alt="Aether Forge" class="logo-img">
+            <img
+                src="logo.png"
+                alt="Aether Forge"
+                class="logo-img">
 
         </a>
 
 
         <div class="nav-links">
 
-            <a href="index.html" class="nav-link active">
+            <a
+                href="index.html"
+                class="nav-link">
+
                 Home
+
             </a>
 
-            <a href="projects.html" class="nav-link">
+            <a
+                href="projects.html"
+                class="nav-link active">
+
                 Projects
+
             </a>
 
-            <a href="#features" class="nav-link">
+            <a
+                href="index.html#features"
+                class="nav-link">
+
                 Features
+
             </a>
 
-            <a href="#community" class="nav-link">
+            <a
+                href="index.html#community"
+                class="nav-link">
+
                 Community
+
             </a>
 
-            <a href="#contact" class="nav-link">
+            <a
+                href="contact.html"
+                class="nav-link">
+
                 Contact
+
             </a>
 
         </div>
@@ -1539,86 +1061,71 @@
 
 
     <!-- =========================================
-         HERO
+         PAGE HEADER
     ========================================= -->
 
-    <header>
+    <section class="page-header">
 
         <h1>
-            Aether <span>Forge</span>
+            MY <span>PROJECTS</span>
         </h1>
 
-
-        <p class="subtitle">
-
-            Next-generation WebGL topological
-            construction interface. Design, group,
-            and export parametric geometry in real-time.
-
+        <p>
+            Manage your construction projects,
+            open existing designs, and initialize
+            new creations.
         </p>
 
+    </section>
 
-        <a href="projects.html" class="btn-launch" id="launch-btn">
-
-            INITIALIZE CONSTRUCTOR
-
-        </a>
-
-    </header>
 
     <!-- =========================================
-         FEATURES
+         PROJECT DASHBOARD
     ========================================= -->
 
-    <section class="features" id="features">
+    <section id="projects-section">
 
+        <div class="projects-header">
 
-        <div class="feature-card">
+            <div>
 
-            <div class="feature-icon">
-                ✥
+                <div class="projects-title">
+
+                    PROJECT ARCHIVE
+
+                </div>
+
+                <div
+                    class="project-count"
+                    id="project-count">
+
+                    LOADING PROJECTS...
+
+                </div>
+
             </div>
 
 
-            <h3 class="feature-title">
-                Multi-Transform
-            </h3>
+            <button
+                class="create-project-btn"
+                id="create-project-btn">
 
+                + NEW PROJECT
 
-            <p class="feature-desc">
-
-                Utilize advanced Shift-Select
-                logic to group multiple primitives.
-                Scale, rotate, and translate complex
-                assemblies simultaneously.
-
-            </p>
+            </button>
 
         </div>
 
 
-        <div class="feature-card">
+        <div id="projects-grid">
 
-            <div class="feature-icon">
-                ⏳
+            <div class="loading-projects">
+
+                LOADING PROJECT DATABASE...
+
             </div>
 
-
-            <h3 class="feature-title">
-                Temporal Memory
-            </h3>
-
-
-            <p class="feature-desc">
-
-                Full Undo/Redo architecture.
-                Step back through time to recover
-                lost geometrical topologies instantly.
-
-            </p>
-
         </div>
-
 
     </section>
 
@@ -1634,138 +1141,24 @@
             async () => {
 
 
-                // =====================================
-                // SPLASH SCREEN
-                // =====================================
-
-                const splash =
-                    document.getElementById(
-                        'splash-screen'
-                    );
-
-
-                const log =
-                    document.getElementById(
-                        'dynamic-log'
-                    );
-
-
-                if (
-                    sessionStorage.getItem(
-                        'aether_splash_seen'
-                    ) === 'true'
-                ) {
-
-                    splash.style.display =
-                        'none';
-
-                }
-
-                else {
-
-                    const statuses = [
-
-                        "CALIBRATING FABRICATOR AXIS...",
-
-                        "SYNTHESIZING VECTOR CORE...",
-
-                        "CONSTRUCTION COMPLETE. DEPLOYING MATRIX."
-
-                    ];
-
-
-                    let step = 0;
-
-
-                    const logUpdate =
-                        setInterval(() => {
-
-                            if (
-                                step <
-                                statuses.length - 1
-                            ) {
-
-                                step++;
-
-                                log.innerText =
-                                    statuses[step];
-
-                            }
-
-                            else {
-
-                                clearInterval(
-                                    logUpdate
-                                );
-
-                            }
-
-                        }, 1200);
-
-
-                    setTimeout(() => {
-
-                        splash.style.transition =
-                            'all 1s';
-
-                        splash.style.opacity =
-                            '0';
-
-                        splash.style.visibility =
-                            'hidden';
-
-                        splash.style.pointerEvents =
-                            'none';
-
-
-                        clearInterval(
-                            logUpdate
-                        );
-
-
-                        sessionStorage.setItem(
-                            'aether_splash_seen',
-                            'true'
-                        );
-
-                    }, 5500);
-
-                }
-
-
-                // =====================================
-                // ELEMENTS
-                // =====================================
+                /* =====================================
+                   ELEMENTS
+                ===================================== */
 
                 const authSection =
                     document.getElementById(
                         'auth-section'
                     );
 
-
-                const launchBtn =
-                    document.getElementById(
-                        'launch-btn'
-                    );
-
-
-                const projectsSection =
-                    document.getElementById(
-                        'projects-section'
-                    );
-
-
                 const projectsGrid =
                     document.getElementById(
                         'projects-grid'
                     );
 
-
                 const projectCount =
                     document.getElementById(
                         'project-count'
                     );
-
 
                 const createProjectBtn =
                     document.getElementById(
@@ -1776,9 +1169,76 @@
                 let projects = [];
 
 
-                // =====================================
-                // CREATE PROJECT
-                // =====================================
+                /* =====================================
+                   HTML ESCAPE
+                ===================================== */
+
+                function escapeHtml(value) {
+
+                    const div =
+                        document.createElement(
+                            'div'
+                        );
+
+                    div.textContent =
+                        value || '';
+
+                    return div.innerHTML;
+
+                }
+
+
+                /* =====================================
+                   FORMAT DATE
+                ===================================== */
+
+                function formatDate(dateString) {
+
+                    if (!dateString) {
+
+                        return "UNKNOWN";
+
+                    }
+
+                    const date =
+                        new Date(dateString);
+
+                    if (
+                        Number.isNaN(
+                            date.getTime()
+                        )
+                    ) {
+
+                        return "UNKNOWN";
+
+                    }
+
+                    return date.toLocaleString(
+                        [],
+                        {
+                            dateStyle: 'medium',
+                            timeStyle: 'short'
+                        }
+                    );
+
+                }
+
+
+                /* =====================================
+                   OPEN PROJECT
+                ===================================== */
+
+                function openProject(projectId) {
+
+                    window.location.href =
+                        `AetherForge.html?project_id=${projectId}`;
+
+                }
+
+
+                /* =====================================
+                   CREATE PROJECT
+                ===================================== */
 
                 async function createProject() {
 
@@ -1786,7 +1246,6 @@
                         prompt(
                             "ENTER NEW PROJECT NAME:"
                         );
-
 
                     if (
                         !projectName ||
@@ -1847,12 +1306,8 @@
                         }
 
 
-                        // Reload project list
-
                         await loadProjects();
 
-
-                        // Open newly created project
 
                         if (
                             data.project &&
@@ -1864,7 +1319,6 @@
 
                         }
 
-
                     }
 
                     catch (error) {
@@ -1873,7 +1327,6 @@
                             "Project creation error:",
                             error
                         );
-
 
                         alert(
                             "PROJECT SYSTEM OFFLINE."
@@ -1884,21 +1337,19 @@
                 }
 
 
-                // =====================================
-                // DELETE PROJECT
-                // =====================================
+                /* =====================================
+                   DELETE PROJECT
+                ===================================== */
 
                 async function deleteProject(
                     projectId,
                     projectName
                 ) {
 
-
                     const confirmed =
                         confirm(
                             `DELETE PROJECT "${projectName}"?\n\nThis action cannot be undone.`
                         );
-
 
                     if (!confirmed) {
 
@@ -1951,7 +1402,6 @@
                             error
                         );
 
-
                         alert(
                             "PROJECT SYSTEM OFFLINE."
                         );
@@ -1961,9 +1411,9 @@
                 }
 
 
-                // =====================================
-                // RENAME PROJECT
-                // =====================================
+                /* =====================================
+                   RENAME PROJECT
+                ===================================== */
 
                 async function renameProject(
                     projectId,
@@ -1971,13 +1421,11 @@
                     currentDescription
                 ) {
 
-
                     const newName =
                         prompt(
                             "ENTER NEW PROJECT NAME:",
                             currentName
                         );
-
 
                     if (
                         !newName ||
@@ -2049,7 +1497,6 @@
                             error
                         );
 
-
                         alert(
                             "PROJECT SYSTEM OFFLINE."
                         );
@@ -2059,69 +1506,9 @@
                 }
 
 
-                // =====================================
-                // OPEN PROJECT
-                // =====================================
-
-                function openProject(
-                    projectId
-                ) {
-
-                    window.location.href =
-                        `AetherForge.html?project_id=${projectId}`;
-
-                }
-
-
-                // =====================================
-                // FORMAT DATE
-                // =====================================
-
-                function formatDate(
-                    dateString
-                ) {
-
-                    if (!dateString) {
-
-                        return "UNKNOWN";
-
-                    }
-
-
-                    const date =
-                        new Date(
-                            dateString
-                        );
-
-
-                    if (
-                        Number.isNaN(
-                            date.getTime()
-                        )
-                    ) {
-
-                        return "UNKNOWN";
-
-                    }
-
-
-                    return date.toLocaleString(
-                        [],
-                        {
-                            dateStyle:
-                                'medium',
-
-                            timeStyle:
-                                'short'
-                        }
-                    );
-
-                }
-
-
-                // =====================================
-                // RENDER PROJECTS
-                // =====================================
+                /* =====================================
+                   RENDER PROJECTS
+                ===================================== */
 
                 function renderProjects() {
 
@@ -2139,25 +1526,33 @@
 
                         projectsGrid.innerHTML = `
 
-                            <div class="empty-projects"
-                                 style="grid-column:1/-1;">
+                            <div
+                                class="empty-projects"
+                                style="grid-column:1/-1;">
 
-                                <div class="empty-projects-icon">
+                                <div
+                                    class="empty-projects-icon">
+
                                     ◇
+
                                 </div>
 
                                 <h3>
+
                                     NO PROJECTS DETECTED
+
                                 </h3>
 
                                 <p>
+
                                     Initialize your first
                                     construction project.
+
                                 </p>
 
                                 <button
                                     class="create-project-btn"
-                                    onclick="document.getElementById('create-project-btn').click()">
+                                    id="create-first-project">
 
                                     + CREATE FIRST PROJECT
 
@@ -2166,6 +1561,17 @@
                             </div>
 
                         `;
+
+
+                        document
+                            .getElementById(
+                                'create-first-project'
+                            )
+                            .addEventListener(
+                                'click',
+                                createProject
+                            );
+
 
                         return;
 
@@ -2187,28 +1593,44 @@
 
                             card.innerHTML = `
 
-                                <div class="project-icon">
+                                <div
+                                    class="project-icon">
+
                                     ◈
+
                                 </div>
 
-                                <div class="project-name">
-                                    ${escapeHtml(project.name)}
-                                </div>
+                                <div
+                                    class="project-name">
 
-                                <div class="project-description">
                                     ${escapeHtml(
-                                project.description ||
-                                'Aether Forge Constructor Project'
-                            )
-                                }
+                                        project.name
+                                    )}
+
                                 </div>
 
-                                <div class="project-date">
+                                <div
+                                    class="project-description">
+
+                                    ${escapeHtml(
+                                        project.description ||
+                                        'Aether Forge Constructor Project'
+                                    )}
+
+                                </div>
+
+                                <div
+                                    class="project-date">
+
                                     LAST UPDATED:
-                                    ${formatDate(project.updated_at)}
+                                    ${formatDate(
+                                        project.updated_at
+                                    )}
+
                                 </div>
 
-                                <div class="project-actions">
+                                <div
+                                    class="project-actions">
 
                                     <button
                                         class="project-btn open-project"
@@ -2239,7 +1661,7 @@
                             `;
 
 
-                            // OPEN
+                            /* OPEN */
 
                             card
                                 .querySelector(
@@ -2257,7 +1679,7 @@
                                 );
 
 
-                            // RENAME
+                            /* RENAME */
 
                             card
                                 .querySelector(
@@ -2277,7 +1699,7 @@
                                 );
 
 
-                            // DELETE
+                            /* DELETE */
 
                             card
                                 .querySelector(
@@ -2306,36 +1728,17 @@
                 }
 
 
-                // =====================================
-                // HTML ESCAPE
-                // =====================================
-
-                function escapeHtml(
-                    value
-                ) {
-
-                    const div =
-                        document.createElement(
-                            'div'
-                        );
-
-
-                    div.textContent =
-                        value || '';
-
-
-                    return div.innerHTML;
-
-                }
-
-
-                // =====================================
-                // LOAD PROJECTS
-                // =====================================
+                /* =====================================
+                   LOAD PROJECTS
+                ===================================== */
 
                 async function loadProjects() {
 
                     try {
+
+                        projectCount.innerText =
+                            "LOADING PROJECTS...";
+
 
                         const response =
                             await fetch(
@@ -2363,6 +1766,36 @@
                             projectCount.innerText =
                                 "PROJECT SYSTEM OFFLINE";
 
+                            projectsGrid.innerHTML = `
+
+                                <div
+                                    class="empty-projects"
+                                    style="grid-column:1/-1;">
+
+                                    <div
+                                        class="empty-projects-icon">
+
+                                        ⚠
+
+                                    </div>
+
+                                    <h3>
+
+                                        PROJECT SYSTEM OFFLINE
+
+                                    </h3>
+
+                                    <p>
+
+                                        Unable to retrieve
+                                        your project database.
+
+                                    </p>
+
+                                </div>
+
+                            `;
+
                             return;
 
                         }
@@ -2387,14 +1820,45 @@
                         projectCount.innerText =
                             "PROJECT SYSTEM OFFLINE";
 
+
+                        projectsGrid.innerHTML = `
+
+                            <div
+                                class="empty-projects"
+                                style="grid-column:1/-1;">
+
+                                <div
+                                    class="empty-projects-icon">
+
+                                    ⚠
+
+                                </div>
+
+                                <h3>
+
+                                    PROJECT SYSTEM OFFLINE
+
+                                </h3>
+
+                                <p>
+
+                                    Unable to connect
+                                    to the project service.
+
+                                </p>
+
+                            </div>
+
+                        `;
+
                     }
 
                 }
 
 
-                // =====================================
-                // CHECK AUTHENTICATION
-                // =====================================
+                /* =====================================
+                   CHECK AUTHENTICATION
+                ===================================== */
 
                 try {
 
@@ -2419,10 +1883,9 @@
                         !data.authenticated
                     ) {
 
-
-                        // ==============================
-                        // NOT LOGGED IN
-                        // ==============================
+                        /*
+                         * Projects require login.
+                         */
 
                         authSection.innerHTML = `
 
@@ -2445,27 +1908,51 @@
                         `;
 
 
-                        launchBtn.addEventListener(
-                            'click',
-                            e => {
+                        projectsGrid.innerHTML = `
 
-                                e.preventDefault();
+                            <div
+                                class="empty-projects"
+                                style="grid-column:1/-1;">
 
-                                alert(
-                                    "ACCESS DENIED: Please authenticate via System Login to use the Constructor."
-                                );
+                                <div
+                                    class="empty-projects-icon">
 
-                                window.location.href =
-                                    'login.html';
+                                    ◇
 
-                            }
-                        );
+                                </div>
+
+                                <h3>
+
+                                    AUTHENTICATION REQUIRED
+
+                                </h3>
+
+                                <p>
+
+                                    Login to access your
+                                    Aether Forge projects.
+
+                                </p>
+
+                                <a
+                                    href="login.html"
+                                    class="create-project-btn"
+                                    style="
+                                        display:inline-block;
+                                        text-decoration:none;
+                                    ">
+
+                                    SYSTEM LOGIN
+
+                                </a>
+
+                            </div>
+
+                        `;
 
 
-                        // Hide project dashboard
-
-                        projectsSection.style.display =
-                            'none';
+                        projectCount.innerText =
+                            "AUTHENTICATION REQUIRED";
 
 
                         return;
@@ -2473,9 +1960,9 @@
                     }
 
 
-                    // =================================
-                    // LOGGED IN
-                    // =================================
+                    /* =================================
+                       LOGGED IN
+                    ================================= */
 
                     const username =
                         data.user.username;
@@ -2483,7 +1970,8 @@
 
                     authSection.innerHTML = `
 
-                        <div class="operative-badge">
+                        <div
+                            class="operative-badge">
 
                             OP:
                             ${escapeHtml(username)}
@@ -2501,9 +1989,9 @@
                     `;
 
 
-                    // =================================
-                    // LOGOUT
-                    // =================================
+                    /* =================================
+                       LOGOUT
+                    ================================= */
 
                     document
                         .getElementById(
@@ -2545,24 +2033,9 @@
                         );
 
 
-                    // =================================
-                    // SHOW PROJECT DASHBOARD
-                    // =================================
-
-                    projectsSection.style.display =
-                        'block';
-
-
-                    // =================================
-                    // LOAD PROJECTS
-                    // =================================
-
-                    await loadProjects();
-
-
-                    // =================================
-                    // CREATE BUTTON
-                    // =================================
+                    /* =================================
+                       CREATE BUTTON
+                    ================================= */
 
                     createProjectBtn
                         .addEventListener(
@@ -2571,26 +2044,11 @@
                         );
 
 
-                    // =================================
-                    // HERO BUTTON
-                    // =================================
+                    /* =================================
+                       LOAD PROJECTS
+                    ================================= */
 
-                    launchBtn
-                        .addEventListener(
-                            'click',
-                            e => {
-
-                                e.preventDefault();
-
-
-                                projectsSection
-                                    .scrollIntoView({
-                                        behavior:
-                                            'smooth'
-                                    });
-
-                            }
-                        );
+                    await loadProjects();
 
                 }
 
@@ -2622,6 +2080,9 @@
 
                     `;
 
+                    projectCount.innerText =
+                        "AUTHENTICATION ERROR";
+
                 }
 
             }
@@ -2633,3 +2094,4 @@
 </body>
 
 </html>
+
