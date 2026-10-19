@@ -1,1569 +1,1226 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
 
     <title>AETHER FORGE | Home</title>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+      }
 
-        body {
-            background: #020202;
-            color: #ffffff;
-            overflow-x: hidden;
-            min-height: 100vh;
-            perspective: 1200px;
-        }
+      body {
+        background: #020202;
+        color: #ffffff;
+        overflow-x: hidden;
+        min-height: 100vh;
+        perspective: 1200px;
+      }
 
-
-        /* =========================================
+      /* =========================================
            3D MOVING GRID
         ========================================= */
 
-        .grid-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            perspective: 600px;
-            z-index: -2;
-            overflow: hidden;
+      .grid-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        perspective: 600px;
+        z-index: -2;
+        overflow: hidden;
+      }
+
+      .moving-grid {
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        left: -50%;
+        top: -50%;
+
+        background-image:
+          linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+
+        background-size: 50px 50px;
+
+        transform: rotateX(60deg) translateY(0);
+
+        animation: gridFlow 10s linear infinite;
+      }
+
+      @keyframes gridFlow {
+        100% {
+          transform: rotateX(60deg) translateY(100px);
         }
+      }
 
-        .moving-grid {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            left: -50%;
-            top: -50%;
+      .glow-orb {
+        position: fixed;
 
-            background-image:
-                linear-gradient(rgba(0, 255, 255, 0.1) 1px,
-                    transparent 1px),
-                linear-gradient(90deg,
-                    rgba(0, 255, 255, 0.1) 1px,
-                    transparent 1px);
+        top: 30%;
+        left: 50%;
 
-            background-size: 50px 50px;
+        width: 60vw;
+        height: 60vw;
 
-            transform: rotateX(60deg) translateY(0);
+        background: radial-gradient(
+          circle,
+          rgba(0, 200, 255, 0.15) 0%,
+          transparent 60%
+        );
 
-            animation:
-                gridFlow 10s linear infinite;
+        transform: translate(-50%, -50%);
+
+        z-index: -1;
+
+        animation: pulse 4s infinite alternate;
+      }
+
+      @keyframes pulse {
+        100% {
+          opacity: 0.5;
+
+          transform: translate(-50%, -50%) scale(1.1);
         }
+      }
 
-        @keyframes gridFlow {
-
-            100% {
-                transform:
-                    rotateX(60deg) translateY(100px);
-            }
-
-        }
-
-
-        .glow-orb {
-            position: fixed;
-
-            top: 30%;
-            left: 50%;
-
-            width: 60vw;
-            height: 60vw;
-
-            background:
-                radial-gradient(circle,
-                    rgba(0, 200, 255, 0.15) 0%,
-                    transparent 60%);
-
-            transform:
-                translate(-50%, -50%);
-
-            z-index: -1;
-
-            animation:
-                pulse 4s infinite alternate;
-        }
-
-        @keyframes pulse {
-
-            100% {
-                opacity: 0.5;
-
-                transform:
-                    translate(-50%, -50%) scale(1.1);
-            }
-
-        }
-
-
-        /* =========================================
+      /* =========================================
            NAVIGATION
         ========================================= */
 
-        nav {
-            display: flex;
+      nav {
+        display: flex;
 
-            justify-content: space-between;
-            align-items: center;
+        justify-content: space-between;
+        align-items: center;
 
-            padding: 20px 50px;
+        padding: 20px 50px;
 
-            background:
-                rgba(0, 5, 10, 0.6);
+        background: rgba(0, 5, 10, 0.6);
 
-            backdrop-filter: blur(15px);
+        backdrop-filter: blur(15px);
 
-            border-bottom:
-                1px solid rgba(0, 255, 255, 0.2);
+        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
 
-            position: relative;
+        position: relative;
 
-            z-index: 100;
-        }
+        z-index: 100;
+      }
 
+      .logo-block {
+        display: flex;
 
-        .logo-block {
-            display: flex;
+        align-items: center;
 
-            align-items: center;
+        gap: 15px;
 
-            gap: 15px;
+        text-decoration: none;
 
-            text-decoration: none;
+        cursor: pointer;
+      }
 
-            cursor: pointer;
-        }
+      .logo-img {
+        height: 80px;
+        width: auto;
 
+        opacity: 0.85;
 
-        .logo-img {
-            height: 80px;
-            width: auto;
+        filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.4));
 
-            opacity: 0.85;
+        transition:
+          transform 0.3s ease,
+          opacity 0.3s,
+          filter 0.3s;
+      }
 
-            filter:
-                drop-shadow(0 0 10px rgba(0, 255, 255, 0.4));
+      .logo-block:hover .logo-img {
+        transform: scale(1.05);
 
-            transition:
-                transform 0.3s ease,
-                opacity 0.3s,
-                filter 0.3s;
-        }
+        opacity: 1;
 
+        filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.7));
+      }
 
-        .logo-block:hover .logo-img {
-            transform: scale(1.05);
+      .nav-links {
+        display: flex;
 
-            opacity: 1;
+        gap: 30px;
 
-            filter:
-                drop-shadow(0 0 15px rgba(0, 255, 255, 0.7));
-        }
+        align-items: center;
+      }
 
+      .nav-link {
+        color: #88ccdd;
 
-        .nav-links {
-            display: flex;
+        text-decoration: none;
 
-            gap: 30px;
+        font-size: 14px;
 
-            align-items: center;
-        }
+        letter-spacing: 2px;
 
+        text-transform: uppercase;
 
-        .nav-link {
-            color: #88ccdd;
+        transition:
+          color 0.3s,
+          text-shadow 0.3s;
 
-            text-decoration: none;
+        position: relative;
 
-            font-size: 14px;
+        padding-bottom: 5px;
+      }
 
-            letter-spacing: 2px;
+      .nav-link:hover,
+      .nav-link.active {
+        color: #00ffff;
 
-            text-transform: uppercase;
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+      }
 
-            transition:
-                color 0.3s,
-                text-shadow 0.3s;
+      .nav-link::after {
+        content: "";
 
-            position: relative;
+        position: absolute;
 
-            padding-bottom: 5px;
-        }
+        bottom: 0;
+        left: 0;
 
+        width: 0%;
+        height: 2px;
 
-        .nav-link:hover,
-        .nav-link.active {
+        background: #00ffff;
 
-            color: #00ffff;
+        box-shadow: 0 0 10px #00ffff;
 
-            text-shadow:
-                0 0 10px rgba(0, 255, 255, 0.6);
-        }
+        transition: width 0.3s ease;
+      }
 
+      .nav-link:hover::after,
+      .nav-link.active::after {
+        width: 100%;
+      }
 
-        .nav-link::after {
-            content: '';
+      #auth-section {
+        display: flex;
 
-            position: absolute;
+        gap: 15px;
 
-            bottom: 0;
-            left: 0;
+        align-items: center;
+      }
 
-            width: 0%;
-            height: 2px;
+      .btn-nav-login,
+      .btn-nav-register,
+      .btn-nav-logout {
+        padding: 8px 20px;
 
-            background: #00ffff;
+        font-size: 12px;
 
-            box-shadow:
-                0 0 10px #00ffff;
+        letter-spacing: 2px;
 
-            transition:
-                width 0.3s ease;
-        }
+        text-transform: uppercase;
 
+        border-radius: 4px;
 
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            width: 100%;
-        }
+        transition: 0.4s;
+      }
 
+      .btn-nav-login {
+        background: rgba(0, 255, 255, 0.05);
 
-        #auth-section {
-            display: flex;
+        border: 1px solid #00ffff;
 
-            gap: 15px;
+        color: #00ffff;
 
-            align-items: center;
-        }
+        text-decoration: none;
+      }
 
+      .btn-nav-register {
+        background: rgba(0, 255, 255, 0.1);
 
-        .btn-nav-login,
-        .btn-nav-register,
-        .btn-nav-logout {
+        border: 1px solid #00ffff;
 
-            padding: 8px 20px;
+        color: #00ffff;
 
-            font-size: 12px;
+        text-decoration: none;
+      }
 
-            letter-spacing: 2px;
+      .btn-nav-login:hover,
+      .btn-nav-register:hover {
+        background: #00ffff;
 
-            text-transform: uppercase;
+        color: #000;
 
-            border-radius: 4px;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
 
-            transition: 0.4s;
-        }
+        transform: translateY(-2px);
+      }
 
+      .btn-nav-logout {
+        background: rgba(255, 51, 51, 0.1);
 
-        .btn-nav-login {
+        border: 1px solid #ff3333;
 
-            background:
-                rgba(0, 255, 255, 0.05);
+        color: #ff3333;
 
-            border:
-                1px solid #00ffff;
+        cursor: pointer;
+      }
 
-            color: #00ffff;
+      .btn-nav-logout:hover {
+        background: #ff3333;
 
-            text-decoration: none;
-        }
+        color: #fff;
 
+        box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
 
-        .btn-nav-register {
+        transform: translateY(-2px);
+      }
 
-            background:
-                rgba(0, 255, 255, 0.1);
+      .operative-badge {
+        color: #fff;
 
-            border:
-                1px solid #00ffff;
+        font-size: 12px;
 
-            color: #00ffff;
+        letter-spacing: 2px;
 
-            text-decoration: none;
-        }
+        background: rgba(0, 255, 255, 0.1);
 
+        padding: 8px 20px;
 
-        .btn-nav-login:hover,
-        .btn-nav-register:hover {
+        border-radius: 4px;
 
-            background: #00ffff;
+        border: 1px solid rgba(0, 255, 255, 0.3);
+      }
 
-            color: #000;
-
-            box-shadow:
-                0 0 20px rgba(0, 255, 255, 0.6);
-
-            transform:
-                translateY(-2px);
-        }
-
-
-        .btn-nav-logout {
-
-            background:
-                rgba(255, 51, 51, 0.1);
-
-            border:
-                1px solid #ff3333;
-
-            color: #ff3333;
-
-            cursor: pointer;
-        }
-
-
-        .btn-nav-logout:hover {
-
-            background: #ff3333;
-
-            color: #fff;
-
-            box-shadow:
-                0 0 20px rgba(255, 51, 51, 0.6);
-
-            transform:
-                translateY(-2px);
-        }
-
-
-        .operative-badge {
-
-            color: #fff;
-
-            font-size: 12px;
-
-            letter-spacing: 2px;
-
-            background:
-                rgba(0, 255, 255, 0.1);
-
-            padding: 8px 20px;
-
-            border-radius: 4px;
-
-            border:
-                1px solid rgba(0, 255, 255, 0.3);
-        }
-
-
-        /* =========================================
+      /* =========================================
            HERO
         ========================================= */
 
-        header {
+      header {
+        display: flex;
 
-            display: flex;
+        flex-direction: column;
 
-            flex-direction: column;
+        align-items: center;
 
-            align-items: center;
+        text-align: center;
 
-            text-align: center;
+        padding: 100px 20px 70px;
 
-            padding: 100px 20px 70px;
+        transform-style: preserve-3d;
 
-            transform-style: preserve-3d;
+        animation: float 6s ease-in-out infinite;
 
-            animation:
-                float 6s ease-in-out infinite;
+        position: relative;
 
-            position: relative;
+        z-index: 10;
+      }
 
-            z-index: 10;
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) rotateX(2deg);
         }
 
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform:
-                    translateY(0) rotateX(2deg);
-            }
-
-            50% {
-                transform:
-                    translateY(-15px) rotateX(-2deg);
-            }
-
+        50% {
+          transform: translateY(-15px) rotateX(-2deg);
         }
+      }
 
+      h1 {
+        font-size: 5rem;
 
-        h1 {
+        letter-spacing: 12px;
 
-            font-size: 5rem;
+        margin-bottom: 20px;
 
-            letter-spacing: 12px;
+        text-transform: uppercase;
 
-            margin-bottom: 20px;
+        color: #fff;
 
-            text-transform: uppercase;
+        text-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+      }
 
-            color: #fff;
+      h1 span {
+        color: #00ffff;
+      }
 
-            text-shadow:
-                0 0 30px rgba(0, 255, 255, 0.3);
-        }
+      p.subtitle {
+        color: #88ccdd;
 
+        font-size: 1.2rem;
 
-        h1 span {
-            color: #00ffff;
-        }
+        max-width: 600px;
 
+        line-height: 1.8;
 
-        p.subtitle {
+        margin-bottom: 40px;
+      }
 
-            color: #88ccdd;
+      .btn-launch {
+        display: inline-block;
 
-            font-size: 1.2rem;
+        background: rgba(0, 20, 30, 0.8);
 
-            max-width: 600px;
+        border: 2px solid #00ffff;
 
-            line-height: 1.8;
+        color: #00ffff;
 
-            margin-bottom: 40px;
-        }
+        padding: 18px 60px;
 
+        font-size: 1.2rem;
 
-        .btn-launch {
+        letter-spacing: 4px;
 
-            display: inline-block;
+        text-transform: uppercase;
 
-            background:
-                rgba(0, 20, 30, 0.8);
+        text-decoration: none;
 
-            border:
-                2px solid #00ffff;
+        border-radius: 6px;
 
-            color: #00ffff;
+        transition: all 0.4s ease;
 
-            padding: 18px 60px;
+        cursor: pointer;
+      }
 
-            font-size: 1.2rem;
+      .btn-launch:hover {
+        background: #00ffff;
 
-            letter-spacing: 4px;
+        color: #000;
 
-            text-transform: uppercase;
+        box-shadow: 0 0 40px rgba(0, 255, 255, 0.8);
 
-            text-decoration: none;
+        transform: scale(1.05);
+      }
 
-            border-radius: 6px;
-
-            transition:
-                all 0.4s ease;
-
-            cursor: pointer;
-        }
-
-
-        .btn-launch:hover {
-
-            background: #00ffff;
-
-            color: #000;
-
-            box-shadow:
-                0 0 40px rgba(0, 255, 255, 0.8);
-
-            transform:
-                scale(1.05);
-        }
-
-
-        /* =========================================
+      /* =========================================
            PROJECT DASHBOARD
         ========================================= */
 
-        #projects-section {
+      #projects-section {
+        position: relative;
 
-            position: relative;
+        z-index: 20;
 
-            z-index: 20;
+        width: 90%;
 
-            width: 90%;
+        max-width: 1200px;
 
-            max-width: 1200px;
+        margin: 20px auto 100px;
 
-            margin:
-                20px auto 100px;
+        padding: 35px;
 
-            padding: 35px;
+        background: rgba(0, 10, 20, 0.72);
 
-            background:
-                rgba(0, 10, 20, 0.72);
+        border: 1px solid rgba(0, 255, 255, 0.2);
 
-            border:
-                1px solid rgba(0, 255, 255, 0.2);
+        border-radius: 16px;
 
-            border-radius: 16px;
+        backdrop-filter: blur(15px);
 
-            backdrop-filter:
-                blur(15px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 
-            box-shadow:
-                0 20px 60px rgba(0, 0, 0, 0.5);
+        display: none;
+      }
 
-            display: none;
-        }
+      .projects-header {
+        display: flex;
 
+        justify-content: space-between;
 
-        .projects-header {
+        align-items: center;
 
-            display: flex;
+        margin-bottom: 30px;
 
-            justify-content:
-                space-between;
+        padding-bottom: 20px;
 
-            align-items: center;
+        border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+      }
 
-            margin-bottom: 30px;
+      .projects-title {
+        color: #00ffff;
 
-            padding-bottom: 20px;
+        font-size: 22px;
 
-            border-bottom:
-                1px solid rgba(0, 255, 255, 0.15);
-        }
+        letter-spacing: 4px;
 
+        text-transform: uppercase;
 
-        .projects-title {
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+      }
 
-            color: #00ffff;
+      .project-count {
+        color: #88ccdd;
 
-            font-size: 22px;
+        font-size: 11px;
 
-            letter-spacing: 4px;
+        letter-spacing: 2px;
+      }
 
-            text-transform:
-                uppercase;
+      .create-project-btn {
+        background: rgba(0, 255, 255, 0.08);
 
-            text-shadow:
-                0 0 10px rgba(0, 255, 255, 0.4);
-        }
+        border: 1px solid #00ffff;
 
+        color: #00ffff;
 
-        .project-count {
+        padding: 10px 18px;
 
-            color: #88ccdd;
+        border-radius: 5px;
 
-            font-size: 11px;
+        cursor: pointer;
 
-            letter-spacing: 2px;
-        }
+        font-size: 11px;
 
+        letter-spacing: 2px;
 
-        .create-project-btn {
+        text-transform: uppercase;
 
-            background:
-                rgba(0, 255, 255, 0.08);
+        transition: 0.3s;
+      }
 
-            border:
-                1px solid #00ffff;
+      .create-project-btn:hover {
+        background: #00ffff;
 
-            color: #00ffff;
+        color: #000;
 
-            padding:
-                10px 18px;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+      }
 
-            border-radius: 5px;
+      #projects-grid {
+        display: grid;
 
-            cursor: pointer;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 
-            font-size: 11px;
+        gap: 22px;
+      }
 
-            letter-spacing: 2px;
+      .project-card {
+        background: rgba(0, 20, 30, 0.65);
 
-            text-transform:
-                uppercase;
+        border: 1px solid rgba(0, 255, 255, 0.18);
 
-            transition: 0.3s;
-        }
+        border-radius: 10px;
 
+        padding: 22px;
 
-        .create-project-btn:hover {
+        transition:
+          transform 0.3s,
+          border-color 0.3s,
+          box-shadow 0.3s;
 
-            background: #00ffff;
+        position: relative;
 
-            color: #000;
+        overflow: hidden;
+      }
 
-            box-shadow:
-                0 0 20px rgba(0, 255, 255, 0.5);
-        }
+      .project-card::before {
+        content: "";
 
+        position: absolute;
 
-        #projects-grid {
+        top: 0;
+        left: 0;
 
-            display: grid;
+        width: 100%;
+        height: 2px;
 
-            grid-template-columns:
-                repeat(auto-fit,
-                    minmax(260px, 1fr));
+        background: linear-gradient(90deg, transparent, #00ffff, transparent);
 
-            gap: 22px;
-        }
+        opacity: 0.5;
+      }
 
+      .project-card:hover {
+        transform: translateY(-6px);
 
-        .project-card {
+        border-color: rgba(0, 255, 255, 0.7);
 
-            background:
-                rgba(0, 20, 30, 0.65);
+        box-shadow: 0 15px 35px rgba(0, 255, 255, 0.12);
+      }
 
-            border:
-                1px solid rgba(0, 255, 255, 0.18);
+      .project-icon {
+        width: 45px;
+        height: 45px;
 
-            border-radius: 10px;
+        display: flex;
 
-            padding: 22px;
+        align-items: center;
+        justify-content: center;
 
-            transition:
-                transform 0.3s,
-                border-color 0.3s,
-                box-shadow 0.3s;
+        border: 1px solid rgba(0, 255, 255, 0.3);
 
-            position: relative;
+        border-radius: 8px;
 
-            overflow: hidden;
-        }
+        color: #00ffff;
 
+        font-size: 20px;
 
-        .project-card::before {
+        margin-bottom: 15px;
 
-            content: '';
+        background: rgba(0, 255, 255, 0.05);
+      }
 
-            position: absolute;
+      .project-name {
+        color: #fff;
 
-            top: 0;
-            left: 0;
+        font-size: 18px;
 
-            width: 100%;
-            height: 2px;
+        letter-spacing: 1px;
 
-            background:
-                linear-gradient(90deg,
-                    transparent,
-                    #00ffff,
-                    transparent);
+        margin-bottom: 8px;
 
-            opacity: 0.5;
-        }
+        word-break: break-word;
+      }
 
+      .project-description {
+        color: #88ccdd;
 
-        .project-card:hover {
+        font-size: 12px;
 
-            transform:
-                translateY(-6px);
+        line-height: 1.5;
 
-            border-color:
-                rgba(0, 255, 255, 0.7);
+        min-height: 35px;
 
-            box-shadow:
-                0 15px 35px rgba(0, 255, 255, 0.12);
-        }
+        margin-bottom: 15px;
+      }
 
+      .project-date {
+        color: #557f88;
 
-        .project-icon {
+        font-size: 10px;
 
-            width: 45px;
-            height: 45px;
+        letter-spacing: 1px;
 
-            display: flex;
+        margin-bottom: 18px;
+      }
 
-            align-items: center;
-            justify-content: center;
+      .project-actions {
+        display: flex;
 
-            border:
-                1px solid rgba(0, 255, 255, 0.3);
+        gap: 8px;
+      }
 
-            border-radius: 8px;
+      .project-btn {
+        flex: 1;
 
-            color: #00ffff;
+        padding: 9px 5px;
 
-            font-size: 20px;
+        border-radius: 4px;
 
-            margin-bottom: 15px;
+        cursor: pointer;
 
-            background:
-                rgba(0, 255, 255, 0.05);
-        }
+        font-size: 10px;
 
+        letter-spacing: 1px;
 
-        .project-name {
+        text-transform: uppercase;
 
-            color: #fff;
+        transition: 0.3s;
+      }
 
-            font-size: 18px;
+      .open-project {
+        background: rgba(0, 255, 255, 0.08);
 
-            letter-spacing: 1px;
+        border: 1px solid #00ffff;
 
-            margin-bottom: 8px;
+        color: #00ffff;
+      }
 
-            word-break:
-                break-word;
-        }
+      .open-project:hover {
+        background: #00ffff;
 
+        color: #000;
+      }
 
-        .project-description {
+      .rename-project {
+        background: rgba(255, 255, 255, 0.04);
 
-            color: #88ccdd;
+        border: 1px solid #557f88;
 
-            font-size: 12px;
+        color: #88ccdd;
+      }
 
-            line-height: 1.5;
+      .rename-project:hover {
+        border-color: #fff;
 
-            min-height: 35px;
+        color: #fff;
+      }
 
-            margin-bottom: 15px;
-        }
+      .delete-project {
+        background: rgba(255, 51, 51, 0.05);
 
+        border: 1px solid #ff3333;
 
-        .project-date {
+        color: #ff5555;
+      }
 
-            color: #557f88;
+      .delete-project:hover {
+        background: #ff3333;
 
-            font-size: 10px;
+        color: #fff;
+      }
 
-            letter-spacing: 1px;
+      .empty-projects {
+        text-align: center;
 
-            margin-bottom: 18px;
-        }
+        padding: 60px 20px;
 
+        color: #88ccdd;
+      }
 
-        .project-actions {
+      .empty-projects-icon {
+        font-size: 45px;
 
-            display: flex;
+        margin-bottom: 20px;
 
-            gap: 8px;
-        }
+        opacity: 0.6;
+      }
 
+      .empty-projects h3 {
+        color: #00ffff;
 
-        .project-btn {
+        letter-spacing: 3px;
 
-            flex: 1;
+        margin-bottom: 10px;
 
-            padding: 9px 5px;
+        font-size: 18px;
+      }
 
-            border-radius: 4px;
+      .empty-projects p {
+        font-size: 12px;
 
-            cursor: pointer;
+        letter-spacing: 1px;
 
-            font-size: 10px;
+        margin-bottom: 25px;
+      }
 
-            letter-spacing: 1px;
-
-            text-transform:
-                uppercase;
-
-            transition: 0.3s;
-        }
-
-
-        .open-project {
-
-            background:
-                rgba(0, 255, 255, 0.08);
-
-            border:
-                1px solid #00ffff;
-
-            color: #00ffff;
-        }
-
-
-        .open-project:hover {
-
-            background: #00ffff;
-
-            color: #000;
-        }
-
-
-        .rename-project {
-
-            background:
-                rgba(255, 255, 255, 0.04);
-
-            border:
-                1px solid #557f88;
-
-            color: #88ccdd;
-        }
-
-
-        .rename-project:hover {
-
-            border-color: #fff;
-
-            color: #fff;
-        }
-
-
-        .delete-project {
-
-            background:
-                rgba(255, 51, 51, 0.05);
-
-            border:
-                1px solid #ff3333;
-
-            color: #ff5555;
-        }
-
-
-        .delete-project:hover {
-
-            background: #ff3333;
-
-            color: #fff;
-        }
-
-
-        .empty-projects {
-
-            text-align: center;
-
-            padding: 60px 20px;
-
-            color: #88ccdd;
-        }
-
-
-        .empty-projects-icon {
-
-            font-size: 45px;
-
-            margin-bottom: 20px;
-
-            opacity: 0.6;
-        }
-
-
-        .empty-projects h3 {
-
-            color: #00ffff;
-
-            letter-spacing: 3px;
-
-            margin-bottom: 10px;
-
-            font-size: 18px;
-        }
-
-
-        .empty-projects p {
-
-            font-size: 12px;
-
-            letter-spacing: 1px;
-
-            margin-bottom: 25px;
-        }
-
-
-        /* =========================================
+      /* =========================================
            FEATURES
         ========================================= */
 
-        .features {
+      .features {
+        display: flex;
 
-            display: flex;
+        justify-content: center;
 
-            justify-content: center;
+        gap: 40px;
 
-            gap: 40px;
+        padding: 40px 50px 100px;
 
-            padding:
-                40px 50px 100px;
+        perspective: 1000px;
 
-            perspective: 1000px;
+        position: relative;
 
-            position: relative;
+        z-index: 10;
+      }
 
-            z-index: 10;
-        }
+      .feature-card {
+        background: rgba(0, 10, 20, 0.7);
 
+        border: 1px solid rgba(0, 255, 255, 0.2);
 
-        .feature-card {
+        padding: 40px;
 
-            background:
-                rgba(0, 10, 20, 0.7);
+        border-radius: 12px;
 
-            border:
-                1px solid rgba(0, 255, 255, 0.2);
+        width: 300px;
 
-            padding: 40px;
+        backdrop-filter: blur(10px);
 
-            border-radius: 12px;
+        transition:
+          transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+          border-color 0.3s;
 
-            width: 300px;
+        transform-style: preserve-3d;
+      }
 
-            backdrop-filter:
-                blur(10px);
+      .feature-card:hover {
+        transform: translateZ(40px) rotateX(10deg) rotateY(-5deg);
 
-            transition:
-                transform 0.5s cubic-bezier(0.2,
-                    0.8,
-                    0.2,
-                    1),
-                border-color 0.3s;
+        border-color: #00ffff;
 
-            transform-style:
-                preserve-3d;
-        }
+        box-shadow: -15px 15px 30px rgba(0, 255, 255, 0.15);
+      }
 
+      .feature-icon {
+        font-size: 2.5rem;
 
-        .feature-card:hover {
+        margin-bottom: 20px;
 
-            transform:
-                translateZ(40px) rotateX(10deg) rotateY(-5deg);
+        color: #00ffff;
 
-            border-color: #00ffff;
+        transition: 0.4s;
 
-            box-shadow:
-                -15px 15px 30px rgba(0, 255, 255, 0.15);
-        }
+        display: inline-block;
+      }
 
+      .feature-title {
+        color: #fff;
 
-        .feature-icon {
+        font-size: 1.2rem;
 
-            font-size: 2.5rem;
+        margin-bottom: 15px;
 
-            margin-bottom: 20px;
+        letter-spacing: 2px;
 
-            color: #00ffff;
+        text-transform: uppercase;
+      }
 
-            transition: 0.4s;
+      .feature-desc {
+        color: #88ccdd;
 
-            display: inline-block;
-        }
+        font-size: 0.95rem;
 
+        line-height: 1.6;
+      }
 
-        .feature-title {
-
-            color: #fff;
-
-            font-size: 1.2rem;
-
-            margin-bottom: 15px;
-
-            letter-spacing: 2px;
-
-            text-transform:
-                uppercase;
-        }
-
-
-        .feature-desc {
-
-            color: #88ccdd;
-
-            font-size: 0.95rem;
-
-            line-height: 1.6;
-        }
-
-
-        /* =========================================
+      /* =========================================
            SPLASH SCREEN
         ========================================= */
 
-        #splash-screen {
+      #splash-screen {
+        position: fixed;
 
-            position: fixed;
+        top: 0;
+        left: 0;
 
-            top: 0;
-            left: 0;
+        width: 100vw;
+        height: 100vh;
 
-            width: 100vw;
-            height: 100vh;
+        background: #020202;
 
-            background: #020202;
+        z-index: 9999;
 
-            z-index: 9999;
+        display: flex;
 
-            display: flex;
+        justify-content: center;
 
-            justify-content: center;
+        align-items: center;
 
-            align-items: center;
+        transition:
+          opacity 1s,
+          visibility 1s;
+      }
 
-            transition:
-                opacity 1s,
-                visibility 1s;
+      .splash-content {
+        text-align: center;
+      }
+
+      .logo-assembler {
+        position: relative;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 20px;
+
+        margin: 0 auto;
+
+        width: 100%;
+
+        max-width: 90vw;
+      }
+
+      .forge-wireframe {
+        width: 180px;
+        height: 180px;
+
+        fill: rgba(0, 255, 255, 0);
+
+        stroke-width: 0.5;
+
+        filter: drop-shadow(0 0 10px #00ffff);
+
+        stroke-dasharray: 400;
+
+        stroke-dashoffset: 400;
+
+        animation:
+          blueprintDraw 3.5s ease-out forwards,
+          solidifyAnvil 1s ease 3s forwards,
+          logoPulse 2s infinite alternate 4.5s;
+      }
+
+      .splash-text-container {
+        display: inline-block;
+
+        overflow: hidden;
+
+        white-space: nowrap;
+
+        border-right: 4px solid #00ffff;
+
+        max-width: 0;
+
+        opacity: 0;
+
+        animation:
+          revealCursor 0s 2.5s forwards,
+          typing 1.5s steps(12, end) 2.5s forwards,
+          blinkCaret 0.5s step-end 4,
+          hideCaret 0s 4.5s forwards;
+      }
+
+      .splash-typewriter {
+        color: #00ffff;
+
+        font-family: "Courier New", Courier, monospace;
+
+        font-size: 55px;
+
+        letter-spacing: 6px;
+
+        font-weight: bold;
+
+        text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+      }
+
+      .aether-surge {
+        position: absolute;
+
+        top: 50%;
+        left: 50%;
+
+        width: 10px;
+        height: 10px;
+
+        background: #00ffff;
+
+        border-radius: 50%;
+
+        transform: translate(-50%, -50%);
+
+        opacity: 0;
+
+        filter: blur(15px);
+
+        animation: energySurge 1.5s cubic-bezier(0.1, 1, 0.1, 1) 3.5s forwards;
+      }
+
+      .constructor-data {
+        color: #88ccdd;
+
+        font-size: 11px;
+
+        letter-spacing: 3px;
+
+        text-transform: uppercase;
+
+        margin-top: 30px;
+
+        font-family: monospace;
+
+        animation: dataFlicker 0.1s infinite alternate;
+      }
+
+      @keyframes blueprintDraw {
+        100% {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      @keyframes solidifyAnvil {
+        100% {
+          fill: rgba(0, 255, 255, 0.2);
+
+          stroke-width: 1;
+        }
+      }
+
+      @keyframes revealCursor {
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes typing {
+        from {
+          max-width: 0;
         }
 
+        to {
+          max-width: 1000px;
+        }
+      }
 
-        .splash-content {
-            text-align: center;
+      @keyframes blinkCaret {
+        50% {
+          border-color: transparent;
+        }
+      }
+
+      @keyframes hideCaret {
+        to {
+          border-color: transparent;
+        }
+      }
+
+      @keyframes logoPulse {
+        0% {
+          opacity: 0.8;
+
+          filter: drop-shadow(0 0 10px #00ffff);
         }
 
+        100% {
+          opacity: 1;
 
-        .logo-assembler {
+          filter: drop-shadow(0 0 25px #00ffff);
+        }
+      }
 
-            position: relative;
+      @keyframes energySurge {
+        0% {
+          opacity: 0;
 
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 20px;
-
-            margin: 0 auto;
-
-            width: 100%;
-
-            max-width: 90vw;
+          width: 10px;
+          height: 10px;
         }
 
+        50% {
+          opacity: 0.5;
 
-        .forge-wireframe {
+          width: 800px;
+          height: 800px;
 
-            width: 180px;
-            height: 180px;
-
-            fill:
-                rgba(0, 255, 255, 0);
-
-            stroke-width: 0.5;
-
-            filter:
-                drop-shadow(0 0 10px #00ffff);
-
-            stroke-dasharray: 400;
-
-            stroke-dashoffset: 400;
-
-            animation:
-                blueprintDraw 3.5s ease-out forwards,
-                solidifyAnvil 1s ease 3s forwards,
-                logoPulse 2s infinite alternate 4.5s;
+          filter: blur(5px);
         }
 
+        100% {
+          opacity: 0;
 
-        .splash-text-container {
+          width: 10px;
+          height: 10px;
+        }
+      }
 
-            display: inline-block;
-
-            overflow: hidden;
-
-            white-space: nowrap;
-
-            border-right:
-                4px solid #00ffff;
-
-            max-width: 0;
-
-            opacity: 0;
-
-            animation:
-                revealCursor 0s 2.5s forwards,
-                typing 1.5s steps(12, end) 2.5s forwards,
-                blinkCaret 0.5s step-end 4,
-                hideCaret 0s 4.5s forwards;
+      @keyframes dataFlicker {
+        0% {
+          opacity: 0.9;
         }
 
-
-        .splash-typewriter {
-
-            color: #00ffff;
-
-            font-family:
-                'Courier New',
-                Courier,
-                monospace;
-
-            font-size: 55px;
-
-            letter-spacing: 6px;
-
-            font-weight: bold;
-
-            text-shadow:
-                0 0 20px rgba(0, 255, 255, 0.8);
+        100% {
+          opacity: 1;
         }
+      }
 
-
-        .aether-surge {
-
-            position: absolute;
-
-            top: 50%;
-            left: 50%;
-
-            width: 10px;
-            height: 10px;
-
-            background: #00ffff;
-
-            border-radius: 50%;
-
-            transform:
-                translate(-50%, -50%);
-
-            opacity: 0;
-
-            filter: blur(15px);
-
-            animation:
-                energySurge 1.5s cubic-bezier(0.1,
-                    1,
-                    0.1,
-                    1) 3.5s forwards;
-        }
-
-
-        .constructor-data {
-
-            color: #88ccdd;
-
-            font-size: 11px;
-
-            letter-spacing: 3px;
-
-            text-transform:
-                uppercase;
-
-            margin-top: 30px;
-
-            font-family: monospace;
-
-            animation:
-                dataFlicker 0.1s infinite alternate;
-        }
-
-
-        @keyframes blueprintDraw {
-
-            100% {
-                stroke-dashoffset: 0;
-            }
-
-        }
-
-
-        @keyframes solidifyAnvil {
-
-            100% {
-
-                fill:
-                    rgba(0, 255, 255, 0.2);
-
-                stroke-width: 1;
-            }
-
-        }
-
-
-        @keyframes revealCursor {
-
-            to {
-                opacity: 1;
-            }
-
-        }
-
-
-        @keyframes typing {
-
-            from {
-                max-width: 0;
-            }
-
-            to {
-                max-width: 1000px;
-            }
-
-        }
-
-
-        @keyframes blinkCaret {
-
-            50% {
-                border-color:
-                    transparent;
-            }
-
-        }
-
-
-        @keyframes hideCaret {
-
-            to {
-                border-color:
-                    transparent;
-            }
-
-        }
-
-
-        @keyframes logoPulse {
-
-            0% {
-
-                opacity: 0.8;
-
-                filter:
-                    drop-shadow(0 0 10px #00ffff);
-            }
-
-            100% {
-
-                opacity: 1;
-
-                filter:
-                    drop-shadow(0 0 25px #00ffff);
-            }
-
-        }
-
-
-        @keyframes energySurge {
-
-            0% {
-
-                opacity: 0;
-
-                width: 10px;
-                height: 10px;
-            }
-
-            50% {
-
-                opacity: 0.5;
-
-                width: 800px;
-                height: 800px;
-
-                filter: blur(5px);
-            }
-
-            100% {
-
-                opacity: 0;
-
-                width: 10px;
-                height: 10px;
-            }
-
-        }
-
-
-        @keyframes dataFlicker {
-
-            0% {
-                opacity: 0.9;
-            }
-
-            100% {
-                opacity: 1;
-            }
-
-        }
-
-
-        /* =========================================
+      /* =========================================
            MOBILE
         ========================================= */
 
-        @media (max-width: 768px) {
+      @media (max-width: 768px) {
+        nav {
+          flex-direction: column;
 
-            nav {
+          gap: 15px;
 
-                flex-direction: column;
-
-                gap: 15px;
-
-                padding: 20px;
-            }
-
-
-            .logo-block {
-
-                flex-direction: column;
-
-                gap: 5px;
-            }
-
-
-            .logo-img {
-                height: 60px;
-            }
-
-
-            .nav-links {
-
-                gap: 15px;
-
-                flex-wrap: wrap;
-
-                justify-content: center;
-
-                margin-top: 10px;
-
-                margin-bottom: 10px;
-            }
-
-
-            .nav-link {
-                font-size: 12px;
-            }
-
-
-            #auth-section {
-                flex-wrap: wrap;
-
-                justify-content:
-                    center;
-            }
-
-
-            header {
-
-                padding:
-                    70px 20px 50px;
-            }
-
-
-            h1 {
-
-                font-size: 3rem;
-
-                letter-spacing: 5px;
-            }
-
-
-            p.subtitle {
-
-                font-size: 1rem;
-            }
-
-
-            .features {
-
-                flex-direction: column;
-
-                align-items: center;
-
-                padding:
-                    40px 20px;
-
-                gap: 20px;
-            }
-
-
-            .feature-card {
-
-                width: 100%;
-
-                max-width: 350px;
-            }
-
-
-            #projects-section {
-
-                width: 94%;
-
-                padding: 20px;
-
-                margin-bottom: 60px;
-            }
-
-
-            .projects-header {
-
-                flex-direction: column;
-
-                align-items: flex-start;
-
-                gap: 15px;
-            }
-
-
-            .projects-header .create-project-btn {
-
-                width: 100%;
-            }
-
-
-            #projects-grid {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-
-            .logo-assembler {
-
-                flex-direction: column;
-
-                gap: 10px;
-            }
-
-
-            .forge-wireframe {
-
-                width: 120px;
-                height: 120px;
-            }
-
-
-            .splash-typewriter {
-
-                font-size: 30px;
-            }
-
-
-            .splash-text-container {
-
-                border-right:
-                    2px solid #00ffff;
-            }
-
+          padding: 20px;
         }
+
+        .logo-block {
+          flex-direction: column;
+
+          gap: 5px;
+        }
+
+        .logo-img {
+          height: 60px;
+        }
+
+        .nav-links {
+          gap: 15px;
+
+          flex-wrap: wrap;
+
+          justify-content: center;
+
+          margin-top: 10px;
+
+          margin-bottom: 10px;
+        }
+
+        .nav-link {
+          font-size: 12px;
+        }
+
+        #auth-section {
+          flex-wrap: wrap;
+
+          justify-content: center;
+        }
+
+        header {
+          padding: 70px 20px 50px;
+        }
+
+        h1 {
+          font-size: 3rem;
+
+          letter-spacing: 5px;
+        }
+
+        p.subtitle {
+          font-size: 1rem;
+        }
+
+        .features {
+          flex-direction: column;
+
+          align-items: center;
+
+          padding: 40px 20px;
+
+          gap: 20px;
+        }
+
+        .feature-card {
+          width: 100%;
+
+          max-width: 350px;
+        }
+
+        #projects-section {
+          width: 94%;
+
+          padding: 20px;
+
+          margin-bottom: 60px;
+        }
+
+        .projects-header {
+          flex-direction: column;
+
+          align-items: flex-start;
+
+          gap: 15px;
+        }
+
+        .projects-header .create-project-btn {
+          width: 100%;
+        }
+
+        #projects-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .logo-assembler {
+          flex-direction: column;
+
+          gap: 10px;
+        }
+
+        .forge-wireframe {
+          width: 120px;
+          height: 120px;
+        }
+
+        .splash-typewriter {
+          font-size: 30px;
+        }
+
+        .splash-text-container {
+          border-right: 2px solid #00ffff;
+        }
+      }
     </style>
-</head>
+  </head>
 
-
-<body>
-
-
+  <body>
     <!-- =========================================
          SPLASH SCREEN
     ========================================= -->
 
     <div id="splash-screen">
+      <div class="splash-content">
+        <div class="logo-assembler">
+          <svg
+            class="forge-wireframe"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid meet"
+          >
+            <path
+              stroke="#00ffff"
+              d="M10,80 L20,80 L15,60 C15,60 10,60 10,55 L10,35 C10,35 10,30 15,30 L85,30 C85,30 90,30 90,35 L90,55 C90,55 90,60 85,60 L80,60 L75,80 L10,80 Z"
+            />
 
-        <div class="splash-content">
+            <path
+              stroke="rgba(0, 255, 255, 0.15)"
+              d="M50,15 L50,10 M50,10 L60,10 M60,10 L60,15 M60,15 L50,15 Z"
+            />
+          </svg>
 
-            <div class="logo-assembler">
+          <div class="splash-text-container">
+            <span class="splash-typewriter"> AETHER FORGE </span>
+          </div>
 
-                <svg class="forge-wireframe" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-
-                    <path stroke="#00ffff"
-                        d="M10,80 L20,80 L15,60 C15,60 10,60 10,55 L10,35 C10,35 10,30 15,30 L85,30 C85,30 90,30 90,35 L90,55 C90,55 90,60 85,60 L80,60 L75,80 L10,80 Z" />
-
-                    <path stroke="rgba(0, 255, 255, 0.15)"
-                        d="M50,15 L50,10 M50,10 L60,10 M60,10 L60,15 M60,15 L50,15 Z" />
-
-                </svg>
-
-
-                <div class="splash-text-container">
-
-                    <span class="splash-typewriter">
-                        AETHER FORGE
-                    </span>
-
-                </div>
-
-
-                <div class="aether-surge"></div>
-
-            </div>
-
-
-            <div class="constructor-data" id="dynamic-log">
-
-                SYNTHESIZING TOPOLOGY_V3...
-
-            </div>
-
+          <div class="aether-surge"></div>
         </div>
 
+        <div class="constructor-data" id="dynamic-log">
+          SYNTHESIZING TOPOLOGY_V3...
+        </div>
+      </div>
     </div>
-
 
     <!-- BACKGROUND -->
 
     <div class="grid-container">
-
-        <div class="moving-grid"></div>
-
+      <div class="moving-grid"></div>
     </div>
 
     <div class="glow-orb"></div>
-
 
     <!-- =========================================
          NAVIGATION
     ========================================= -->
 
     <nav>
+      <a href="index.html" class="logo-block">
+        <img src="logo.png" alt="Aether Forge" class="logo-img" />
+      </a>
 
-        <a href="index.html" class="logo-block">
+      <div class="nav-links">
+        <a href="index.html" class="nav-link active"> Home </a>
 
-            <img src="logo.png" alt="Aether Forge" class="logo-img">
+        <a href="projects.html" class="nav-link"> Projects </a>
 
-        </a>
+        <a href="#features" class="nav-link"> Features </a>
 
+        <a href="#community" class="nav-link"> Community </a>
 
-        <div class="nav-links">
+        <a href="contact.html" class="nav-link"> Contact </a>
+      </div>
 
-            <a href="index.html" class="nav-link active">
-                Home
-            </a>
-
-            <a href="projects.html" class="nav-link">
-                Projects
-            </a>
-
-            <a href="#features" class="nav-link">
-                Features
-            </a>
-
-            <a href="#community" class="nav-link">
-                Community
-            </a>
-
-            <a href="contact.html" class="nav-link">
-                Contact
-            </a>
-
-        </div>
-
-
-        <div id="auth-section"></div>
-
+      <div id="auth-section"></div>
     </nav>
-
 
     <!-- =========================================
          HERO
     ========================================= -->
 
     <header>
+      <h1>Aether <span>Forge</span></h1>
 
-        <h1>
-            Aether <span>Forge</span>
-        </h1>
+      <p class="subtitle">
+        Next-generation WebGL topological construction interface. Design, group,
+        and export parametric geometry in real-time.
+      </p>
 
-
-        <p class="subtitle">
-
-            Next-generation WebGL topological
-            construction interface. Design, group,
-            and export parametric geometry in real-time.
-
-        </p>
-
-
-        <a href="projects.html" class="btn-launch" id="launch-btn">
-
-            INITIALIZE CONSTRUCTOR
-
-        </a>
-
+      <a href="projects.html" class="btn-launch" id="launch-btn">
+        INITIALIZE CONSTRUCTOR
+      </a>
     </header>
 
     <!-- =========================================
@@ -1571,573 +1228,279 @@
     ========================================= -->
 
     <section class="features" id="features">
+      <div class="feature-card">
+        <div class="feature-icon">✥</div>
 
+        <h3 class="feature-title">Multi-Transform</h3>
 
-        <div class="feature-card">
+        <p class="feature-desc">
+          Utilize advanced Shift-Select logic to group multiple primitives.
+          Scale, rotate, and translate complex assemblies simultaneously.
+        </p>
+      </div>
 
-            <div class="feature-icon">
-                ✥
-            </div>
+      <div class="feature-card">
+        <div class="feature-icon">⏳</div>
 
+        <h3 class="feature-title">Temporal Memory</h3>
 
-            <h3 class="feature-title">
-                Multi-Transform
-            </h3>
-
-
-            <p class="feature-desc">
-
-                Utilize advanced Shift-Select
-                logic to group multiple primitives.
-                Scale, rotate, and translate complex
-                assemblies simultaneously.
-
-            </p>
-
-        </div>
-
-
-        <div class="feature-card">
-
-            <div class="feature-icon">
-                ⏳
-            </div>
-
-
-            <h3 class="feature-title">
-                Temporal Memory
-            </h3>
-
-
-            <p class="feature-desc">
-
-                Full Undo/Redo architecture.
-                Step back through time to recover
-                lost geometrical topologies instantly.
-
-            </p>
-
-        </div>
-
-
+        <p class="feature-desc">
+          Full Undo/Redo architecture. Step back through time to recover lost
+          geometrical topologies instantly.
+        </p>
+      </div>
     </section>
-
 
     <!-- =========================================
          JAVASCRIPT
     ========================================= -->
 
     <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // =====================================
+        // SPLASH SCREEN
+        // =====================================
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            async () => {
+        const splash = document.getElementById("splash-screen");
 
+        const log = document.getElementById("dynamic-log");
 
-                // =====================================
-                // SPLASH SCREEN
-                // =====================================
+        if (sessionStorage.getItem("aether_splash_seen") === "true") {
+          splash.style.display = "none";
+        } else {
+          const statuses = [
+            "CALIBRATING FABRICATOR AXIS...",
 
-                const splash =
-                    document.getElementById(
-                        'splash-screen'
-                    );
+            "SYNTHESIZING VECTOR CORE...",
 
+            "CONSTRUCTION COMPLETE. DEPLOYING MATRIX.",
+          ];
 
-                const log =
-                    document.getElementById(
-                        'dynamic-log'
-                    );
+          let step = 0;
 
+          const logUpdate = setInterval(() => {
+            if (step < statuses.length - 1) {
+              step++;
 
-                if (
-                    sessionStorage.getItem(
-                        'aether_splash_seen'
-                    ) === 'true'
-                ) {
+              log.innerText = statuses[step];
+            } else {
+              clearInterval(logUpdate);
+            }
+          }, 1200);
 
-                    splash.style.display =
-                        'none';
+          setTimeout(() => {
+            splash.style.transition = "all 1s";
 
-                }
+            splash.style.opacity = "0";
 
-                else {
+            splash.style.visibility = "hidden";
 
-                    const statuses = [
+            splash.style.pointerEvents = "none";
 
-                        "CALIBRATING FABRICATOR AXIS...",
+            clearInterval(logUpdate);
 
-                        "SYNTHESIZING VECTOR CORE...",
+            sessionStorage.setItem("aether_splash_seen", "true");
+          }, 5500);
+        }
 
-                        "CONSTRUCTION COMPLETE. DEPLOYING MATRIX."
+        // =====================================
+        // ELEMENTS
+        // =====================================
 
-                    ];
+        const authSection = document.getElementById("auth-section");
 
+        const launchBtn = document.getElementById("launch-btn");
 
-                    let step = 0;
+        const projectsSection = document.getElementById("projects-section");
 
+        const projectsGrid = document.getElementById("projects-grid");
 
-                    const logUpdate =
-                        setInterval(() => {
+        const projectCount = document.getElementById("project-count");
 
-                            if (
-                                step <
-                                statuses.length - 1
-                            ) {
+        const createProjectBtn = document.getElementById("create-project-btn");
 
-                                step++;
+        let projects = [];
 
-                                log.innerText =
-                                    statuses[step];
+        // =====================================
+        // CREATE PROJECT
+        // =====================================
 
-                            }
+        async function createProject() {
+          const projectName = prompt("ENTER NEW PROJECT NAME:");
 
-                            else {
+          if (!projectName || !projectName.trim()) {
+            return;
+          }
 
-                                clearInterval(
-                                    logUpdate
-                                );
+          try {
+            const response = await fetch("/api/projects", {
+              method: "POST",
 
-                            }
+              credentials: "include",
 
-                        }, 1200);
+              headers: {
+                "Content-Type": "application/json",
+              },
 
+              body: JSON.stringify({
+                name: projectName.trim(),
 
-                    setTimeout(() => {
+                description: "Aether Forge Constructor Project",
+              }),
+            });
 
-                        splash.style.transition =
-                            'all 1s';
+            const data = await response.json();
 
-                        splash.style.opacity =
-                            '0';
+            if (!response.ok) {
+              alert(
+                "PROJECT CREATION FAILED: " +
+                  (data.message || "Unknown error."),
+              );
 
-                        splash.style.visibility =
-                            'hidden';
+              return;
+            }
 
-                        splash.style.pointerEvents =
-                            'none';
+            // Reload project list
 
+            await loadProjects();
 
-                        clearInterval(
-                            logUpdate
-                        );
+            // Open newly created project
 
+            if (data.project && data.project.id) {
+              window.location.href = `AetherForge.html?project_id=${data.project.id}`;
+            }
+          } catch (error) {
+            console.error("Project creation error:", error);
 
-                        sessionStorage.setItem(
-                            'aether_splash_seen',
-                            'true'
-                        );
+            alert("PROJECT SYSTEM OFFLINE.");
+          }
+        }
 
-                    }, 5500);
+        // =====================================
+        // DELETE PROJECT
+        // =====================================
 
-                }
+        async function deleteProject(projectId, projectName) {
+          const confirmed = confirm(
+            `DELETE PROJECT "${projectName}"?\n\nThis action cannot be undone.`,
+          );
 
+          if (!confirmed) {
+            return;
+          }
 
-                // =====================================
-                // ELEMENTS
-                // =====================================
+          try {
+            const response = await fetch(`/api/projects/${projectId}`, {
+              method: "DELETE",
 
-                const authSection =
-                    document.getElementById(
-                        'auth-section'
-                    );
+              credentials: "include",
+            });
 
+            const data = await response.json();
 
-                const launchBtn =
-                    document.getElementById(
-                        'launch-btn'
-                    );
+            if (!response.ok) {
+              alert("DELETE FAILED: " + (data.message || "Unknown error."));
 
+              return;
+            }
 
-                const projectsSection =
-                    document.getElementById(
-                        'projects-section'
-                    );
+            await loadProjects();
+          } catch (error) {
+            console.error("Delete error:", error);
 
+            alert("PROJECT SYSTEM OFFLINE.");
+          }
+        }
 
-                const projectsGrid =
-                    document.getElementById(
-                        'projects-grid'
-                    );
+        // =====================================
+        // RENAME PROJECT
+        // =====================================
 
+        async function renameProject(
+          projectId,
+          currentName,
+          currentDescription,
+        ) {
+          const newName = prompt("ENTER NEW PROJECT NAME:", currentName);
 
-                const projectCount =
-                    document.getElementById(
-                        'project-count'
-                    );
+          if (!newName || !newName.trim()) {
+            return;
+          }
 
+          try {
+            const response = await fetch(`/api/projects/${projectId}`, {
+              method: "PUT",
 
-                const createProjectBtn =
-                    document.getElementById(
-                        'create-project-btn'
-                    );
+              credentials: "include",
 
+              headers: {
+                "Content-Type": "application/json",
+              },
 
-                let projects = [];
+              body: JSON.stringify({
+                name: newName.trim(),
 
+                description: currentDescription || "",
+              }),
+            });
 
-                // =====================================
-                // CREATE PROJECT
-                // =====================================
+            const data = await response.json();
 
-                async function createProject() {
+            if (!response.ok) {
+              alert("RENAME FAILED: " + (data.message || "Unknown error."));
 
-                    const projectName =
-                        prompt(
-                            "ENTER NEW PROJECT NAME:"
-                        );
+              return;
+            }
 
+            await loadProjects();
+          } catch (error) {
+            console.error("Rename error:", error);
 
-                    if (
-                        !projectName ||
-                        !projectName.trim()
-                    ) {
+            alert("PROJECT SYSTEM OFFLINE.");
+          }
+        }
 
-                        return;
+        // =====================================
+        // OPEN PROJECT
+        // =====================================
 
-                    }
+        function openProject(projectId) {
+          window.location.href = `AetherForge.html?project_id=${projectId}`;
+        }
 
+        // =====================================
+        // FORMAT DATE
+        // =====================================
 
-                    try {
+        function formatDate(dateString) {
+          if (!dateString) {
+            return "UNKNOWN";
+          }
 
-                        const response =
-                            await fetch(
-                                '/api/projects',
-                                {
-                                    method: 'POST',
+          const date = new Date(dateString);
 
-                                    credentials:
-                                        'include',
+          if (Number.isNaN(date.getTime())) {
+            return "UNKNOWN";
+          }
 
-                                    headers: {
-                                        'Content-Type':
-                                            'application/json'
-                                    },
+          return date.toLocaleString([], {
+            dateStyle: "medium",
 
-                                    body:
-                                        JSON.stringify({
+            timeStyle: "short",
+          });
+        }
 
-                                            name:
-                                                projectName.trim(),
+        // =====================================
+        // RENDER PROJECTS
+        // =====================================
 
-                                            description:
-                                                "Aether Forge Constructor Project"
+        function renderProjects() {
+          projectsGrid.innerHTML = "";
 
-                                        })
-                                }
-                            );
+          projectCount.innerText = `${projects.length} PROJECT${projects.length === 1 ? "" : "S"} AVAILABLE`;
 
-
-                        const data =
-                            await response.json();
-
-
-                        if (!response.ok) {
-
-                            alert(
-                                "PROJECT CREATION FAILED: " +
-                                (
-                                    data.message ||
-                                    "Unknown error."
-                                )
-                            );
-
-                            return;
-
-                        }
-
-
-                        // Reload project list
-
-                        await loadProjects();
-
-
-                        // Open newly created project
-
-                        if (
-                            data.project &&
-                            data.project.id
-                        ) {
-
-                            window.location.href =
-                                `AetherForge.html?project_id=${data.project.id}`;
-
-                        }
-
-
-                    }
-
-                    catch (error) {
-
-                        console.error(
-                            "Project creation error:",
-                            error
-                        );
-
-
-                        alert(
-                            "PROJECT SYSTEM OFFLINE."
-                        );
-
-                    }
-
-                }
-
-
-                // =====================================
-                // DELETE PROJECT
-                // =====================================
-
-                async function deleteProject(
-                    projectId,
-                    projectName
-                ) {
-
-
-                    const confirmed =
-                        confirm(
-                            `DELETE PROJECT "${projectName}"?\n\nThis action cannot be undone.`
-                        );
-
-
-                    if (!confirmed) {
-
-                        return;
-
-                    }
-
-
-                    try {
-
-                        const response =
-                            await fetch(
-                                `/api/projects/${projectId}`,
-                                {
-                                    method: 'DELETE',
-
-                                    credentials:
-                                        'include'
-                                }
-                            );
-
-
-                        const data =
-                            await response.json();
-
-
-                        if (!response.ok) {
-
-                            alert(
-                                "DELETE FAILED: " +
-                                (
-                                    data.message ||
-                                    "Unknown error."
-                                )
-                            );
-
-                            return;
-
-                        }
-
-
-                        await loadProjects();
-
-                    }
-
-                    catch (error) {
-
-                        console.error(
-                            "Delete error:",
-                            error
-                        );
-
-
-                        alert(
-                            "PROJECT SYSTEM OFFLINE."
-                        );
-
-                    }
-
-                }
-
-
-                // =====================================
-                // RENAME PROJECT
-                // =====================================
-
-                async function renameProject(
-                    projectId,
-                    currentName,
-                    currentDescription
-                ) {
-
-
-                    const newName =
-                        prompt(
-                            "ENTER NEW PROJECT NAME:",
-                            currentName
-                        );
-
-
-                    if (
-                        !newName ||
-                        !newName.trim()
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    try {
-
-                        const response =
-                            await fetch(
-                                `/api/projects/${projectId}`,
-                                {
-                                    method: 'PUT',
-
-                                    credentials:
-                                        'include',
-
-                                    headers: {
-                                        'Content-Type':
-                                            'application/json'
-                                    },
-
-                                    body:
-                                        JSON.stringify({
-
-                                            name:
-                                                newName.trim(),
-
-                                            description:
-                                                currentDescription || ""
-
-                                        })
-                                }
-                            );
-
-
-                        const data =
-                            await response.json();
-
-
-                        if (!response.ok) {
-
-                            alert(
-                                "RENAME FAILED: " +
-                                (
-                                    data.message ||
-                                    "Unknown error."
-                                )
-                            );
-
-                            return;
-
-                        }
-
-
-                        await loadProjects();
-
-                    }
-
-                    catch (error) {
-
-                        console.error(
-                            "Rename error:",
-                            error
-                        );
-
-
-                        alert(
-                            "PROJECT SYSTEM OFFLINE."
-                        );
-
-                    }
-
-                }
-
-
-                // =====================================
-                // OPEN PROJECT
-                // =====================================
-
-                function openProject(
-                    projectId
-                ) {
-
-                    window.location.href =
-                        `AetherForge.html?project_id=${projectId}`;
-
-                }
-
-
-                // =====================================
-                // FORMAT DATE
-                // =====================================
-
-                function formatDate(
-                    dateString
-                ) {
-
-                    if (!dateString) {
-
-                        return "UNKNOWN";
-
-                    }
-
-
-                    const date =
-                        new Date(
-                            dateString
-                        );
-
-
-                    if (
-                        Number.isNaN(
-                            date.getTime()
-                        )
-                    ) {
-
-                        return "UNKNOWN";
-
-                    }
-
-
-                    return date.toLocaleString(
-                        [],
-                        {
-                            dateStyle:
-                                'medium',
-
-                            timeStyle:
-                                'short'
-                        }
-                    );
-
-                }
-
-
-                // =====================================
-                // RENDER PROJECTS
-                // =====================================
-
-                function renderProjects() {
-
-                    projectsGrid.innerHTML =
-                        '';
-
-
-                    projectCount.innerText =
-                        `${projects.length} PROJECT${projects.length === 1 ? '' : 'S'} AVAILABLE`;
-
-
-                    if (
-                        projects.length === 0
-                    ) {
-
-                        projectsGrid.innerHTML = `
+          if (projects.length === 0) {
+            projectsGrid.innerHTML = `
 
                             <div class="empty-projects"
                                  style="grid-column:1/-1;">
@@ -2167,25 +1530,15 @@
 
                         `;
 
-                        return;
+            return;
+          }
 
-                    }
+          projects.forEach((project) => {
+            const card = document.createElement("div");
 
+            card.className = "project-card";
 
-                    projects.forEach(
-                        project => {
-
-                            const card =
-                                document.createElement(
-                                    'div'
-                                );
-
-
-                            card.className =
-                                'project-card';
-
-
-                            card.innerHTML = `
+            card.innerHTML = `
 
                                 <div class="project-icon">
                                     ◈
@@ -2197,10 +1550,9 @@
 
                                 <div class="project-description">
                                     ${escapeHtml(
-                                project.description ||
-                                'Aether Forge Constructor Project'
-                            )
-                                }
+                                      project.description ||
+                                        "Aether Forge Constructor Project",
+                                    )}
                                 </div>
 
                                 <div class="project-date">
@@ -2238,398 +1590,243 @@
 
                             `;
 
+            // OPEN
 
-                            // OPEN
+            card
+              .querySelector('[data-action="open"]')
+              .addEventListener("click", () => {
+                openProject(project.id);
+              });
 
-                            card
-                                .querySelector(
-                                    '[data-action="open"]'
-                                )
-                                .addEventListener(
-                                    'click',
-                                    () => {
+            // RENAME
 
-                                        openProject(
-                                            project.id
-                                        );
+            card
+              .querySelector('[data-action="rename"]')
+              .addEventListener("click", () => {
+                renameProject(project.id, project.name, project.description);
+              });
 
-                                    }
-                                );
+            // DELETE
 
+            card
+              .querySelector('[data-action="delete"]')
+              .addEventListener("click", () => {
+                deleteProject(project.id, project.name);
+              });
 
-                            // RENAME
+            projectsGrid.appendChild(card);
+          });
+        }
 
-                            card
-                                .querySelector(
-                                    '[data-action="rename"]'
-                                )
-                                .addEventListener(
-                                    'click',
-                                    () => {
+        // =====================================
+        // HTML ESCAPE
+        // =====================================
 
-                                        renameProject(
-                                            project.id,
-                                            project.name,
-                                            project.description
-                                        );
+        function escapeHtml(value) {
+          const div = document.createElement("div");
 
-                                    }
-                                );
+          div.textContent = value || "";
 
+          return div.innerHTML;
+        }
 
-                            // DELETE
+        // =====================================
+        // LOAD PROJECTS
+        // =====================================
 
-                            card
-                                .querySelector(
-                                    '[data-action="delete"]'
-                                )
-                                .addEventListener(
-                                    'click',
-                                    () => {
+        async function loadProjects() {
+          try {
+            const response = await fetch("/api/projects", {
+              method: "GET",
 
-                                        deleteProject(
-                                            project.id,
-                                            project.name
-                                        );
+              credentials: "include",
+            });
 
-                                    }
-                                );
+            const data = await response.json();
 
+            if (!response.ok) {
+              console.error("Project loading failed:", data);
 
-                            projectsGrid.appendChild(
-                                card
-                            );
+              projectCount.innerText = "PROJECT SYSTEM OFFLINE";
 
-                        }
-                    );
-
-                }
-
-
-                // =====================================
-                // HTML ESCAPE
-                // =====================================
-
-                function escapeHtml(
-                    value
-                ) {
-
-                    const div =
-                        document.createElement(
-                            'div'
-                        );
-
-
-                    div.textContent =
-                        value || '';
-
-
-                    return div.innerHTML;
-
-                }
-
-
-                // =====================================
-                // LOAD PROJECTS
-                // =====================================
-
-                async function loadProjects() {
-
-                    try {
-
-                        const response =
-                            await fetch(
-                                '/api/projects',
-                                {
-                                    method: 'GET',
-
-                                    credentials:
-                                        'include'
-                                }
-                            );
-
-
-                        const data =
-                            await response.json();
-
-
-                        if (!response.ok) {
-
-                            console.error(
-                                "Project loading failed:",
-                                data
-                            );
-
-                            projectCount.innerText =
-                                "PROJECT SYSTEM OFFLINE";
-
-                            return;
-
-                        }
-
-
-                        projects =
-                            data.projects || [];
-
-
-                        renderProjects();
-
-                    }
-
-                    catch (error) {
-
-                        console.error(
-                            "Project loading error:",
-                            error
-                        );
-
-
-                        projectCount.innerText =
-                            "PROJECT SYSTEM OFFLINE";
-
-                    }
-
-                }
-
-
-                // =====================================
-                // CHECK AUTHENTICATION
-                // =====================================
-
-                try {
-
-                    const response =
-                        await fetch(
-                            '/api/auth/me',
-                            {
-                                method: 'GET',
-
-                                credentials:
-                                    'include'
-                            }
-                        );
-
-
-                    const data =
-                        await response.json();
-
-
-                    if (
-                        !response.ok ||
-                        !data.authenticated
-                    ) {
-
-
-                        // ==============================
-                        // NOT LOGGED IN
-                        // ==============================
-
-                        authSection.innerHTML = `
-
-                            <a
-                                href="login.html"
-                                class="btn-nav-login">
-
-                                LOGIN
-
-                            </a>
-
-                            <a
-                                href="signup.html"
-                                class="btn-nav-register">
-
-                                REGISTER
-
-                            </a>
-
-                        `;
-
-
-                        launchBtn.addEventListener(
-                            'click',
-                            e => {
-
-                                e.preventDefault();
-
-                                alert(
-                                    "ACCESS DENIED: Please authenticate via System Login to use the Constructor."
-                                );
-
-                                window.location.href =
-                                    'login.html';
-
-                            }
-                        );
-
-
-                        // Hide project dashboard
-
-                        projectsSection.style.display =
-                            'none';
-
-
-                        return;
-
-                    }
-
-
-                    // =================================
-                    // LOGGED IN
-                    // =================================
-
-                    const username =
-                        data.user.username;
-
-
-                    authSection.innerHTML = `
-
-                        <div class="operative-badge">
-
-                            OP:
-                            ${escapeHtml(username)}
-
-                        </div>
-
-                        <button
-                            class="btn-nav-logout"
-                            id="logout-btn">
-
-                            LOGOUT
-
-                        </button>
-
-                    `;
-
-
-                    // =================================
-                    // LOGOUT
-                    // =================================
-
-                    document
-                        .getElementById(
-                            'logout-btn'
-                        )
-                        .addEventListener(
-                            'click',
-                            async () => {
-
-                                try {
-
-                                    await fetch(
-                                        '/api/auth/logout',
-                                        {
-                                            method:
-                                                'POST',
-
-                                            credentials:
-                                                'include'
-                                        }
-                                    );
-
-                                }
-
-                                catch (error) {
-
-                                    console.error(
-                                        "Logout error:",
-                                        error
-                                    );
-
-                                }
-
-
-                                window.location.href =
-                                    'index.html';
-
-                            }
-                        );
-
-
-                    // =================================
-                    // SHOW PROJECT DASHBOARD
-                    // =================================
-
-                    projectsSection.style.display =
-                        'block';
-
-
-                    // =================================
-                    // LOAD PROJECTS
-                    // =================================
-
-                    await loadProjects();
-
-
-                    // =================================
-                    // CREATE BUTTON
-                    // =================================
-
-                    createProjectBtn
-                        .addEventListener(
-                            'click',
-                            createProject
-                        );
-
-
-                    // =================================
-                    // HERO BUTTON
-                    // =================================
-
-                    launchBtn
-                        .addEventListener(
-                            'click',
-                            e => {
-
-                                e.preventDefault();
-
-
-                                projectsSection
-                                    .scrollIntoView({
-                                        behavior:
-                                            'smooth'
-                                    });
-
-                            }
-                        );
-
-                }
-
-                catch (error) {
-
-                    console.error(
-                        "Authentication check failed:",
-                        error
-                    );
-
-
-                    authSection.innerHTML = `
-
-                        <a
-                            href="login.html"
-                            class="btn-nav-login">
-
-                            LOGIN
-
-                        </a>
-
-                        <a
-                            href="signup.html"
-                            class="btn-nav-register">
-
-                            REGISTER
-
-                        </a>
-
-                    `;
-
-                }
-
+              return;
             }
 
-        );
+            projects = data.projects || [];
 
+            renderProjects();
+          } catch (error) {
+            console.error("Project loading error:", error);
+
+            projectCount.innerText = "PROJECT SYSTEM OFFLINE";
+          }
+        }
+
+        /* =====================================
+   CHECK AUTHENTICATION
+===================================== */
+
+        try {
+          authSection.innerHTML = `
+        <span class="operative-badge">
+            VERIFYING SESSION...
+        </span>
+    `;
+
+          const response = await fetch("/api/auth/me", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              Accept: "application/json",
+            },
+            cache: "no-store",
+          });
+
+          let data;
+
+          try {
+            data = await response.json();
+          } catch {
+            throw new Error(
+              `Invalid authentication response (HTTP ${response.status})`,
+            );
+          }
+
+          // USER IS NOT LOGGED IN
+          if (
+            response.status === 401 ||
+            response.status === 403 ||
+            data.authenticated === false
+          ) {
+            authSection.innerHTML = `
+            <a href="login.html" class="btn-nav-login">
+                LOGIN
+            </a>
+
+            <a href="signup.html" class="btn-nav-register">
+                REGISTER
+            </a>
+        `;
+
+            return;
+          }
+
+          if (!response.ok) {
+            throw new Error(`Authentication failed: HTTP ${response.status}`);
+          }
+
+          // VALIDATE USER SESSION
+          if (
+            data.authenticated !== true ||
+            !data.user ||
+            !data.user.username
+          ) {
+            throw new Error("Unexpected authentication response format.");
+          }
+
+          // DISPLAY LOGGED-IN USER
+          const username = escapeHtml(data.user.username);
+
+          authSection.innerHTML = `
+        <div class="operative-badge">
+            OP: ${username}
+        </div>
+
+        <button
+            class="btn-nav-logout"
+            id="logout-btn"
+            type="button">
+            LOGOUT
+        </button>
+    `;
+
+          // LOGOUT
+          document
+            .getElementById("logout-btn")
+            .addEventListener("click", async () => {
+              const logoutBtn = document.getElementById("logout-btn");
+
+              logoutBtn.disabled = true;
+              logoutBtn.textContent = "LOGGING OUT...";
+
+              try {
+                const logoutResponse = await fetch("/api/auth/logout", {
+                  method: "POST",
+                  credentials: "include",
+                });
+
+                if (!logoutResponse.ok) {
+                  throw new Error(
+                    `Logout failed: HTTP ${logoutResponse.status}`,
+                  );
+                }
+
+                window.location.href = "index.html";
+              } catch (error) {
+                console.error("Logout error:", error);
+
+                alert(
+                  "Logout failed. Please check your connection and try again.",
+                );
+
+                logoutBtn.disabled = false;
+                logoutBtn.textContent = "LOGOUT";
+              }
+            });
+
+          // OPTIONAL PROJECT DASHBOARD
+          // The home page does not currently contain the project dashboard HTML.
+          // Do not load projects here; the separate Projects page handles them.
+
+          const homeProjectsSection =
+            document.getElementById("projects-section");
+
+          const homeCreateProjectBtn =
+            document.getElementById("create-project-btn");
+
+          if (homeProjectsSection) {
+            homeProjectsSection.style.display = "block";
+
+            if (typeof loadProjects === "function") {
+              try {
+                await loadProjects();
+              } catch (error) {
+                console.error("Home project loading error:", error);
+              }
+            }
+
+            if (homeCreateProjectBtn) {
+              homeCreateProjectBtn.addEventListener("click", createProject);
+            }
+          }
+
+          // Keep the existing Projects page navigation working.
+          // The hero button already links to projects.html.
+          // Do not intercept its click on the home page.
+        } catch (error) {
+          console.error("Authentication check failed:", error);
+
+          authSection.innerHTML = `
+        <span class="operative-badge" role="status">
+            AUTHENTICATION UNAVAILABLE
+        </span>
+
+        <button
+            class="btn-nav-login"
+            id="retry-auth-btn"
+            type="button"
+            style="cursor:pointer;">
+            RETRY
+        </button>
+    `;
+
+          document
+            .getElementById("retry-auth-btn")
+            .addEventListener("click", () => {
+              window.location.reload();
+            });
+        }
+      });
     </script>
-
-</body>
-
+  </body>
 </html>
