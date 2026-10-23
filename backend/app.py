@@ -131,16 +131,20 @@ def create_app():
     # Create database tables
     # -----------------------------
 
+
+    # -----------------------------
+    # Create database tables
+    # -----------------------------
+
     with app.app_context():
 
         db.create_all()
 
-        # Add project_data column if it does not exist
         from sqlalchemy import inspect, text
 
         inspector = inspect(db.engine)
 
-        # Only check if the projects table exists
+        # Add project_data column if it does not exist
         if "projects" in inspector.get_table_names():
 
             columns = [
@@ -150,8 +154,7 @@ def create_app():
 
             if "project_data" not in columns:
 
-                with db.engine.connect() as connection:
-
+                with db.engine.begin() as connection:
                     connection.execute(
                         text(
                             "ALTER TABLE projects "
@@ -159,41 +162,50 @@ def create_app():
                         )
                     )
 
-                    connection.commit()
+        # Add Google Login columns to existing users table
+        inspector = inspect(db.engine)
 
-            # Add Google Login columns to existing users table
-    inspector = inspect(db.engine)
-    if "users" in inspector.get_table_names():
-        user_columns = [
-            column["name"]
-            for column in inspector.get_columns("users")
-        ]
+        if "users" in inspector.get_table_names():
 
-        with db.engine.begin() as connection:
-            if "email" not in user_columns:
+            user_columns = [
+                column["name"]
+                for column in inspector.get_columns("users")
+            ]
+
+            with db.engine.begin() as connection:
+
+                if "email" not in user_columns:
+                    connection.execute(
+                        text(
+                            "ALTER TABLE users "
+                            "ADD COLUMN email VARCHAR(255)"
+                        )
+                    )
+
+                if "google_id" not in user_columns:
+                    connection.execute(
+                        text(
+                            "ALTER TABLE users "
+                            "ADD COLUMN google_id VARCHAR(255)"
+                        )
+                    )
+
+                # Ensure Google accounts and emails are unique
                 connection.execute(
-                    text("ALTER TABLE users ADD COLUMN email VARCHAR(255)")
+                    text(
+                        "CREATE UNIQUE INDEX IF NOT EXISTS "
+                        "ix_users_email_unique ON users (email)"
+                    )
                 )
 
-            if "google_id" not in user_columns:
                 connection.execute(
-                    text("ALTER TABLE users ADD COLUMN google_id VARCHAR(255)")
+                    text(
+                        "CREATE UNIQUE INDEX IF NOT EXISTS "
+                        "ix_users_google_id_unique ON users (google_id)"
+                    )
                 )
 
-            # Ensure Google accounts and emails are unique.
-            connection.execute(
-                text(
-                    "CREATE UNIQUE INDEX IF NOT EXISTS "
-                    "ix_users_email_unique ON users (email)"
-                )
-            )
-
-            connection.execute(
-                text(
-                    "CREATE UNIQUE INDEX IF NOT EXISTS "
-                    "ix_users_google_id_unique ON users (google_id)"
-                )
-            )
+    return app
 
     return app
 
