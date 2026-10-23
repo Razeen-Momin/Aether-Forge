@@ -161,6 +161,40 @@ def create_app():
 
                     connection.commit()
 
+            # Add Google Login columns to existing users table
+    inspector = inspect(db.engine)
+    if "users" in inspector.get_table_names():
+        user_columns = [
+            column["name"]
+            for column in inspector.get_columns("users")
+        ]
+
+        with db.engine.begin() as connection:
+            if "email" not in user_columns:
+                connection.execute(
+                    text("ALTER TABLE users ADD COLUMN email VARCHAR(255)")
+                )
+
+            if "google_id" not in user_columns:
+                connection.execute(
+                    text("ALTER TABLE users ADD COLUMN google_id VARCHAR(255)")
+                )
+
+            # Ensure Google accounts and emails are unique.
+            connection.execute(
+                text(
+                    "CREATE UNIQUE INDEX IF NOT EXISTS "
+                    "ix_users_email_unique ON users (email)"
+                )
+            )
+
+            connection.execute(
+                text(
+                    "CREATE UNIQUE INDEX IF NOT EXISTS "
+                    "ix_users_google_id_unique ON users (google_id)"
+                )
+            )
+
     return app
 
 

@@ -1,76 +1,276 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>AETHER FORGE | AUTHENTICATION</title>
     <style>
-        body { margin: 0; background: #020202; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; perspective: 1000px; }
-        .bg-gradient { position: absolute; width: 150vw; height: 150vh; background: conic-gradient(from 180deg at 50% 50%, #000 0deg, #001a22 180deg, #000 360deg); animation: spin 20s linear infinite; z-index: -1; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        .auth-container { background: rgba(0, 15, 25, 0.6); border: 1px solid rgba(0, 255, 255, 0.3); padding: 50px 40px; border-radius: 15px; width: 90%; max-width: 380px; backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 255, 255, 0.05); transform: rotateX(5deg); transition: 0.5s; }
-        .auth-container:hover { transform: rotateX(0deg) translateZ(20px); box-shadow: 0 30px 60px rgba(0, 255, 255, 0.15); }
-        
-        h2 { margin-top: 0; letter-spacing: 6px; font-size: 22px; color: #00ffff; text-shadow: 0 0 15px rgba(0, 255, 255, 0.5); text-align: center; margin-bottom: 35px; }
-        .input-group { margin-bottom: 25px; position: relative; }
-        label { display: block; font-size: 11px; color: #00ffff; margin-bottom: 8px; letter-spacing: 2px; text-transform: uppercase; }
-        input { width: 100%; padding: 12px 15px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(0,255,255,0.2); color: #fff; border-radius: 6px; box-sizing: border-box; outline: none; transition: 0.3s; font-size: 14px; letter-spacing: 1px; }
-        input:focus { border-color: #00ffff; box-shadow: 0 0 15px rgba(0, 255, 255, 0.3); background: rgba(0,20,30,0.8); }
-        
-        .btn-auth { width: 100%; padding: 15px; background: rgba(0, 255, 255, 0.1); border: 1px solid #00ffff; color: #00ffff; font-size: 14px; letter-spacing: 3px; cursor: pointer; border-radius: 6px; transition: 0.3s; text-transform: uppercase; font-weight: bold; }
-        .btn-auth:hover { background: #00ffff; color: #000; box-shadow: 0 0 25px rgba(0, 255, 255, 0.6); }
-        .toggle-text { margin-top: 25px; font-size: 12px; color: #88ccdd; display: block; text-decoration: none; text-align: center; letter-spacing: 1px; transition: 0.3s; }
-        .toggle-text:hover { color: #00ffff; text-shadow: 0 0 8px rgba(0,255,255,0.5); }
-        #status-message { margin-top: 20px; font-size: 12px; text-align: center; letter-spacing: 1px; min-height: 15px; }
+      body {
+        margin: 0;
+        background: #020202;
+        color: #fff;
+        font-family: "Segoe UI", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        perspective: 1000px;
+      }
+      .bg-gradient {
+        position: absolute;
+        width: 150vw;
+        height: 150vh;
+        background: conic-gradient(
+          from 180deg at 50% 50%,
+          #000 0deg,
+          #001a22 180deg,
+          #000 360deg
+        );
+        animation: spin 20s linear infinite;
+        z-index: -1;
+      }
+      @keyframes spin {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .auth-container {
+        background: rgba(0, 15, 25, 0.6);
+        border: 1px solid rgba(0, 255, 255, 0.3);
+        padding: 50px 40px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 380px;
+        backdrop-filter: blur(20px);
+        box-shadow:
+          0 20px 50px rgba(0, 0, 0, 0.5),
+          inset 0 0 20px rgba(0, 255, 255, 0.05);
+        transform: rotateX(5deg);
+        transition: 0.5s;
+      }
+      .auth-container:hover {
+        transform: rotateX(0deg) translateZ(20px);
+        box-shadow: 0 30px 60px rgba(0, 255, 255, 0.15);
+      }
+
+      h2 {
+        margin-top: 0;
+        letter-spacing: 6px;
+        font-size: 22px;
+        color: #00ffff;
+        text-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        text-align: center;
+        margin-bottom: 35px;
+      }
+      .input-group {
+        margin-bottom: 25px;
+        position: relative;
+      }
+      label {
+        display: block;
+        font-size: 11px;
+        color: #00ffff;
+        margin-bottom: 8px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+      input {
+        width: 100%;
+        padding: 12px 15px;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(0, 255, 255, 0.2);
+        color: #fff;
+        border-radius: 6px;
+        box-sizing: border-box;
+        outline: none;
+        transition: 0.3s;
+        font-size: 14px;
+        letter-spacing: 1px;
+      }
+      input:focus {
+        border-color: #00ffff;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        background: rgba(0, 20, 30, 0.8);
+      }
+
+      .btn-auth {
+        width: 100%;
+        padding: 15px;
+        background: rgba(0, 255, 255, 0.1);
+        border: 1px solid #00ffff;
+        color: #00ffff;
+        font-size: 14px;
+        letter-spacing: 3px;
+        cursor: pointer;
+        border-radius: 6px;
+        transition: 0.3s;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+      .btn-auth:hover {
+        background: #00ffff;
+        color: #000;
+        box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+      }
+      .toggle-text {
+        margin-top: 25px;
+        font-size: 12px;
+        color: #88ccdd;
+        display: block;
+        text-decoration: none;
+        text-align: center;
+        letter-spacing: 1px;
+        transition: 0.3s;
+      }
+      .toggle-text:hover {
+        color: #00ffff;
+        text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+      }
+      #status-message {
+        margin-top: 20px;
+        font-size: 12px;
+        text-align: center;
+        letter-spacing: 1px;
+        min-height: 15px;
+      }
+      .google-divider {
+        margin: 24px 0 18px;
+        text-align: center;
+        color: #88ccdd;
+        font-size: 10px;
+        letter-spacing: 2px;
+      }
+
+      .google-button-wrapper {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
     </style>
-</head>
-<body>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+  <body>
     <div class="bg-gradient"></div>
     <div class="auth-container">
-        <h2>SYSTEM LOGIN</h2>
-        <form id="login-form">
-            <div class="input-group"><label>OPERATIVE ID</label><input type="text" id="username" required autocomplete="off"></div>
-            <div class="input-group"><label>ACCESS CODES</label><input type="password" id="password" required></div>
-            <button type="submit" class="btn-auth">AUTHENTICATE</button>
-        </form>
-        <div id="status-message"></div>
-        <a href="signup.html" class="toggle-text">New Operative? Initialize Profile.</a>
+      <h2>SYSTEM LOGIN</h2>
+      <form id="login-form">
+        <div class="input-group">
+          <label>OPERATIVE ID</label
+          ><input type="text" id="username" required autocomplete="off" />
+        </div>
+        <div class="input-group">
+          <label>ACCESS CODES</label
+          ><input type="password" id="password" required />
+        </div>
+        <button type="submit" class="btn-auth">AUTHENTICATE</button>
+      </form>
+
+      <div class="google-divider">— OR CONNECT WITH —</div>
+
+      <div
+        id="g_id_onload"
+        data-client_id="YOUR_GOOGLE_CLIENT_ID"
+        data-callback="handleGoogleCredential"
+        data-auto_prompt="false"
+      ></div>
+
+      <div class="google-button-wrapper">
+        <div
+          class="g_id_signin"
+          data-type="standard"
+          data-size="large"
+          data-theme="filled_black"
+          data-text="continue_with"
+          data-shape="rectangular"
+          data-logo_alignment="left"
+        ></div>
+      </div>
+
+      <div id="status-message"></div>
+
+      <a href="signup.html" class="toggle-text"
+        >New Operative? Initialize Profile.</a
+      >
     </div>
 
     <script>
-        const loginForm = document.getElementById('login-form');
-        const statusMessage = document.getElementById('status-message');
+      const loginForm = document.getElementById("login-form");
+      const statusMessage = document.getElementById("status-message");
 
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            statusMessage.style.color = "#00ffff";
-            statusMessage.innerText = "ESTABLISHING SECURE CONNECTION...";
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        statusMessage.style.color = "#00ffff";
+        statusMessage.innerText = "ESTABLISHING SECURE CONNECTION...";
 
-            try {
-                const response = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({ username, password })
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    statusMessage.style.color = "#00ff00"; 
-                    statusMessage.innerText = "ACCESS GRANTED. REDIRECTING...";
-                    localStorage.setItem('stark_operative', username);
-                    setTimeout(() => window.location.href = 'index.html', 1000); 
-                } else {
-                    statusMessage.style.color = "#ff3333";
-                    statusMessage.innerText = "ERROR: " + data.message;
-                }
-            } catch (error) {
-                statusMessage.style.color = "#ff3333";
-                statusMessage.innerText = "NETWORK ERROR: MAINFRAME OFFLINE.";
-            }
-        });
+        try {
+          const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ username, password }),
+          });
+          const data = await response.json();
+          if (response.ok) {
+            statusMessage.style.color = "#00ff00";
+            statusMessage.innerText = "ACCESS GRANTED. REDIRECTING...";
+            localStorage.setItem("stark_operative", username);
+            setTimeout(() => (window.location.href = "index.html"), 1000);
+          } else {
+            statusMessage.style.color = "#ff3333";
+            statusMessage.innerText = "ERROR: " + data.message;
+          }
+        } catch (error) {
+          statusMessage.style.color = "#ff3333";
+          statusMessage.innerText = "NETWORK ERROR: MAINFRAME OFFLINE.";
+        }
+      });
+
+      async function handleGoogleCredential(response) {
+        statusMessage.style.color = "#00ffff";
+        statusMessage.innerText = "VERIFYING GOOGLE CREDENTIAL...";
+
+        try {
+          const result = await fetch("/api/auth/google", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              credential: response.credential,
+            }),
+          });
+
+          const data = await result.json();
+
+          if (result.ok) {
+            statusMessage.style.color = "#00ff00";
+            statusMessage.innerText = "ACCESS GRANTED. REDIRECTING...";
+
+            localStorage.setItem("stark_operative", data.user.username);
+
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 1000);
+          } else {
+            statusMessage.style.color = "#ff3333";
+            statusMessage.innerText =
+              "GOOGLE LOGIN ERROR: " +
+              (data.message || "Authentication failed.");
+          }
+        } catch (error) {
+          console.error("Google Login error:", error);
+          statusMessage.style.color = "#ff3333";
+          statusMessage.innerText = "NETWORK ERROR: MAINFRAME OFFLINE.";
+        }
+      }
     </script>
-</body>
+  </body>
 </html>
