@@ -3,10 +3,7 @@
   <head>
     <meta charset="UTF-8" />
 
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>AETHER FORGE | Home</title>
 
@@ -1132,6 +1129,281 @@
 
         .splash-text-container {
           border-right: 2px solid #00ffff;
+        }
+      }
+
+      /* =========================================
+         RESPONSIVE LAYOUT IMPROVEMENTS
+         Keeps existing desktop layout and behavior.
+      ========================================= */
+
+      html {
+        width: 100%;
+        overflow-x: clip;
+        scroll-behavior: smooth;
+      }
+
+      img,
+      svg,
+      video,
+      canvas {
+        max-width: 100%;
+      }
+
+      button,
+      input,
+      textarea,
+      select {
+        max-width: 100%;
+        font: inherit;
+      }
+
+      @media (max-width: 768px) {
+        nav {
+          width: 100%;
+          padding: 16px 18px;
+        }
+
+        .nav-links {
+          width: 100%;
+          row-gap: 12px;
+        }
+
+        #auth-section {
+          width: 100%;
+          gap: 10px;
+        }
+
+        #auth-section > * {
+          max-width: 100%;
+        }
+
+        header {
+          padding: 58px 20px 42px;
+          animation-duration: 8s;
+        }
+
+        h1 {
+          font-size: clamp(2.1rem, 8vw, 3rem);
+          line-height: 1.15;
+          letter-spacing: clamp(1px, 1.5vw, 5px);
+          overflow-wrap: anywhere;
+        }
+
+        p.subtitle {
+          width: 100%;
+          max-width: 560px;
+          line-height: 1.65;
+          overflow-wrap: anywhere;
+        }
+
+        .btn-launch {
+          max-width: 100%;
+          padding: 15px 22px;
+          font-size: 0.95rem;
+          letter-spacing: 2px;
+          line-height: 1.5;
+          overflow-wrap: anywhere;
+        }
+
+        .features {
+          width: 100%;
+          padding: 30px 18px 60px;
+        }
+
+        .feature-card {
+          width: 100%;
+          max-width: 480px;
+          padding: 28px 24px;
+        }
+
+        #projects-section {
+          width: calc(100% - 28px);
+          padding: 20px 16px;
+          margin-top: 14px;
+          overflow-wrap: anywhere;
+        }
+
+        .projects-header {
+          width: 100%;
+        }
+
+        .project-actions {
+          flex-wrap: wrap;
+        }
+
+        .project-btn {
+          min-height: 40px;
+          min-width: 0;
+          letter-spacing: 0.5px;
+        }
+
+        #splash-screen {
+          width: 100%;
+          height: 100vh;
+          height: 100dvh;
+          padding: 20px;
+        }
+
+        .logo-assembler {
+          max-width: 100%;
+        }
+
+        .splash-text-container {
+          max-width: 100%;
+        }
+
+        .splash-typewriter {
+          font-size: clamp(1.25rem, 5.5vw, 1.9rem);
+          letter-spacing: 2px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        nav {
+          gap: 12px;
+          padding: 14px 12px;
+        }
+
+        .logo-img {
+          height: 52px;
+        }
+
+        .nav-links {
+          gap: 10px 14px;
+          margin-top: 4px;
+          margin-bottom: 4px;
+        }
+
+        .nav-link {
+          font-size: 11px;
+          letter-spacing: 1px;
+          padding: 7px 0;
+        }
+
+        #auth-section {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        #auth-section > a,
+        #auth-section > button,
+        #auth-section .operative-badge {
+          width: 100%;
+          text-align: center;
+          justify-content: center;
+          min-height: 42px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 10px 12px;
+          letter-spacing: 1px;
+        }
+
+        header {
+          padding: 48px 16px 34px;
+        }
+
+        h1 {
+          font-size: clamp(1.85rem, 9vw, 2.5rem);
+          letter-spacing: 1px;
+          margin-bottom: 16px;
+        }
+
+        p.subtitle {
+          font-size: 0.95rem;
+          margin-bottom: 28px;
+        }
+
+        .btn-launch {
+          width: 100%;
+          padding: 14px 12px;
+          font-size: 0.82rem;
+          letter-spacing: 1.5px;
+        }
+
+        .features {
+          padding: 24px 14px 48px;
+          gap: 16px;
+        }
+
+        .feature-card {
+          padding: 24px 18px;
+        }
+
+        .feature-title {
+          font-size: 1rem;
+          letter-spacing: 1px;
+        }
+
+        .feature-desc {
+          font-size: 0.9rem;
+        }
+
+        #projects-section {
+          width: calc(100% - 20px);
+          padding: 17px 12px;
+        }
+
+        .projects-title {
+          font-size: 18px;
+          letter-spacing: 2px;
+          overflow-wrap: anywhere;
+        }
+
+        .project-card {
+          padding: 18px 14px;
+        }
+
+        .project-actions {
+          gap: 6px;
+        }
+
+        .project-btn {
+          flex: 1 1 28%;
+          padding: 10px 4px;
+          font-size: 9px;
+        }
+
+        .empty-projects {
+          padding: 38px 10px;
+        }
+
+        .splash-content {
+          width: 100%;
+        }
+
+        .logo-assembler {
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .forge-wireframe {
+          width: 96px;
+          height: 96px;
+        }
+
+        .splash-typewriter {
+          font-size: clamp(1.1rem, 6vw, 1.5rem);
+          letter-spacing: 1px;
+        }
+
+        .constructor-data {
+          max-width: 100%;
+          padding: 0 8px;
+          font-size: 10px;
+          overflow-wrap: anywhere;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
         }
       }
     </style>
