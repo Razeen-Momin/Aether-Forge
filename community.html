@@ -56,66 +56,167 @@
         );
       }
       nav {
-        height: 82px;
-        padding: 0 6%;
         display: flex;
-        align-items: center;
         justify-content: space-between;
-        border-bottom: 1px solid var(--line);
-        background: rgba(2, 8, 12, 0.78);
-        backdrop-filter: blur(16px);
-        position: sticky;
-        top: 0;
-        z-index: 5;
+        align-items: center;
+        padding: 20px 50px;
+        background: rgba(0, 5, 10, 0.6);
+        backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        position: relative;
+        z-index: 100;
+        gap: 24px;
       }
-      .brand {
-        font-size: 1.25rem;
-        letter-spacing: 3px;
-        font-weight: 800;
-        color: var(--cyan);
-        text-decoration: none;
-        text-shadow: 0 0 16px #00ffff66;
-      }
-      .links {
+      .logo-block {
         display: flex;
-        gap: 25px;
+        align-items: center;
+        gap: 15px;
+        text-decoration: none;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .logo-img {
+        height: 80px;
+        width: auto;
+        opacity: 0.85;
+        filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.4));
+        transition:
+          transform 0.3s ease,
+          opacity 0.3s,
+          filter 0.3s;
+      }
+      .logo-block:hover .logo-img {
+        transform: scale(1.05);
+        opacity: 1;
+        filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.7));
+      }
+      .nav-links {
+        display: flex;
+        gap: 30px;
         align-items: center;
       }
-      .links a {
-        color: #c4d9df;
+      .nav-link {
+        color: #88ccdd;
         text-decoration: none;
-        font-size: 0.9rem;
+        font-size: 14px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        transition:
+          color 0.3s,
+          text-shadow 0.3s;
+        position: relative;
+        padding-bottom: 5px;
+        white-space: nowrap;
       }
-      .links a:hover,
-      .links a.active {
-        color: var(--cyan);
+      .nav-link:hover,
+      .nav-link.active {
+        color: #00ffff;
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+      }
+      .nav-link:after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #00ffff;
+        box-shadow: 0 0 10px #00ffff;
+        transition: width 0.3s ease;
+      }
+      .nav-link:hover:after,
+      .nav-link.active:after {
+        width: 100%;
+      }
+      #auth-section {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        flex-shrink: 0;
+      }
+      .btn-nav-login,
+      .btn-nav-register,
+      .btn-nav-logout {
+        padding: 8px 20px;
+        font-size: 12px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border-radius: 4px;
+        transition: 0.4s;
+        white-space: nowrap;
+      }
+      .btn-nav-login {
+        background: rgba(0, 255, 255, 0.05);
+        border: 1px solid #00ffff;
+        color: #00ffff;
+        text-decoration: none;
+      }
+      .btn-nav-register {
+        background: rgba(0, 255, 255, 0.1);
+        border: 1px solid #00ffff;
+        color: #00ffff;
+        text-decoration: none;
+      }
+      .btn-nav-login:hover,
+      .btn-nav-register:hover {
+        background: #00ffff;
+        color: #000;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+        transform: translateY(-2px);
+      }
+      .btn-nav-logout {
+        background: rgba(255, 51, 51, 0.1);
+        border: 1px solid #ff3333;
+        color: #ff3333;
+        cursor: pointer;
+      }
+      .btn-nav-logout:hover {
+        background: #ff3333;
+        color: #fff;
+        box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
+        transform: translateY(-2px);
+      }
+      .operative-badge {
+        color: #fff;
+        font-size: 12px;
+        letter-spacing: 2px;
+        background: rgba(0, 255, 255, 0.1);
+        padding: 8px 20px;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 255, 255, 0.3);
+        white-space: nowrap;
       }
       main {
         width: min(1180px, 90%);
-        margin: 48px auto 80px;
+        margin: 0 auto 80px;
       }
-      .eyebrow {
+      .page-header {
+        text-align: center;
+        padding: 80px 20px 45px;
+        position: relative;
+        z-index: 2;
+      }
+      .page-header h1 {
+        font-size: 3.5rem;
+        letter-spacing: 10px;
+        text-transform: uppercase;
+        color: #fff;
+        margin-bottom: 15px;
+        text-shadow: 0 0 30px rgba(0, 255, 255, 0.35);
+      }
+      .page-header h1 span {
         color: var(--cyan);
-        letter-spacing: 4px;
-        font-size: 0.75rem;
-        font-weight: 700;
       }
-      .hero {
-        display: flex;
-        justify-content: space-between;
-        align-items: end;
-        gap: 25px;
-        margin-bottom: 32px;
-      }
-      .hero h1 {
-        font-size: clamp(2.2rem, 5vw, 4rem);
+      .page-header p {
+        color: #88ccdd;
+        font-size: 1rem;
         letter-spacing: 2px;
-        margin: 9px 0;
+        line-height: 1.7;
       }
-      .hero p {
-        color: var(--muted);
-        max-width: 610px;
-        line-height: 1.6;
+      .user-row {
+        display: flex;
+        justify-content: flex-end;
+        margin: 0 0 18px;
       }
       .user-chip {
         border: 1px solid var(--line);
@@ -347,6 +448,53 @@
         margin-top: 13px;
         line-height: 1.5;
       }
+      @media (max-width: 1100px) {
+        nav {
+          padding: 18px 25px;
+          gap: 18px;
+        }
+        .nav-links {
+          gap: 18px;
+        }
+        .nav-link {
+          font-size: 12px;
+          letter-spacing: 1.5px;
+        }
+      }
+      @media (max-width: 768px) {
+        nav {
+          flex-direction: column;
+          gap: 15px;
+          padding: 20px;
+        }
+        .logo-img {
+          height: 60px;
+        }
+        .nav-links {
+          gap: 15px;
+          flex-wrap: wrap;
+          justify-content: center;
+          margin: 10px 0;
+        }
+        .nav-link {
+          font-size: 12px;
+        }
+        #auth-section {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .page-header {
+          padding: 60px 15px 35px;
+        }
+        .page-header h1 {
+          font-size: 2.4rem;
+          letter-spacing: 6px;
+        }
+        .page-header p {
+          font-size: 0.88rem;
+          letter-spacing: 1px;
+        }
+      }
       @media (max-width: 650px) {
         nav {
           height: auto;
@@ -359,10 +507,6 @@
           gap: 16px;
           flex-wrap: wrap;
         }
-        .hero {
-          align-items: flex-start;
-          flex-direction: column;
-        }
         .user-chip {
           white-space: normal;
         }
@@ -374,25 +518,26 @@
   </head>
   <body>
     <nav>
-      <a class="brand" href="index.html">AETHER FORGE</a>
-      <div class="links">
-        <a href="index.html">Home</a><a href="projects.html">Projects</a
-        ><a class="active" href="community.html">Community</a
-        ><a href="contact.html">Contact</a>
+      <a href="index.html" class="logo-block"
+        ><img src="logo.png" alt="Aether Forge" class="logo-img"
+      /></a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="projects.html" class="nav-link">Projects</a>
+        <a href="index.html#features" class="nav-link">Features</a>
+        <a href="community.html" class="nav-link active">Community</a>
+        <a href="contact.html" class="nav-link">Contact</a>
       </div>
+      <div id="auth-section"></div>
     </nav>
+    <section class="page-header">
+      <h1>THE <span>COMMUNITY</span></h1>
+      <p>THE CREATOR NETWORK // DISCOVER · SHARE · CREATE</p>
+    </section>
     <main>
-      <section class="hero">
-        <div>
-          <div class="eyebrow">THE CREATOR NETWORK</div>
-          <h1>COMMUNITY</h1>
-          <p>
-            Discover 3D creations shared by other makers, contribute your own
-            models, and build together.
-          </p>
-        </div>
+      <div class="user-row">
         <div class="user-chip" id="userChip">Checking account…</div>
-      </section>
+      </div>
       <div id="notice" class="notice" role="status"></div>
       <div class="toolbar">
         <div class="search">
@@ -512,12 +657,37 @@
         return data;
       }
       async function init() {
+        const authSection = document.getElementById("auth-section");
         try {
           const data = await api("/api/auth/me");
+          if (!data.authenticated || !data.user)
+            throw new Error("Not signed in");
           currentUser = data.user;
+          authSection.innerHTML = `<div class="operative-badge">OP: ${safe(currentUser.username)}</div><button class="btn-nav-logout" id="logout-btn" type="button">LOGOUT</button>`;
+          document
+            .getElementById("logout-btn")
+            .addEventListener("click", async () => {
+              const button = document.getElementById("logout-btn");
+              button.disabled = true;
+              button.textContent = "LOGGING OUT...";
+              try {
+                await api("/api/auth/logout", { method: "POST" });
+                window.location.href = "index.html";
+              } catch (error) {
+                showNotice(
+                  error.message || "Logout failed. Please try again.",
+                  true,
+                );
+                button.disabled = false;
+                button.textContent = "LOGOUT";
+              }
+            });
           document.getElementById("userChip").textContent =
             `Signed in as ${currentUser.username}`;
         } catch {
+          currentUser = null;
+          authSection.innerHTML =
+            '<a href="login.html" class="btn-nav-login">LOGIN</a><a href="signup.html" class="btn-nav-register">REGISTER</a>';
           document.getElementById("userChip").textContent =
             "Sign in to upload models";
         }
