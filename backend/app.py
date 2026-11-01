@@ -9,6 +9,8 @@ from backend.routes.auth import auth_bp
 from backend.models.project import Project
 from backend.routes.project import projects_bp
 from backend.models.user import User
+from backend.models.community_asset import CommunityAsset
+from backend.routes.community import community_bp
 from dotenv import load_dotenv
 
 
@@ -45,6 +47,7 @@ def create_app():
 
     app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024
 
     # -----------------------------
     # Initialize extensions
@@ -63,6 +66,7 @@ def create_app():
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(projects_bp)
+    app.register_blueprint(community_bp)
 
     # -----------------------------
     # Frontend files
