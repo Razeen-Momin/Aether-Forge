@@ -793,10 +793,11 @@
           button.disabled = true;
           button.textContent = "Uploading…";
           try {
-            const form = new FormData(event.currentTarget);
+            const uploadForm = document.getElementById("uploadForm");
+            const form = new FormData(uploadForm);
             await api("/api/community", { method: "POST", body: form });
             closeModal();
-            event.currentTarget.reset();
+            uploadForm.reset();
             activeTab = "explore";
             document
               .querySelectorAll(".tab")
