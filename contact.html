@@ -1,2209 +1,1443 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>AETHER FORGE | Contact</title>
 
-
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      html {
+        scroll-behavior: smooth;
+      }
 
+      body {
+        background: #020202;
 
-        html {
-            scroll-behavior: smooth;
-        }
+        color: #ffffff;
 
+        overflow-x: hidden;
 
-        body {
+        min-height: 100vh;
 
-            background: #020202;
+        perspective: 1200px;
 
-            color: #ffffff;
+        font-family: Arial, Helvetica, sans-serif;
+      }
 
-            overflow-x: hidden;
-
-            min-height: 100vh;
-
-            perspective: 1200px;
-
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
-        }
-
-
-        /* =========================================
+      /* =========================================
            BACKGROUND GRID
         ========================================= */
 
-        .grid-container {
+      .grid-container {
+        position: fixed;
 
-            position: fixed;
+        top: 0;
+        left: 0;
 
-            top: 0;
-            left: 0;
+        width: 100vw;
+        height: 100vh;
 
-            width: 100vw;
-            height: 100vh;
+        perspective: 600px;
 
-            perspective: 600px;
+        z-index: -2;
 
-            z-index: -2;
+        overflow: hidden;
+      }
 
-            overflow: hidden;
+      .moving-grid {
+        position: absolute;
+
+        width: 200%;
+        height: 200%;
+
+        left: -50%;
+        top: -50%;
+
+        background-image:
+          linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+
+        background-size: 50px 50px;
+
+        transform: rotateX(60deg) translateY(0);
+
+        animation: gridFlow 10s linear infinite;
+      }
+
+      @keyframes gridFlow {
+        100% {
+          transform: rotateX(60deg) translateY(100px);
         }
+      }
 
-
-        .moving-grid {
-
-            position: absolute;
-
-            width: 200%;
-            height: 200%;
-
-            left: -50%;
-            top: -50%;
-
-            background-image:
-
-                linear-gradient(
-                    rgba(0, 255, 255, 0.1)
-                    1px,
-                    transparent 1px
-                ),
-
-                linear-gradient(
-                    90deg,
-                    rgba(0, 255, 255, 0.1)
-                    1px,
-                    transparent 1px
-                );
-
-            background-size: 50px 50px;
-
-            transform:
-                rotateX(60deg)
-                translateY(0);
-
-            animation:
-                gridFlow 10s linear infinite;
-        }
-
-
-        @keyframes gridFlow {
-
-            100% {
-
-                transform:
-                    rotateX(60deg)
-                    translateY(100px);
-
-            }
-
-        }
-
-
-        /* =========================================
+      /* =========================================
            GLOW ORB
         ========================================= */
 
-        .glow-orb {
+      .glow-orb {
+        position: fixed;
 
-            position: fixed;
+        top: 30%;
+        left: 50%;
 
-            top: 30%;
-            left: 50%;
+        width: 60vw;
+        height: 60vw;
 
-            width: 60vw;
-            height: 60vw;
+        background: radial-gradient(
+          circle,
+          rgba(0, 200, 255, 0.15) 0%,
+          transparent 60%
+        );
 
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(0, 200, 255, 0.15) 0%,
-                    transparent 60%
-                );
+        transform: translate(-50%, -50%);
 
-            transform:
-                translate(-50%, -50%);
+        z-index: -1;
 
-            z-index: -1;
+        animation: pulse 4s infinite alternate;
+      }
 
-            animation:
-                pulse 4s infinite alternate;
+      @keyframes pulse {
+        100% {
+          opacity: 0.5;
+
+          transform: translate(-50%, -50%) scale(1.1);
         }
+      }
 
-
-        @keyframes pulse {
-
-            100% {
-
-                opacity: 0.5;
-
-                transform:
-                    translate(-50%, -50%)
-                    scale(1.1);
-
-            }
-
-        }
-
-
-        /* =========================================
+      /* =========================================
            NAVIGATION
         ========================================= */
 
-        nav {
+      nav {
+        display: flex;
 
-            display: flex;
+        justify-content: space-between;
 
-            justify-content:
-                space-between;
+        align-items: center;
 
-            align-items: center;
+        padding: 20px 50px;
 
-            padding: 20px 50px;
+        background: rgba(0, 5, 10, 0.6);
 
-            background:
-                rgba(0, 5, 10, 0.6);
+        backdrop-filter: blur(15px);
 
-            backdrop-filter:
-                blur(15px);
+        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
 
-            border-bottom:
-                1px solid
-                rgba(0, 255, 255, 0.2);
+        position: relative;
 
-            position: relative;
+        z-index: 100;
+      }
 
-            z-index: 100;
-        }
+      .logo-block {
+        display: flex;
 
+        align-items: center;
 
-        .logo-block {
+        gap: 15px;
 
-            display: flex;
+        text-decoration: none;
 
-            align-items: center;
+        cursor: pointer;
+      }
 
-            gap: 15px;
+      .logo-img {
+        height: 80px;
 
-            text-decoration: none;
+        width: auto;
 
-            cursor: pointer;
-        }
+        opacity: 0.85;
 
+        filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.4));
 
-        .logo-img {
+        transition:
+          transform 0.3s ease,
+          opacity 0.3s,
+          filter 0.3s;
+      }
 
-            height: 80px;
+      .logo-block:hover .logo-img {
+        transform: scale(1.05);
 
-            width: auto;
+        opacity: 1;
 
-            opacity: 0.85;
+        filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.7));
+      }
 
-            filter:
-                drop-shadow(
-                    0 0 10px
-                    rgba(0, 255, 255, 0.4)
-                );
+      .nav-links {
+        display: flex;
 
-            transition:
-                transform 0.3s ease,
-                opacity 0.3s,
-                filter 0.3s;
-        }
+        gap: 30px;
 
+        align-items: center;
+      }
 
-        .logo-block:hover .logo-img {
+      .nav-link {
+        color: #88ccdd;
 
-            transform: scale(1.05);
+        text-decoration: none;
 
-            opacity: 1;
+        font-size: 14px;
 
-            filter:
-                drop-shadow(
-                    0 0 15px
-                    rgba(0, 255, 255, 0.7)
-                );
-        }
+        letter-spacing: 2px;
 
+        text-transform: uppercase;
 
-        .nav-links {
+        transition:
+          color 0.3s,
+          text-shadow 0.3s;
 
-            display: flex;
+        position: relative;
 
-            gap: 30px;
+        padding-bottom: 5px;
+      }
 
-            align-items: center;
-        }
+      .nav-link:hover,
+      .nav-link.active {
+        color: #00ffff;
 
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+      }
 
-        .nav-link {
+      .nav-link::after {
+        content: "";
 
-            color: #88ccdd;
+        position: absolute;
 
-            text-decoration: none;
+        bottom: 0;
+        left: 0;
 
-            font-size: 14px;
+        width: 0%;
 
-            letter-spacing: 2px;
+        height: 2px;
 
-            text-transform: uppercase;
+        background: #00ffff;
 
-            transition:
-                color 0.3s,
-                text-shadow 0.3s;
+        box-shadow: 0 0 10px #00ffff;
 
-            position: relative;
+        transition: width 0.3s ease;
+      }
 
-            padding-bottom: 5px;
-        }
+      .nav-link:hover::after,
+      .nav-link.active::after {
+        width: 100%;
+      }
 
-
-        .nav-link:hover,
-        .nav-link.active {
-
-            color: #00ffff;
-
-            text-shadow:
-                0 0 10px
-                rgba(0, 255, 255, 0.6);
-        }
-
-
-        .nav-link::after {
-
-            content: '';
-
-            position: absolute;
-
-            bottom: 0;
-            left: 0;
-
-            width: 0%;
-
-            height: 2px;
-
-            background: #00ffff;
-
-            box-shadow:
-                0 0 10px #00ffff;
-
-            transition:
-                width 0.3s ease;
-        }
-
-
-        .nav-link:hover::after,
-        .nav-link.active::after {
-
-            width: 100%;
-        }
-
-
-        /* =========================================
+      /* =========================================
            AUTH SECTION
         ========================================= */
 
-        #auth-section {
+      #auth-section {
+        display: flex;
 
-            display: flex;
+        gap: 15px;
 
-            gap: 15px;
+        align-items: center;
+      }
 
-            align-items: center;
-        }
+      .btn-nav-login,
+      .btn-nav-register,
+      .btn-nav-logout {
+        padding: 8px 20px;
 
+        font-size: 12px;
 
-        .btn-nav-login,
-        .btn-nav-register,
-        .btn-nav-logout {
+        letter-spacing: 2px;
 
-            padding: 8px 20px;
+        text-transform: uppercase;
 
-            font-size: 12px;
+        border-radius: 4px;
 
-            letter-spacing: 2px;
+        transition: 0.4s;
+      }
 
-            text-transform: uppercase;
+      .btn-nav-login {
+        background: rgba(0, 255, 255, 0.05);
 
-            border-radius: 4px;
+        border: 1px solid #00ffff;
 
-            transition: 0.4s;
-        }
+        color: #00ffff;
 
+        text-decoration: none;
+      }
 
-        .btn-nav-login {
+      .btn-nav-register {
+        background: rgba(0, 255, 255, 0.1);
 
-            background:
-                rgba(0, 255, 255, 0.05);
+        border: 1px solid #00ffff;
 
-            border:
-                1px solid #00ffff;
+        color: #00ffff;
 
-            color: #00ffff;
+        text-decoration: none;
+      }
 
-            text-decoration: none;
-        }
+      .btn-nav-login:hover,
+      .btn-nav-register:hover {
+        background: #00ffff;
 
+        color: #000;
 
-        .btn-nav-register {
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
 
-            background:
-                rgba(0, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
 
-            border:
-                1px solid #00ffff;
+      .btn-nav-logout {
+        background: rgba(255, 51, 51, 0.1);
 
-            color: #00ffff;
+        border: 1px solid #ff3333;
 
-            text-decoration: none;
-        }
+        color: #ff3333;
 
+        cursor: pointer;
+      }
 
-        .btn-nav-login:hover,
-        .btn-nav-register:hover {
+      .btn-nav-logout:hover {
+        background: #ff3333;
 
-            background: #00ffff;
+        color: #fff;
 
-            color: #000;
+        box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
 
-            box-shadow:
-                0 0 20px
-                rgba(0, 255, 255, 0.6);
+        transform: translateY(-2px);
+      }
 
-            transform:
-                translateY(-2px);
-        }
+      .operative-badge {
+        color: #fff;
 
+        font-size: 12px;
 
-        .btn-nav-logout {
+        letter-spacing: 2px;
 
-            background:
-                rgba(255, 51, 51, 0.1);
+        background: rgba(0, 255, 255, 0.1);
 
-            border:
-                1px solid #ff3333;
+        padding: 8px 20px;
 
-            color: #ff3333;
+        border-radius: 4px;
 
-            cursor: pointer;
-        }
+        border: 1px solid rgba(0, 255, 255, 0.3);
+      }
 
-
-        .btn-nav-logout:hover {
-
-            background: #ff3333;
-
-            color: #fff;
-
-            box-shadow:
-                0 0 20px
-                rgba(255, 51, 51, 0.6);
-
-            transform:
-                translateY(-2px);
-        }
-
-
-        .operative-badge {
-
-            color: #fff;
-
-            font-size: 12px;
-
-            letter-spacing: 2px;
-
-            background:
-                rgba(0, 255, 255, 0.1);
-
-            padding: 8px 20px;
-
-            border-radius: 4px;
-
-            border:
-                1px solid
-                rgba(0, 255, 255, 0.3);
-        }
-
-
-        /* =========================================
+      /* =========================================
            CONTACT PAGE TITLE
         ========================================= */
 
-        .contact-title-section {
+      .contact-title-section {
+        text-align: center;
 
-            text-align: center;
+        padding: 65px 20px 20px;
 
-            padding:
-                65px 20px 20px;
+        position: relative;
 
-            position: relative;
+        z-index: 10;
+      }
 
-            z-index: 10;
+      .contact-page-title {
+        font-size: 3.2rem;
+
+        letter-spacing: 8px;
+
+        text-transform: uppercase;
+
+        color: #ffffff;
+
+        text-shadow: 0 0 15px rgba(0, 255, 255, 0.25);
+
+        animation: contactTitleGlow 3s ease-in-out infinite alternate;
+      }
+
+      .contact-page-title span {
+        color: #00ffff;
+      }
+
+      .contact-page-subtitle {
+        margin-top: 12px;
+
+        color: #557f88;
+
+        font-size: 11px;
+
+        letter-spacing: 4px;
+
+        text-transform: uppercase;
+
+        animation: contactSubtitleFade 2s ease-in-out;
+      }
+
+      .contact-title-line {
+        width: 180px;
+
+        height: 1px;
+
+        margin: 25px auto 0;
+
+        background: #00ffff;
+
+        box-shadow:
+          0 0 10px #00ffff,
+          0 0 25px rgba(0, 255, 255, 0.5);
+
+        position: relative;
+
+        overflow: hidden;
+      }
+
+      .contact-title-line::after {
+        content: "";
+
+        position: absolute;
+
+        top: 0;
+
+        left: -100%;
+
+        width: 70px;
+
+        height: 100%;
+
+        background: #ffffff;
+
+        box-shadow: 0 0 10px #ffffff;
+
+        animation: scanLine 2.5s linear infinite;
+      }
+
+      @keyframes scanLine {
+        0% {
+          left: -70px;
         }
 
+        100% {
+          left: 180px;
+        }
+      }
 
-        .contact-page-title {
-
-            font-size: 3.2rem;
-
-            letter-spacing: 8px;
-
-            text-transform: uppercase;
-
-            color: #ffffff;
-
-            text-shadow:
-                0 0 15px
-                rgba(0, 255, 255, 0.25);
-
-            animation:
-                contactTitleGlow
-                3s ease-in-out
-                infinite alternate;
+      @keyframes contactTitleGlow {
+        from {
+          text-shadow: 0 0 10px rgba(0, 255, 255, 0.15);
         }
 
+        to {
+          text-shadow: 0 0 25px rgba(0, 255, 255, 0.55);
+        }
+      }
 
-        .contact-page-title span {
+      @keyframes contactSubtitleFade {
+        from {
+          opacity: 0;
 
-            color: #00ffff;
+          transform: translateY(8px);
         }
 
+        to {
+          opacity: 1;
 
-        .contact-page-subtitle {
-
-            margin-top: 12px;
-
-            color: #557f88;
-
-            font-size: 11px;
-
-            letter-spacing: 4px;
-
-            text-transform: uppercase;
-
-            animation:
-                contactSubtitleFade
-                2s ease-in-out;
+          transform: translateY(0);
         }
+      }
 
-
-        .contact-title-line {
-
-            width: 180px;
-
-            height: 1px;
-
-            margin:
-                25px auto 0;
-
-            background: #00ffff;
-
-            box-shadow:
-
-                0 0 10px #00ffff,
-
-                0 0 25px
-                rgba(0, 255, 255, 0.5);
-
-            position: relative;
-
-            overflow: hidden;
-        }
-
-
-        .contact-title-line::after {
-
-            content: '';
-
-            position: absolute;
-
-            top: 0;
-
-            left: -100%;
-
-            width: 70px;
-
-            height: 100%;
-
-            background: #ffffff;
-
-            box-shadow:
-                0 0 10px #ffffff;
-
-            animation:
-                scanLine
-                2.5s linear infinite;
-        }
-
-
-        @keyframes scanLine {
-
-            0% {
-                left: -70px;
-            }
-
-            100% {
-                left: 180px;
-            }
-
-        }
-
-
-        @keyframes contactTitleGlow {
-
-            from {
-
-                text-shadow:
-                    0 0 10px
-                    rgba(0, 255, 255, 0.15);
-            }
-
-            to {
-
-                text-shadow:
-                    0 0 25px
-                    rgba(0, 255, 255, 0.55);
-            }
-
-        }
-
-
-        @keyframes contactSubtitleFade {
-
-            from {
-
-                opacity: 0;
-
-                transform:
-                    translateY(8px);
-            }
-
-            to {
-
-                opacity: 1;
-
-                transform:
-                    translateY(0);
-            }
-
-        }
-
-
-        /* =========================================
+      /* =========================================
            CONTACT WRAPPER
         ========================================= */
 
-        .contact-wrapper {
+      .contact-wrapper {
+        width: 90%;
 
-            width: 90%;
+        max-width: 1200px;
 
-            max-width: 1200px;
+        margin: 45px auto 100px;
 
-            margin:
-                45px auto 100px;
+        display: grid;
 
-            display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
 
-            grid-template-columns:
-                0.9fr 1.1fr;
+        gap: 30px;
 
-            gap: 30px;
+        position: relative;
 
-            position: relative;
+        z-index: 5;
+      }
 
-            z-index: 5;
-        }
-
-
-        /* =========================================
+      /* =========================================
            CONTACT PANELS
         ========================================= */
 
-        .contact-panel {
+      .contact-panel {
+        background: rgba(0, 10, 15, 0.65);
 
-            background:
-                rgba(0, 10, 15, 0.65);
+        border: 1px solid rgba(0, 255, 255, 0.2);
 
-            border:
-                1px solid
-                rgba(0, 255, 255, 0.2);
+        backdrop-filter: blur(15px);
 
-            backdrop-filter:
-                blur(15px);
+        padding: 35px;
 
-            padding: 35px;
+        border-radius: 8px;
 
-            border-radius: 8px;
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.04);
 
-            box-shadow:
-                0 0 30px
-                rgba(0, 255, 255, 0.04);
+        transition:
+          border 0.3s,
+          box-shadow 0.3s,
+          transform 0.3s;
+      }
 
-            transition:
-                border 0.3s,
-                box-shadow 0.3s,
-                transform 0.3s;
-        }
+      .contact-panel:hover {
+        border-color: rgba(0, 255, 255, 0.45);
 
+        box-shadow: 0 0 35px rgba(0, 255, 255, 0.08);
 
-        .contact-panel:hover {
+        transform: translateY(-4px);
+      }
 
-            border-color:
-                rgba(0, 255, 255, 0.45);
+      .panel-label {
+        color: #557f88;
 
-            box-shadow:
-                0 0 35px
-                rgba(0, 255, 255, 0.08);
+        font-size: 10px;
 
-            transform:
-                translateY(-4px);
-        }
+        letter-spacing: 3px;
 
+        text-transform: uppercase;
 
-        .panel-label {
+        margin-bottom: 10px;
+      }
 
-            color: #557f88;
+      .panel-title {
+        font-size: 1.8rem;
 
-            font-size: 10px;
+        letter-spacing: 3px;
 
-            letter-spacing: 3px;
+        text-transform: uppercase;
 
-            text-transform: uppercase;
+        margin-bottom: 25px;
+      }
 
-            margin-bottom: 10px;
-        }
+      .panel-title span {
+        color: #00ffff;
+      }
 
-
-        .panel-title {
-
-            font-size: 1.8rem;
-
-            letter-spacing: 3px;
-
-            text-transform: uppercase;
-
-            margin-bottom: 25px;
-        }
-
-
-        .panel-title span {
-
-            color: #00ffff;
-        }
-
-
-        /* =========================================
+      /* =========================================
            SYSTEM STATUS
         ========================================= */
 
-        .system-status {
+      .system-status {
+        display: flex;
 
-            display: flex;
+        align-items: center;
 
-            align-items: center;
+        gap: 10px;
 
-            gap: 10px;
+        padding: 12px 15px;
 
-            padding: 12px 15px;
+        margin-bottom: 30px;
 
-            margin-bottom: 30px;
+        background: rgba(0, 255, 255, 0.05);
 
-            background:
-                rgba(0, 255, 255, 0.05);
+        border: 1px solid rgba(0, 255, 255, 0.15);
 
-            border:
-                1px solid
-                rgba(0, 255, 255, 0.15);
+        border-radius: 4px;
+      }
 
-            border-radius: 4px;
+      .status-dot {
+        width: 8px;
+
+        height: 8px;
+
+        border-radius: 50%;
+
+        background: #00ffff;
+
+        box-shadow: 0 0 10px #00ffff;
+
+        animation: statusPulse 1.5s infinite alternate;
+      }
+
+      @keyframes statusPulse {
+        from {
+          opacity: 0.4;
         }
 
-
-        .status-dot {
-
-            width: 8px;
-
-            height: 8px;
-
-            border-radius: 50%;
-
-            background: #00ffff;
-
-            box-shadow:
-                0 0 10px #00ffff;
-
-            animation:
-                statusPulse 1.5s
-                infinite alternate;
+        to {
+          opacity: 1;
         }
+      }
 
+      .status-text {
+        color: #00ffff;
 
-        @keyframes statusPulse {
+        font-size: 11px;
 
-            from {
-                opacity: 0.4;
-            }
+        letter-spacing: 2px;
+      }
 
-            to {
-                opacity: 1;
-            }
-
-        }
-
-
-        .status-text {
-
-            color: #00ffff;
-
-            font-size: 11px;
-
-            letter-spacing: 2px;
-        }
-
-
-        /* =========================================
+      /* =========================================
            CONTACT INFO
         ========================================= */
 
-        .info-item {
+      .info-item {
+        margin-bottom: 25px;
+      }
 
-            margin-bottom: 25px;
-        }
+      .info-label {
+        color: #557f88;
 
+        font-size: 10px;
 
-        .info-label {
+        letter-spacing: 2px;
 
-            color: #557f88;
+        text-transform: uppercase;
 
-            font-size: 10px;
+        margin-bottom: 7px;
+      }
 
-            letter-spacing: 2px;
+      .info-value {
+        color: #d7faff;
 
-            text-transform: uppercase;
+        font-size: 14px;
 
-            margin-bottom: 7px;
-        }
+        letter-spacing: 1px;
+      }
 
+      .info-value a {
+        color: #00ffff;
 
-        .info-value {
+        text-decoration: none;
 
-            color: #d7faff;
+        transition: 0.3s;
+      }
 
-            font-size: 14px;
+      .info-value a:hover {
+        text-shadow: 0 0 10px #00ffff;
+      }
 
-            letter-spacing: 1px;
-        }
-
-
-        .info-value a {
-
-            color: #00ffff;
-
-            text-decoration: none;
-
-            transition: 0.3s;
-        }
-
-
-        .info-value a:hover {
-
-            text-shadow:
-                0 0 10px #00ffff;
-        }
-
-
-        /* =========================================
+      /* =========================================
            SOCIAL LINKS
         ========================================= */
 
-        .social-links {
+      .social-links {
+        display: flex;
 
-            display: flex;
+        gap: 10px;
 
-            gap: 10px;
+        margin-top: 30px;
 
-            margin-top: 30px;
+        flex-wrap: wrap;
+      }
 
-            flex-wrap: wrap;
-        }
+      .social-link {
+        padding: 10px 15px;
 
+        border: 1px solid rgba(0, 255, 255, 0.2);
 
-        .social-link {
+        color: #88ccdd;
 
-            padding:
-                10px 15px;
+        text-decoration: none;
 
-            border:
-                1px solid
-                rgba(0, 255, 255, 0.2);
+        font-size: 10px;
 
-            color: #88ccdd;
+        letter-spacing: 2px;
 
-            text-decoration: none;
+        border-radius: 4px;
 
-            font-size: 10px;
+        transition: 0.3s;
+      }
 
-            letter-spacing: 2px;
+      .social-link:hover {
+        color: #00ffff;
 
-            border-radius: 4px;
+        border-color: #00ffff;
 
-            transition: 0.3s;
-        }
+        background: rgba(0, 255, 255, 0.05);
 
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+      }
 
-        .social-link:hover {
-
-            color: #00ffff;
-
-            border-color: #00ffff;
-
-            background:
-                rgba(0, 255, 255, 0.05);
-
-            box-shadow:
-                0 0 15px
-                rgba(0, 255, 255, 0.2);
-        }
-
-
-        /* =========================================
+      /* =========================================
            FORM
         ========================================= */
 
-        .form-group {
+      .form-group {
+        margin-bottom: 20px;
+      }
 
-            margin-bottom: 20px;
-        }
+      .form-group label {
+        display: block;
 
+        color: #557f88;
 
-        .form-group label {
+        font-size: 10px;
 
-            display: block;
+        letter-spacing: 2px;
 
-            color: #557f88;
+        text-transform: uppercase;
 
-            font-size: 10px;
+        margin-bottom: 8px;
+      }
 
-            letter-spacing: 2px;
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
 
-            text-transform: uppercase;
+        padding: 14px 15px;
 
-            margin-bottom: 8px;
-        }
+        background: rgba(0, 0, 0, 0.55);
 
+        border: 1px solid rgba(0, 255, 255, 0.2);
 
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
+        color: #ffffff;
 
-            width: 100%;
+        border-radius: 4px;
 
-            padding: 14px 15px;
+        outline: none;
 
-            background:
-                rgba(0, 0, 0, 0.55);
+        font-family: Arial, Helvetica, sans-serif;
 
-            border:
-                1px solid
-                rgba(0, 255, 255, 0.2);
+        font-size: 13px;
 
-            color: #ffffff;
+        transition:
+          border 0.3s,
+          box-shadow 0.3s;
+      }
 
-            border-radius: 4px;
+      .form-group textarea {
+        min-height: 150px;
 
-            outline: none;
+        resize: vertical;
+      }
 
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        border-color: #00ffff;
 
-            font-size: 13px;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);
+      }
 
-            transition:
-                border 0.3s,
-                box-shadow 0.3s;
-        }
+      .form-group select option {
+        background: #020202;
 
+        color: #ffffff;
+      }
 
-        .form-group textarea {
-
-            min-height: 150px;
-
-            resize: vertical;
-        }
-
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-
-            border-color: #00ffff;
-
-            box-shadow:
-                0 0 15px
-                rgba(0, 255, 255, 0.15);
-        }
-
-
-        .form-group select option {
-
-            background: #020202;
-
-            color: #ffffff;
-        }
-
-
-        /* =========================================
+      /* =========================================
            TRANSMIT BUTTON
         ========================================= */
 
-        .btn-transmit {
+      .btn-transmit {
+        width: 100%;
 
-            width: 100%;
+        padding: 16px;
 
-            padding: 16px;
+        background: rgba(0, 255, 255, 0.06);
 
-            background:
-                rgba(0, 255, 255, 0.06);
+        border: 1px solid #00ffff;
 
-            border:
-                1px solid #00ffff;
+        color: #00ffff;
 
-            color: #00ffff;
+        font-size: 12px;
 
-            font-size: 12px;
+        letter-spacing: 4px;
 
-            letter-spacing: 4px;
+        text-transform: uppercase;
 
-            text-transform: uppercase;
+        border-radius: 4px;
 
-            border-radius: 4px;
+        cursor: pointer;
 
-            cursor: pointer;
+        transition: 0.4s;
+      }
 
-            transition: 0.4s;
-        }
+      .btn-transmit:hover {
+        background: #00ffff;
 
+        color: #000000;
 
-        .btn-transmit:hover {
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
 
-            background: #00ffff;
+        transform: translateY(-2px);
+      }
 
-            color: #000000;
-
-            box-shadow:
-                0 0 30px
-                rgba(0, 255, 255, 0.6);
-
-            transform:
-                translateY(-2px);
-        }
-
-
-        /* =========================================
+      /* =========================================
            SUCCESS MESSAGE
         ========================================= */
 
-        .success-message {
+      .success-message {
+        display: none;
 
-            display: none;
+        text-align: center;
 
-            text-align: center;
+        padding: 50px 20px;
+      }
 
-            padding: 50px 20px;
-        }
+      .success-icon {
+        font-size: 45px;
 
+        color: #00ffff;
 
-        .success-icon {
+        margin-bottom: 20px;
 
-            font-size: 45px;
+        text-shadow: 0 0 20px #00ffff;
+      }
 
-            color: #00ffff;
+      .success-message h3 {
+        color: #ffffff;
 
-            margin-bottom: 20px;
+        font-size: 20px;
 
-            text-shadow:
-                0 0 20px #00ffff;
-        }
+        letter-spacing: 3px;
 
+        margin-bottom: 10px;
+      }
 
-        .success-message h3 {
+      .success-message p {
+        color: #557f88;
 
-            color: #ffffff;
+        font-size: 12px;
 
-            font-size: 20px;
+        letter-spacing: 1px;
 
-            letter-spacing: 3px;
+        line-height: 1.7;
+      }
 
-            margin-bottom: 10px;
-        }
-
-
-        .success-message p {
-
-            color: #557f88;
-
-            font-size: 12px;
-
-            letter-spacing: 1px;
-
-            line-height: 1.7;
-        }
-
-
-        /* =========================================
+      /* =========================================
            FEEDBACK SECTION
         ========================================= */
 
-        .feedback-section {
+      .feedback-section {
+        width: 90%;
 
-            width: 90%;
+        max-width: 1200px;
 
-            max-width: 1200px;
+        margin: 0 auto 100px;
 
-            margin:
-                0 auto 100px;
+        position: relative;
 
-            position: relative;
+        z-index: 5;
 
-            z-index: 5;
+        background: rgba(0, 10, 15, 0.65);
 
-            background:
-                rgba(0, 10, 15, 0.65);
+        border: 1px solid rgba(0, 255, 255, 0.2);
 
-            border:
-                1px solid
-                rgba(0, 255, 255, 0.2);
+        backdrop-filter: blur(15px);
 
-            backdrop-filter:
-                blur(15px);
+        padding: 40px;
 
-            padding: 40px;
+        border-radius: 8px;
 
-            border-radius: 8px;
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.04);
+      }
 
-            box-shadow:
-                0 0 30px
-                rgba(0, 255, 255, 0.04);
-        }
+      .feedback-header {
+        text-align: center;
 
+        margin-bottom: 35px;
+      }
 
-        .feedback-header {
+      .feedback-header h2 {
+        font-size: 1.8rem;
 
-            text-align: center;
+        letter-spacing: 4px;
 
-            margin-bottom: 35px;
-        }
+        text-transform: uppercase;
 
+        margin-bottom: 10px;
+      }
 
-        .feedback-header h2 {
+      .feedback-header h2 span {
+        color: #00ffff;
+      }
 
-            font-size: 1.8rem;
+      .feedback-header p {
+        color: #557f88;
 
-            letter-spacing: 4px;
+        font-size: 11px;
 
-            text-transform: uppercase;
+        letter-spacing: 2px;
 
-            margin-bottom: 10px;
-        }
+        text-transform: uppercase;
+      }
 
+      .feedback-form {
+        max-width: 800px;
 
-        .feedback-header h2 span {
+        margin: auto;
+      }
 
-            color: #00ffff;
-        }
-
-
-        .feedback-header p {
-
-            color: #557f88;
-
-            font-size: 11px;
-
-            letter-spacing: 2px;
-
-            text-transform: uppercase;
-        }
-
-
-        .feedback-form {
-
-            max-width: 800px;
-
-            margin: auto;
-        }
-
-
-        /* =========================================
+      /* =========================================
            RATING
         ========================================= */
 
-        .rating-title {
+      .rating-title {
+        color: #557f88;
 
-            color: #557f88;
+        font-size: 10px;
 
-            font-size: 10px;
+        letter-spacing: 2px;
 
-            letter-spacing: 2px;
+        text-transform: uppercase;
 
-            text-transform: uppercase;
+        margin-bottom: 12px;
 
-            margin-bottom: 12px;
+        text-align: center;
+      }
 
-            text-align: center;
-        }
+      .rating {
+        display: flex;
 
+        justify-content: center;
 
-        .rating {
+        flex-direction: row-reverse;
 
-            display: flex;
+        gap: 8px;
 
-            justify-content: center;
+        margin-bottom: 30px;
+      }
 
-            flex-direction: row-reverse;
+      .rating input {
+        display: none;
+      }
 
-            gap: 8px;
+      .rating label {
+        font-size: 30px;
 
-            margin-bottom: 30px;
-        }
+        color: #234047;
 
+        cursor: pointer;
 
-        .rating input {
+        transition:
+          color 0.2s,
+          transform 0.2s;
+      }
 
-            display: none;
-        }
+      .rating label:hover {
+        transform: scale(1.15);
+      }
 
+      .rating label:hover,
+      .rating label:hover ~ label,
+      .rating input:checked ~ label {
+        color: #00ffff;
 
-        .rating label {
+        text-shadow: 0 0 12px #00ffff;
+      }
 
-            font-size: 30px;
-
-            color: #234047;
-
-            cursor: pointer;
-
-            transition:
-                color 0.2s,
-                transform 0.2s;
-        }
-
-
-        .rating label:hover {
-
-            transform:
-                scale(1.15);
-        }
-
-
-        .rating label:hover,
-        .rating label:hover ~ label,
-        .rating input:checked ~ label {
-
-            color: #00ffff;
-
-            text-shadow:
-                0 0 12px #00ffff;
-        }
-
-
-        /* =========================================
+      /* =========================================
            FEEDBACK TYPES
         ========================================= */
 
-        .feedback-types {
+      .feedback-types {
+        display: flex;
 
-            display: flex;
+        justify-content: center;
 
-            justify-content: center;
+        flex-wrap: wrap;
 
-            flex-wrap: wrap;
+        gap: 10px;
 
-            gap: 10px;
+        margin-bottom: 25px;
+      }
 
-            margin-bottom: 25px;
-        }
+      .feedback-types input {
+        display: none;
+      }
 
+      .feedback-types label {
+        padding: 10px 15px;
 
-        .feedback-types input {
+        border: 1px solid rgba(0, 255, 255, 0.2);
 
-            display: none;
-        }
+        color: #557f88;
 
+        font-size: 10px;
 
-        .feedback-types label {
+        letter-spacing: 1px;
 
-            padding:
-                10px 15px;
+        border-radius: 4px;
 
-            border:
-                1px solid
-                rgba(0, 255, 255, 0.2);
+        cursor: pointer;
 
-            color: #557f88;
+        transition: 0.3s;
+      }
 
-            font-size: 10px;
+      .feedback-types label:hover {
+        color: #00ffff;
 
-            letter-spacing: 1px;
+        border-color: #00ffff;
+      }
 
-            border-radius: 4px;
+      .feedback-types input:checked + label {
+        color: #00ffff;
 
-            cursor: pointer;
+        border-color: #00ffff;
 
-            transition: 0.3s;
-        }
+        background: rgba(0, 255, 255, 0.08);
 
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);
+      }
 
-        .feedback-types label:hover {
-
-            color: #00ffff;
-
-            border-color: #00ffff;
-        }
-
-
-        .feedback-types input:checked + label {
-
-            color: #00ffff;
-
-            border-color: #00ffff;
-
-            background:
-                rgba(0, 255, 255, 0.08);
-
-            box-shadow:
-                0 0 15px
-                rgba(0, 255, 255, 0.15);
-        }
-
-
-        /* =========================================
+      /* =========================================
            FOOTER
         ========================================= */
 
-        footer {
+      footer {
+        text-align: center;
 
-            text-align: center;
+        padding: 30px 20px;
 
-            padding:
-                30px 20px;
+        border-top: 1px solid rgba(0, 255, 255, 0.1);
 
-            border-top:
-                1px solid
-                rgba(0, 255, 255, 0.1);
+        color: #34555d;
 
-            color: #34555d;
+        font-size: 10px;
 
-            font-size: 10px;
+        letter-spacing: 2px;
 
-            letter-spacing: 2px;
+        text-transform: uppercase;
 
-            text-transform: uppercase;
+        position: relative;
 
-            position: relative;
+        z-index: 5;
+      }
 
-            z-index: 5;
-        }
-
-
-        /* =========================================
+      /* =========================================
            MOBILE
         ========================================= */
 
-        @media (max-width: 900px) {
+      @media (max-width: 900px) {
+        nav {
+          padding: 15px 25px;
 
-            nav {
+          flex-wrap: wrap;
 
-                padding:
-                    15px 25px;
-
-                flex-wrap: wrap;
-
-                gap: 20px;
-            }
-
-
-            .nav-links {
-
-                gap: 18px;
-            }
-
-
-            .contact-wrapper {
-
-                grid-template-columns: 1fr;
-            }
-
+          gap: 20px;
         }
 
-
-        @media (max-width: 768px) {
-
-            nav {
-
-                flex-direction: column;
-
-                justify-content: center;
-            }
-
-
-            .logo-img {
-
-                height: 65px;
-            }
-
-
-            .nav-links {
-
-                gap: 15px;
-
-                flex-wrap: wrap;
-
-                justify-content: center;
-            }
-
-
-            .nav-link {
-
-                font-size: 11px;
-
-                letter-spacing: 1px;
-            }
-
-
-            #auth-section {
-
-                justify-content: center;
-
-                flex-wrap: wrap;
-            }
-
-
-            .contact-title-section {
-
-                padding:
-                    45px 20px 10px;
-            }
-
-
-            .contact-page-title {
-
-                font-size: 2.2rem;
-
-                letter-spacing: 5px;
-            }
-
-
-            .contact-page-subtitle {
-
-                font-size: 9px;
-
-                letter-spacing: 2px;
-            }
-
-
-            .contact-title-line {
-
-                width: 140px;
-            }
-
-
-            .contact-wrapper {
-
-                width: 92%;
-
-                margin:
-                    35px auto 70px;
-            }
-
-
-            .contact-panel {
-
-                padding: 25px 20px;
-            }
-
-
-            .feedback-section {
-
-                width: 92%;
-
-                padding: 25px 20px;
-
-                margin-bottom: 70px;
-            }
-
-
-            .feedback-header h2 {
-
-                font-size: 1.4rem;
-
-                letter-spacing: 3px;
-            }
-
+        .nav-links {
+          gap: 18px;
         }
 
+        .contact-wrapper {
+          grid-template-columns: 1fr;
+        }
+      }
 
+      @media (max-width: 768px) {
+        nav {
+          flex-direction: column;
+
+          justify-content: center;
+        }
+
+        .logo-img {
+          height: 65px;
+        }
+
+        .nav-links {
+          gap: 15px;
+
+          flex-wrap: wrap;
+
+          justify-content: center;
+        }
+
+        .nav-link {
+          font-size: 11px;
+
+          letter-spacing: 1px;
+        }
+
+        #auth-section {
+          justify-content: center;
+
+          flex-wrap: wrap;
+        }
+
+        .contact-title-section {
+          padding: 45px 20px 10px;
+        }
+
+        .contact-page-title {
+          font-size: 2.2rem;
+
+          letter-spacing: 5px;
+        }
+
+        .contact-page-subtitle {
+          font-size: 9px;
+
+          letter-spacing: 2px;
+        }
+
+        .contact-title-line {
+          width: 140px;
+        }
+
+        .contact-wrapper {
+          width: 92%;
+
+          margin: 35px auto 70px;
+        }
+
+        .contact-panel {
+          padding: 25px 20px;
+        }
+
+        .feedback-section {
+          width: 92%;
+
+          padding: 25px 20px;
+
+          margin-bottom: 70px;
+        }
+
+        .feedback-header h2 {
+          font-size: 1.4rem;
+
+          letter-spacing: 3px;
+        }
+      }
     </style>
+  </head>
 
-</head>
-
-
-<body>
-
-
+  <body>
     <!-- =========================================
          BACKGROUND
     ========================================= -->
 
     <div class="grid-container">
-
-        <div class="moving-grid"></div>
-
+      <div class="moving-grid"></div>
     </div>
 
-
     <div class="glow-orb"></div>
-
 
     <!-- =========================================
          NAVIGATION
     ========================================= -->
 
     <nav>
+      <a href="index.html" class="logo-block">
+        <img src="logo.png" alt="Aether Forge" class="logo-img" />
+      </a>
 
-        <a
-            href="index.html"
-            class="logo-block"
-        >
+      <div class="nav-links">
+        <a href="index.html" class="nav-link"> Home </a>
 
-            <img
-                src="logo.png"
-                alt="Aether Forge"
-                class="logo-img"
-            >
+        <a href="projects.html" class="nav-link"> Projects </a>
 
-        </a>
+        <a href="index.html#features" class="nav-link"> Features </a>
 
+        <a href="community.html" class="nav-link"> Community </a>
 
-        <div class="nav-links">
+        <a href="contact.html" class="nav-link active"> Contact </a>
+      </div>
 
-            <a
-                href="index.html"
-                class="nav-link"
-            >
-                Home
-            </a>
-
-
-            <a
-                href="projects.html"
-                class="nav-link"
-            >
-                Projects
-            </a>
-
-
-            <a
-                href="index.html#features"
-                class="nav-link"
-            >
-                Features
-            </a>
-
-
-            <a
-                href="index.html#community"
-                class="nav-link"
-            >
-                Community
-            </a>
-
-
-            <a
-                href="contact.html"
-                class="nav-link active"
-            >
-                Contact
-            </a>
-
-        </div>
-
-
-        <div id="auth-section"></div>
-
+      <div id="auth-section"></div>
     </nav>
-
 
     <!-- =========================================
          CONTACT PAGE TITLE
     ========================================= -->
 
     <section class="contact-title-section">
+      <h1 class="contact-page-title">CONTACT <span>US</span></h1>
 
-        <h1 class="contact-page-title">
+      <p class="contact-page-subtitle">
+        // AETHER FORGE // COMMUNICATION CHANNEL
+      </p>
 
-            CONTACT <span>US</span>
-
-        </h1>
-
-
-        <p class="contact-page-subtitle">
-
-            // AETHER FORGE //
-            COMMUNICATION CHANNEL
-
-        </p>
-
-
-        <div class="contact-title-line"></div>
-
+      <div class="contact-title-line"></div>
     </section>
-
 
     <!-- =========================================
          CONTACT AREA
     ========================================= -->
 
     <main class="contact-wrapper">
-
-
-        <!-- =====================================
+      <!-- =====================================
              LEFT PANEL
         ====================================== -->
 
-        <section class="contact-panel">
+      <section class="contact-panel">
+        <div class="panel-label">CHANNEL 01 // DIRECT COMMUNICATION</div>
 
-            <div class="panel-label">
+        <h2 class="panel-title">
+          Communication
+          <span>Terminal</span>
+        </h2>
 
-                CHANNEL 01 //
-                DIRECT COMMUNICATION
+        <div class="system-status">
+          <div class="status-dot"></div>
 
-            </div>
+          <div class="status-text">SYSTEM ONLINE</div>
+        </div>
 
+        <div class="info-item">
+          <div class="info-label">Primary Channel</div>
 
-            <h2 class="panel-title">
+          <div class="info-value">
+            <a href="mailto:support@aetherforge.dev">
+              support@aetherforge.dev
+            </a>
+          </div>
+        </div>
 
-                Communication
-                <span>Terminal</span>
+        <div class="info-item">
+          <div class="info-label">Response Protocol</div>
 
-            </h2>
+          <div class="info-value">Standard transmission: 24–48 hours</div>
+        </div>
 
+        <div class="info-item">
+          <div class="info-label">System Status</div>
 
-            <div class="system-status">
+          <div class="info-value">All communication channels operational.</div>
+        </div>
 
-                <div class="status-dot"></div>
+        <div class="info-item">
+          <div class="info-label">Community</div>
 
-                <div class="status-text">
+          <div class="info-value">
+            Connect with other Aether Forge operators.
+          </div>
+        </div>
 
-                    SYSTEM ONLINE
+        <div class="social-links">
+          <a href="#" class="social-link"> DISCORD </a>
 
-                </div>
+          <a href="#" class="social-link"> GITHUB </a>
 
-            </div>
+          <a href="#" class="social-link"> COMMUNITY </a>
+        </div>
+      </section>
 
-
-            <div class="info-item">
-
-                <div class="info-label">
-
-                    Primary Channel
-
-                </div>
-
-
-                <div class="info-value">
-
-                    <a href="mailto:support@aetherforge.dev">
-
-                        support@aetherforge.dev
-
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <div class="info-item">
-
-                <div class="info-label">
-
-                    Response Protocol
-
-                </div>
-
-
-                <div class="info-value">
-
-                    Standard transmission:
-                    24–48 hours
-
-                </div>
-
-            </div>
-
-
-            <div class="info-item">
-
-                <div class="info-label">
-
-                    System Status
-
-                </div>
-
-
-                <div class="info-value">
-
-                    All communication
-                    channels operational.
-
-                </div>
-
-            </div>
-
-
-            <div class="info-item">
-
-                <div class="info-label">
-
-                    Community
-
-                </div>
-
-
-                <div class="info-value">
-
-                    Connect with other
-                    Aether Forge operators.
-
-                </div>
-
-            </div>
-
-
-            <div class="social-links">
-
-                <a
-                    href="#"
-                    class="social-link"
-                >
-                    DISCORD
-                </a>
-
-
-                <a
-                    href="#"
-                    class="social-link"
-                >
-                    GITHUB
-                </a>
-
-
-                <a
-                    href="#"
-                    class="social-link"
-                >
-                    COMMUNITY
-                </a>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================
+      <!-- =====================================
              RIGHT PANEL
         ====================================== -->
 
-        <section class="contact-panel">
+      <section class="contact-panel">
+        <div class="panel-label">CHANNEL 02 // TRANSMISSION CONSOLE</div>
 
-            <div class="panel-label">
+        <h2 class="panel-title">
+          Transmission
+          <span>Console</span>
+        </h2>
 
-                CHANNEL 02 //
-                TRANSMISSION CONSOLE
+        <form id="contact-form">
+          <div class="form-group">
+            <label for="name"> Identity </label>
 
-            </div>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="ENTER YOUR NAME"
+              required
+            />
+          </div>
 
+          <div class="form-group">
+            <label for="email"> Communication Address </label>
 
-            <h2 class="panel-title">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="ENTER YOUR EMAIL"
+              required
+            />
+          </div>
 
-                Transmission
-                <span>Console</span>
+          <div class="form-group">
+            <label for="subject"> Transmission Subject </label>
 
-            </h2>
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              placeholder="ENTER SUBJECT"
+              required
+            />
+          </div>
 
+          <div class="form-group">
+            <label for="message"> Message Payload </label>
 
-            <form id="contact-form">
+            <textarea
+              id="message"
+              name="message"
+              placeholder="ENTER YOUR MESSAGE..."
+              required
+            ></textarea>
+          </div>
 
+          <button type="submit" class="btn-transmit">TRANSMIT MESSAGE</button>
+        </form>
 
-                <div class="form-group">
+        <div class="success-message" id="contact-success">
+          <div class="success-icon">✓</div>
 
-                    <label for="name">
+          <h3>TRANSMISSION RECEIVED</h3>
 
-                        Identity
-
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        placeholder="ENTER YOUR NAME"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="email">
-
-                        Communication Address
-
-                    </label>
-
-
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="ENTER YOUR EMAIL"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="subject">
-
-                        Transmission Subject
-
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="subject"
-                        name="subject"
-                        placeholder="ENTER SUBJECT"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="message">
-
-                        Message Payload
-
-                    </label>
-
-
-                    <textarea
-                        id="message"
-                        name="message"
-                        placeholder="ENTER YOUR MESSAGE..."
-                        required
-                    ></textarea>
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="btn-transmit"
-                >
-
-                    TRANSMIT MESSAGE
-
-                </button>
-
-
-            </form>
-
-
-            <div
-                class="success-message"
-                id="contact-success"
-            >
-
-                <div class="success-icon">
-
-                    ✓
-
-                </div>
-
-
-                <h3>
-
-                    TRANSMISSION RECEIVED
-
-                </h3>
-
-
-                <p>
-
-                    Your message has been
-                    successfully transmitted
-                    through the Aether network.
-
-                </p>
-
-            </div>
-
-        </section>
-
+          <p>
+            Your message has been successfully transmitted through the Aether
+            network.
+          </p>
+        </div>
+      </section>
     </main>
-
 
     <!-- =========================================
          FEEDBACK SECTION
     ========================================= -->
 
     <section class="feedback-section">
+      <div class="feedback-header">
+        <h2>User <span>Feedback</span></h2>
 
+        <p>Help us improve the Aether Forge experience</p>
+      </div>
 
-        <div class="feedback-header">
+      <form class="feedback-form" id="feedback-form">
+        <!-- RATING -->
 
-            <h2>
+        <div class="rating-title">Rate Your Experience</div>
 
-                User <span>Feedback</span>
+        <div class="rating">
+          <input type="radio" name="rating" id="star5" value="5" />
 
-            </h2>
+          <label for="star5"> ★ </label>
 
+          <input type="radio" name="rating" id="star4" value="4" />
 
-            <p>
+          <label for="star4"> ★ </label>
 
-                Help us improve the
-                Aether Forge experience
+          <input type="radio" name="rating" id="star3" value="3" />
 
-            </p>
+          <label for="star3"> ★ </label>
 
+          <input type="radio" name="rating" id="star2" value="2" />
+
+          <label for="star2"> ★ </label>
+
+          <input type="radio" name="rating" id="star1" value="1" />
+
+          <label for="star1"> ★ </label>
         </div>
 
+        <!-- FEEDBACK TYPE -->
 
-        <form
-            class="feedback-form"
-            id="feedback-form"
-        >
+        <div class="rating-title">Feedback Type</div>
 
+        <div class="feedback-types">
+          <input
+            type="radio"
+            name="feedback-type"
+            id="bug"
+            value="Bug Report"
+          />
 
-            <!-- RATING -->
+          <label for="bug"> BUG REPORT </label>
 
-            <div class="rating-title">
+          <input
+            type="radio"
+            name="feedback-type"
+            id="feature"
+            value="Feature Request"
+          />
 
-                Rate Your Experience
+          <label for="feature"> FEATURE REQUEST </label>
 
-            </div>
+          <input type="radio" name="feedback-type" id="uiux" value="UI/UX" />
 
+          <label for="uiux"> UI / UX </label>
 
-            <div class="rating">
+          <input
+            type="radio"
+            name="feedback-type"
+            id="performance"
+            value="Performance"
+          />
 
-                <input
-                    type="radio"
-                    name="rating"
-                    id="star5"
-                    value="5"
-                >
+          <label for="performance"> PERFORMANCE </label>
 
-                <label for="star5">
-                    ★
-                </label>
+          <input
+            type="radio"
+            name="feedback-type"
+            id="general"
+            value="General"
+          />
 
-
-                <input
-                    type="radio"
-                    name="rating"
-                    id="star4"
-                    value="4"
-                >
-
-                <label for="star4">
-                    ★
-                </label>
-
-
-                <input
-                    type="radio"
-                    name="rating"
-                    id="star3"
-                    value="3"
-                >
-
-                <label for="star3">
-                    ★
-                </label>
-
-
-                <input
-                    type="radio"
-                    name="rating"
-                    id="star2"
-                    value="2"
-                >
-
-                <label for="star2">
-                    ★
-                </label>
-
-
-                <input
-                    type="radio"
-                    name="rating"
-                    id="star1"
-                    value="1"
-                >
-
-                <label for="star1">
-                    ★
-                </label>
-
-            </div>
-
-
-            <!-- FEEDBACK TYPE -->
-
-            <div class="rating-title">
-
-                Feedback Type
-
-            </div>
-
-
-            <div class="feedback-types">
-
-
-                <input
-                    type="radio"
-                    name="feedback-type"
-                    id="bug"
-                    value="Bug Report"
-                >
-
-                <label for="bug">
-
-                    BUG REPORT
-
-                </label>
-
-
-                <input
-                    type="radio"
-                    name="feedback-type"
-                    id="feature"
-                    value="Feature Request"
-                >
-
-                <label for="feature">
-
-                    FEATURE REQUEST
-
-                </label>
-
-
-                <input
-                    type="radio"
-                    name="feedback-type"
-                    id="uiux"
-                    value="UI/UX"
-                >
-
-                <label for="uiux">
-
-                    UI / UX
-
-                </label>
-
-
-                <input
-                    type="radio"
-                    name="feedback-type"
-                    id="performance"
-                    value="Performance"
-                >
-
-                <label for="performance">
-
-                    PERFORMANCE
-
-                </label>
-
-
-                <input
-                    type="radio"
-                    name="feedback-type"
-                    id="general"
-                    value="General"
-                >
-
-                <label for="general">
-
-                    GENERAL
-
-                </label>
-
-            </div>
-
-
-            <!-- FEEDBACK MESSAGE -->
-
-            <div class="form-group">
-
-                <label for="feedback-message">
-
-                    Feedback Payload
-
-                </label>
-
-
-                <textarea
-                    id="feedback-message"
-                    name="feedback-message"
-                    placeholder="TELL US WHAT YOU THINK..."
-                    required
-                ></textarea>
-
-            </div>
-
-
-            <button
-                type="submit"
-                class="btn-transmit"
-            >
-
-                TRANSMIT FEEDBACK
-
-            </button>
-
-
-        </form>
-
-
-        <div
-            class="success-message"
-            id="feedback-success"
-        >
-
-            <div class="success-icon">
-
-                ✓
-
-            </div>
-
-
-            <h3>
-
-                FEEDBACK RECEIVED
-
-            </h3>
-
-
-            <p>
-
-                Thank you for helping us
-                improve Aether Forge.
-
-            </p>
-
+          <label for="general"> GENERAL </label>
         </div>
 
+        <!-- FEEDBACK MESSAGE -->
+
+        <div class="form-group">
+          <label for="feedback-message"> Feedback Payload </label>
+
+          <textarea
+            id="feedback-message"
+            name="feedback-message"
+            placeholder="TELL US WHAT YOU THINK..."
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn-transmit">TRANSMIT FEEDBACK</button>
+      </form>
+
+      <div class="success-message" id="feedback-success">
+        <div class="success-icon">✓</div>
+
+        <h3>FEEDBACK RECEIVED</h3>
+
+        <p>Thank you for helping us improve Aether Forge.</p>
+      </div>
     </section>
-
 
     <!-- =========================================
          FOOTER
     ========================================= -->
 
-    <footer>
-
-        AETHER FORGE //
-        NEXT-GENERATION CONSTRUCTION INTERFACE
-
-    </footer>
-
+    <footer>AETHER FORGE // NEXT-GENERATION CONSTRUCTION INTERFACE</footer>
 
     <!-- =========================================
          JAVASCRIPT
     ========================================= -->
 
     <script>
-
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            async () => {
-
-
-                /* =================================
+      document.addEventListener("DOMContentLoaded", async () => {
+        /* =================================
                    AUTHENTICATION
                 ================================= */
 
-                const authSection =
-                    document.getElementById(
-                        "auth-section"
-                    );
+        const authSection = document.getElementById("auth-section");
 
+        function escapeHtml(value) {
+          const div = document.createElement("div");
 
-                function escapeHtml(value) {
+          div.textContent = value || "";
 
-                    const div =
-                        document.createElement(
-                            "div"
-                        );
+          return div.innerHTML;
+        }
 
-                    div.textContent =
-                        value || "";
+        try {
+          const response = await fetch("/api/auth/me", {
+            method: "GET",
+            credentials: "include",
+          });
 
-                    return div.innerHTML;
+          const data = await response.json();
 
-                }
-
-
-                try {
-
-                    const response =
-                        await fetch(
-                            "/api/auth/me",
-                            {
-                                method: "GET",
-                                credentials: "include"
-                            }
-                        );
-
-
-                    const data =
-                        await response.json();
-
-
-                    if (
-                        !response.ok ||
-                        !data.authenticated
-                    ) {
-
-                        authSection.innerHTML = `
+          if (!response.ok || !data.authenticated) {
+            authSection.innerHTML = `
 
                             <a
                                 href="login.html"
@@ -2221,16 +1455,12 @@
 
                         `;
 
-                        return;
+            return;
+          }
 
-                    }
+          const username = data.user.username;
 
-
-                    const username =
-                        data.user.username;
-
-
-                    authSection.innerHTML = `
+          authSection.innerHTML = `
 
                         <div
                             class="operative-badge"
@@ -2253,58 +1483,25 @@
 
                     `;
 
+          document
+            .getElementById("logout-btn")
+            .addEventListener("click", async () => {
+              try {
+                await fetch("/api/auth/logout", {
+                  method: "POST",
 
-                    document
-                        .getElementById(
-                            "logout-btn"
-                        )
-                        .addEventListener(
-                            "click",
-                            async () => {
+                  credentials: "include",
+                });
+              } catch (error) {
+                console.error("Logout error:", error);
+              }
 
-                                try {
+              window.location.href = "index.html";
+            });
+        } catch (error) {
+          console.error("Authentication check failed:", error);
 
-                                    await fetch(
-                                        "/api/auth/logout",
-                                        {
-                                            method:
-                                                "POST",
-
-                                            credentials:
-                                                "include"
-                                        }
-                                    );
-
-                                }
-
-                                catch (error) {
-
-                                    console.error(
-                                        "Logout error:",
-                                        error
-                                    );
-
-                                }
-
-
-                                window.location.href =
-                                    "index.html";
-
-                            }
-                        );
-
-
-                }
-
-                catch (error) {
-
-                    console.error(
-                        "Authentication check failed:",
-                        error
-                    );
-
-
-                    authSection.innerHTML = `
+          authSection.innerHTML = `
 
                         <a
                             href="login.html"
@@ -2321,133 +1518,62 @@
                         </a>
 
                     `;
+        }
 
-                }
-
-
-                /* =================================
+        /* =================================
                    CONTACT FORM
                 ================================= */
 
-                const contactForm =
-                    document.getElementById(
-                        "contact-form"
-                    );
+        const contactForm = document.getElementById("contact-form");
 
+        const contactSuccess = document.getElementById("contact-success");
 
-                const contactSuccess =
-                    document.getElementById(
-                        "contact-success"
-                    );
+        contactForm.addEventListener("submit", (event) => {
+          event.preventDefault();
 
+          contactForm.style.display = "none";
 
-                contactForm.addEventListener(
-                    "submit",
-                    event => {
+          contactSuccess.style.display = "block";
+        });
 
-                        event.preventDefault();
-
-
-                        contactForm.style.display =
-                            "none";
-
-
-                        contactSuccess.style.display =
-                            "block";
-
-                    }
-                );
-
-
-                /* =================================
+        /* =================================
                    FEEDBACK FORM
                 ================================= */
 
-                const feedbackForm =
-                    document.getElementById(
-                        "feedback-form"
-                    );
+        const feedbackForm = document.getElementById("feedback-form");
 
+        const feedbackSuccess = document.getElementById("feedback-success");
 
-                const feedbackSuccess =
-                    document.getElementById(
-                        "feedback-success"
-                    );
+        feedbackForm.addEventListener("submit", (event) => {
+          event.preventDefault();
 
+          const rating = document.querySelector('input[name="rating"]:checked');
 
-                feedbackForm.addEventListener(
-                    "submit",
-                    event => {
+          const feedbackType = document.querySelector(
+            'input[name="feedback-type"]:checked',
+          );
 
-                        event.preventDefault();
+          const message = document.getElementById("feedback-message");
 
+          if (!rating || !feedbackType || !message.value.trim()) {
+            alert("PLEASE COMPLETE ALL FEEDBACK FIELDS.");
 
-                        const rating =
-                            document.querySelector(
-                                'input[name="rating"]:checked'
-                            );
+            return;
+          }
 
+          console.log("Feedback submitted:", {
+            rating: rating.value,
 
-                        const feedbackType =
-                            document.querySelector(
-                                'input[name="feedback-type"]:checked'
-                            );
+            type: feedbackType.value,
 
+            message: message.value.trim(),
+          });
 
-                        const message =
-                            document.getElementById(
-                                "feedback-message"
-                            );
+          feedbackForm.style.display = "none";
 
-
-                        if (
-                            !rating ||
-                            !feedbackType ||
-                            !message.value.trim()
-                        ) {
-
-                            alert(
-                                "PLEASE COMPLETE ALL FEEDBACK FIELDS."
-                            );
-
-                            return;
-
-                        }
-
-
-                        console.log(
-                            "Feedback submitted:",
-                            {
-
-                                rating:
-                                    rating.value,
-
-                                type:
-                                    feedbackType.value,
-
-                                message:
-                                    message.value.trim()
-
-                            }
-                        );
-
-
-                        feedbackForm.style.display =
-                            "none";
-
-
-                        feedbackSuccess.style.display =
-                            "block";
-
-                    }
-                );
-
-            }
-        );
-
+          feedbackSuccess.style.display = "block";
+        });
+      });
     </script>
-
-
-</body>
-
+  </body>
 </html>

@@ -1,1530 +1,1086 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
 
     <title>AETHER FORGE | Projects</title>
 
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+      }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-        }
+      body {
+        background: #020202;
+        color: #ffffff;
+        overflow-x: hidden;
+        min-height: 100vh;
+        perspective: 1200px;
+      }
 
-        body {
-            background: #020202;
-            color: #ffffff;
-            overflow-x: hidden;
-            min-height: 100vh;
-            perspective: 1200px;
-        }
-
-
-        /* =========================================
+      /* =========================================
            3D MOVING GRID
         ========================================= */
 
-        .grid-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            perspective: 600px;
-            z-index: -2;
-            overflow: hidden;
+      .grid-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        perspective: 600px;
+        z-index: -2;
+        overflow: hidden;
+      }
+
+      .moving-grid {
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        left: -50%;
+        top: -50%;
+
+        background-image:
+          linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+
+        background-size: 50px 50px;
+
+        transform: rotateX(60deg) translateY(0);
+
+        animation: gridFlow 10s linear infinite;
+      }
+
+      @keyframes gridFlow {
+        100% {
+          transform: rotateX(60deg) translateY(100px);
         }
+      }
 
-        .moving-grid {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            left: -50%;
-            top: -50%;
-
-            background-image:
-                linear-gradient(
-                    rgba(0, 255, 255, 0.1) 1px,
-                    transparent 1px
-                ),
-                linear-gradient(
-                    90deg,
-                    rgba(0, 255, 255, 0.1) 1px,
-                    transparent 1px
-                );
-
-            background-size: 50px 50px;
-
-            transform: rotateX(60deg) translateY(0);
-
-            animation:
-                gridFlow 10s linear infinite;
-        }
-
-        @keyframes gridFlow {
-
-            100% {
-                transform:
-                    rotateX(60deg) translateY(100px);
-            }
-
-        }
-
-
-        /* =========================================
+      /* =========================================
            GLOW
         ========================================= */
 
-        .glow-orb {
-            position: fixed;
+      .glow-orb {
+        position: fixed;
 
-            top: 30%;
-            left: 50%;
+        top: 30%;
+        left: 50%;
 
-            width: 60vw;
-            height: 60vw;
+        width: 60vw;
+        height: 60vw;
 
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(0, 200, 255, 0.15) 0%,
-                    transparent 60%
-                );
+        background: radial-gradient(
+          circle,
+          rgba(0, 200, 255, 0.15) 0%,
+          transparent 60%
+        );
 
-            transform:
-                translate(-50%, -50%);
+        transform: translate(-50%, -50%);
 
-            z-index: -1;
+        z-index: -1;
 
-            animation:
-                pulse 4s infinite alternate;
+        animation: pulse 4s infinite alternate;
+      }
+
+      @keyframes pulse {
+        100% {
+          opacity: 0.5;
+
+          transform: translate(-50%, -50%) scale(1.1);
         }
+      }
 
-        @keyframes pulse {
-
-            100% {
-                opacity: 0.5;
-
-                transform:
-                    translate(-50%, -50%) scale(1.1);
-            }
-
-        }
-
-
-        /* =========================================
+      /* =========================================
            NAVIGATION
         ========================================= */
 
-        nav {
-            display: flex;
+      nav {
+        display: flex;
 
-            justify-content: space-between;
-            align-items: center;
+        justify-content: space-between;
+        align-items: center;
 
-            padding: 20px 50px;
+        padding: 20px 50px;
 
-            background:
-                rgba(0, 5, 10, 0.6);
+        background: rgba(0, 5, 10, 0.6);
 
-            backdrop-filter: blur(15px);
+        backdrop-filter: blur(15px);
 
-            border-bottom:
-                1px solid rgba(0, 255, 255, 0.2);
+        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
 
-            position: relative;
+        position: relative;
 
-            z-index: 100;
-        }
+        z-index: 100;
+      }
 
-        .logo-block {
-            display: flex;
+      .logo-block {
+        display: flex;
 
-            align-items: center;
+        align-items: center;
 
-            gap: 15px;
+        gap: 15px;
 
-            text-decoration: none;
+        text-decoration: none;
 
-            cursor: pointer;
-        }
+        cursor: pointer;
+      }
 
-        .logo-img {
-            height: 80px;
-            width: auto;
+      .logo-img {
+        height: 80px;
+        width: auto;
 
-            opacity: 0.85;
+        opacity: 0.85;
 
-            filter:
-                drop-shadow(
-                    0 0 10px
-                    rgba(0, 255, 255, 0.4)
-                );
+        filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.4));
 
-            transition:
-                transform 0.3s ease,
-                opacity 0.3s,
-                filter 0.3s;
-        }
+        transition:
+          transform 0.3s ease,
+          opacity 0.3s,
+          filter 0.3s;
+      }
 
-        .logo-block:hover .logo-img {
-            transform: scale(1.05);
+      .logo-block:hover .logo-img {
+        transform: scale(1.05);
 
-            opacity: 1;
+        opacity: 1;
 
-            filter:
-                drop-shadow(
-                    0 0 15px
-                    rgba(0, 255, 255, 0.7)
-                );
-        }
+        filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.7));
+      }
 
-        .nav-links {
-            display: flex;
+      .nav-links {
+        display: flex;
 
-            gap: 30px;
+        gap: 30px;
 
-            align-items: center;
-        }
+        align-items: center;
+      }
 
-        .nav-link {
-            color: #88ccdd;
+      .nav-link {
+        color: #88ccdd;
 
-            text-decoration: none;
+        text-decoration: none;
 
-            font-size: 14px;
+        font-size: 14px;
 
-            letter-spacing: 2px;
+        letter-spacing: 2px;
 
-            text-transform: uppercase;
+        text-transform: uppercase;
 
-            transition:
-                color 0.3s,
-                text-shadow 0.3s;
+        transition:
+          color 0.3s,
+          text-shadow 0.3s;
 
-            position: relative;
+        position: relative;
 
-            padding-bottom: 5px;
-        }
+        padding-bottom: 5px;
+      }
 
-        .nav-link:hover,
-        .nav-link.active {
+      .nav-link:hover,
+      .nav-link.active {
+        color: #00ffff;
 
-            color: #00ffff;
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+      }
 
-            text-shadow:
-                0 0 10px
-                rgba(0, 255, 255, 0.6);
-        }
+      .nav-link::after {
+        content: "";
 
-        .nav-link::after {
-            content: '';
+        position: absolute;
 
-            position: absolute;
+        bottom: 0;
+        left: 0;
 
-            bottom: 0;
-            left: 0;
+        width: 0%;
+        height: 2px;
 
-            width: 0%;
-            height: 2px;
+        background: #00ffff;
 
-            background: #00ffff;
+        box-shadow: 0 0 10px #00ffff;
 
-            box-shadow:
-                0 0 10px #00ffff;
+        transition: width 0.3s ease;
+      }
 
-            transition:
-                width 0.3s ease;
-        }
+      .nav-link:hover::after,
+      .nav-link.active::after {
+        width: 100%;
+      }
 
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            width: 100%;
-        }
-
-
-        /* =========================================
+      /* =========================================
            AUTH
         ========================================= */
 
-        #auth-section {
-            display: flex;
+      #auth-section {
+        display: flex;
 
-            gap: 15px;
+        gap: 15px;
 
-            align-items: center;
-        }
+        align-items: center;
+      }
 
-        .btn-nav-login,
-        .btn-nav-register,
-        .btn-nav-logout {
+      .btn-nav-login,
+      .btn-nav-register,
+      .btn-nav-logout {
+        padding: 8px 20px;
 
-            padding: 8px 20px;
+        font-size: 12px;
 
-            font-size: 12px;
+        letter-spacing: 2px;
 
-            letter-spacing: 2px;
+        text-transform: uppercase;
 
-            text-transform: uppercase;
+        border-radius: 4px;
 
-            border-radius: 4px;
+        transition: 0.4s;
+      }
 
-            transition: 0.4s;
-        }
+      .btn-nav-login {
+        background: rgba(0, 255, 255, 0.05);
 
-        .btn-nav-login {
+        border: 1px solid #00ffff;
 
-            background:
-                rgba(0, 255, 255, 0.05);
+        color: #00ffff;
 
-            border:
-                1px solid #00ffff;
+        text-decoration: none;
+      }
 
-            color: #00ffff;
+      .btn-nav-register {
+        background: rgba(0, 255, 255, 0.1);
 
-            text-decoration: none;
-        }
+        border: 1px solid #00ffff;
 
-        .btn-nav-register {
+        color: #00ffff;
 
-            background:
-                rgba(0, 255, 255, 0.1);
+        text-decoration: none;
+      }
 
-            border:
-                1px solid #00ffff;
+      .btn-nav-login:hover,
+      .btn-nav-register:hover {
+        background: #00ffff;
 
-            color: #00ffff;
+        color: #000;
 
-            text-decoration: none;
-        }
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
 
-        .btn-nav-login:hover,
-        .btn-nav-register:hover {
+        transform: translateY(-2px);
+      }
 
-            background: #00ffff;
+      .btn-nav-logout {
+        background: rgba(255, 51, 51, 0.1);
 
-            color: #000;
+        border: 1px solid #ff3333;
 
-            box-shadow:
-                0 0 20px
-                rgba(0, 255, 255, 0.6);
+        color: #ff3333;
 
-            transform:
-                translateY(-2px);
-        }
+        cursor: pointer;
+      }
 
-        .btn-nav-logout {
+      .btn-nav-logout:hover {
+        background: #ff3333;
 
-            background:
-                rgba(255, 51, 51, 0.1);
+        color: #fff;
 
-            border:
-                1px solid #ff3333;
+        box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
 
-            color: #ff3333;
+        transform: translateY(-2px);
+      }
 
-            cursor: pointer;
-        }
+      .operative-badge {
+        color: #fff;
 
-        .btn-nav-logout:hover {
+        font-size: 12px;
 
-            background: #ff3333;
+        letter-spacing: 2px;
 
-            color: #fff;
+        background: rgba(0, 255, 255, 0.1);
 
-            box-shadow:
-                0 0 20px
-                rgba(255, 51, 51, 0.6);
+        padding: 8px 20px;
 
-            transform:
-                translateY(-2px);
-        }
+        border-radius: 4px;
 
-        .operative-badge {
+        border: 1px solid rgba(0, 255, 255, 0.3);
+      }
 
-            color: #fff;
-
-            font-size: 12px;
-
-            letter-spacing: 2px;
-
-            background:
-                rgba(0, 255, 255, 0.1);
-
-            padding: 8px 20px;
-
-            border-radius: 4px;
-
-            border:
-                1px solid rgba(0, 255, 255, 0.3);
-        }
-
-
-        /* =========================================
+      /* =========================================
            PAGE HEADER
         ========================================= */
 
-        .page-header {
+      .page-header {
+        text-align: center;
 
-            text-align: center;
+        padding: 80px 20px 45px;
 
-            padding:
-                80px 20px 45px;
+        position: relative;
 
-            position: relative;
+        z-index: 10;
+      }
 
-            z-index: 10;
-        }
+      .page-header h1 {
+        font-size: 3.5rem;
 
-        .page-header h1 {
+        letter-spacing: 10px;
 
-            font-size: 3.5rem;
+        text-transform: uppercase;
 
-            letter-spacing: 10px;
+        color: #fff;
 
-            text-transform: uppercase;
+        margin-bottom: 15px;
 
-            color: #fff;
+        text-shadow: 0 0 30px rgba(0, 255, 255, 0.35);
+      }
 
-            margin-bottom: 15px;
+      .page-header h1 span {
+        color: #00ffff;
+      }
 
-            text-shadow:
-                0 0 30px
-                rgba(0, 255, 255, 0.35);
-        }
+      .page-header p {
+        color: #88ccdd;
 
-        .page-header h1 span {
+        font-size: 1rem;
 
-            color: #00ffff;
-        }
+        letter-spacing: 2px;
 
-        .page-header p {
+        line-height: 1.7;
+      }
 
-            color: #88ccdd;
-
-            font-size: 1rem;
-
-            letter-spacing: 2px;
-
-            line-height: 1.7;
-        }
-
-
-        /* =========================================
+      /* =========================================
            PROJECT DASHBOARD
         ========================================= */
 
-        #projects-section {
+      #projects-section {
+        position: relative;
 
-            position: relative;
+        z-index: 20;
 
-            z-index: 20;
+        width: 90%;
 
-            width: 90%;
+        max-width: 1200px;
 
-            max-width: 1200px;
+        margin: 20px auto 100px;
 
-            margin:
-                20px auto 100px;
+        padding: 35px;
 
-            padding: 35px;
+        background: rgba(0, 10, 20, 0.72);
 
-            background:
-                rgba(0, 10, 20, 0.72);
+        border: 1px solid rgba(0, 255, 255, 0.2);
 
-            border:
-                1px solid rgba(0, 255, 255, 0.2);
+        border-radius: 16px;
 
-            border-radius: 16px;
+        backdrop-filter: blur(15px);
 
-            backdrop-filter:
-                blur(15px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      }
 
-            box-shadow:
-                0 20px 60px
-                rgba(0, 0, 0, 0.5);
-        }
-
-
-        /* =========================================
+      /* =========================================
            PROJECT HEADER
         ========================================= */
 
-        .projects-header {
+      .projects-header {
+        display: flex;
 
-            display: flex;
+        justify-content: space-between;
 
-            justify-content:
-                space-between;
+        align-items: center;
 
-            align-items: center;
+        margin-bottom: 30px;
 
-            margin-bottom: 30px;
+        padding-bottom: 20px;
 
-            padding-bottom: 20px;
+        border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+      }
 
-            border-bottom:
-                1px solid
-                rgba(0, 255, 255, 0.15);
-        }
+      .projects-title {
+        color: #00ffff;
 
-        .projects-title {
+        font-size: 22px;
 
-            color: #00ffff;
+        letter-spacing: 4px;
 
-            font-size: 22px;
+        text-transform: uppercase;
 
-            letter-spacing: 4px;
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+      }
 
-            text-transform:
-                uppercase;
+      .project-count {
+        color: #88ccdd;
 
-            text-shadow:
-                0 0 10px
-                rgba(0, 255, 255, 0.4);
-        }
+        font-size: 11px;
 
-        .project-count {
+        letter-spacing: 2px;
 
-            color: #88ccdd;
+        margin-top: 7px;
+      }
 
-            font-size: 11px;
-
-            letter-spacing: 2px;
-
-            margin-top: 7px;
-        }
-
-
-        /* =========================================
+      /* =========================================
            CREATE BUTTON
         ========================================= */
 
-        .create-project-btn {
+      .create-project-btn {
+        background: rgba(0, 255, 255, 0.08);
 
-            background:
-                rgba(0, 255, 255, 0.08);
+        border: 1px solid #00ffff;
 
-            border:
-                1px solid #00ffff;
+        color: #ffffff;
 
-            color: #ffffff;
+        padding: 10px 18px;
 
-            padding:
-                10px 18px;
+        border-radius: 5px;
 
-            border-radius: 5px;
+        cursor: pointer;
 
-            cursor: pointer;
+        font-size: 11px;
 
-            font-size: 11px;
+        letter-spacing: 2px;
 
-            letter-spacing: 2px;
+        text-transform: uppercase;
 
-            text-transform:
-                uppercase;
+        transition: 0.3s;
+      }
 
-            transition: 0.3s;
-        }
+      .create-project-btn:hover {
+        background: #00ffff;
 
-        .create-project-btn:hover {
+        color: #000;
 
-            background: #00ffff;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+      }
 
-            color: #000;
-
-            box-shadow:
-                0 0 20px
-                rgba(0, 255, 255, 0.5);
-        }
-
-
-        /* =========================================
+      /* =========================================
            PROJECT GRID
         ========================================= */
 
-        #projects-grid {
+      #projects-grid {
+        display: grid;
 
-            display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 
-            grid-template-columns:
-                repeat(
-                    auto-fit,
-                    minmax(260px, 1fr)
-                );
+        gap: 22px;
+      }
 
-            gap: 22px;
-        }
-
-
-        /* =========================================
+      /* =========================================
            PROJECT CARD
         ========================================= */
 
-        .project-card {
+      .project-card {
+        background: rgba(0, 20, 30, 0.65);
 
-            background:
-                rgba(0, 20, 30, 0.65);
+        border: 1px solid rgba(0, 255, 255, 0.18);
 
-            border:
-                1px solid
-                rgba(0, 255, 255, 0.18);
+        border-radius: 10px;
 
-            border-radius: 10px;
+        padding: 22px;
 
-            padding: 22px;
+        transition:
+          transform 0.3s,
+          border-color 0.3s,
+          box-shadow 0.3s;
 
-            transition:
-                transform 0.3s,
-                border-color 0.3s,
-                box-shadow 0.3s;
+        position: relative;
 
-            position: relative;
+        overflow: hidden;
+      }
 
-            overflow: hidden;
-        }
+      .project-card::before {
+        content: "";
 
-        .project-card::before {
+        position: absolute;
 
-            content: '';
+        top: 0;
+        left: 0;
 
-            position: absolute;
+        width: 100%;
+        height: 2px;
 
-            top: 0;
-            left: 0;
+        background: linear-gradient(90deg, transparent, #00ffff, transparent);
 
-            width: 100%;
-            height: 2px;
+        opacity: 0.5;
+      }
 
-            background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    #00ffff,
-                    transparent
-                );
+      .project-card:hover {
+        transform: translateY(-6px);
 
-            opacity: 0.5;
-        }
+        border-color: rgba(0, 255, 255, 0.7);
 
-        .project-card:hover {
+        box-shadow: 0 15px 35px rgba(0, 255, 255, 0.12);
+      }
 
-            transform:
-                translateY(-6px);
-
-            border-color:
-                rgba(0, 255, 255, 0.7);
-
-            box-shadow:
-                0 15px 35px
-                rgba(0, 255, 255, 0.12);
-        }
-
-
-        /* =========================================
+      /* =========================================
            PROJECT ICON
         ========================================= */
 
-        .project-icon {
+      .project-icon {
+        width: 45px;
+        height: 45px;
 
-            width: 45px;
-            height: 45px;
+        display: flex;
 
-            display: flex;
+        align-items: center;
+        justify-content: center;
 
-            align-items: center;
-            justify-content: center;
+        border: 1px solid rgba(0, 255, 255, 0.3);
 
-            border:
-                1px solid
-                rgba(0, 255, 255, 0.3);
+        border-radius: 8px;
 
-            border-radius: 8px;
+        color: #00ffff;
 
-            color: #00ffff;
+        font-size: 20px;
 
-            font-size: 20px;
+        margin-bottom: 15px;
 
-            margin-bottom: 15px;
+        background: rgba(0, 255, 255, 0.05);
+      }
 
-            background:
-                rgba(0, 255, 255, 0.05);
-        }
+      .project-name {
+        color: #fff;
 
-        .project-name {
+        font-size: 18px;
 
-            color: #fff;
+        letter-spacing: 1px;
 
-            font-size: 18px;
+        margin-bottom: 8px;
 
-            letter-spacing: 1px;
+        word-break: break-word;
+      }
 
-            margin-bottom: 8px;
+      .project-description {
+        color: #88ccdd;
 
-            word-break:
-                break-word;
-        }
+        font-size: 12px;
 
-        .project-description {
+        line-height: 1.5;
 
-            color: #88ccdd;
+        min-height: 35px;
 
-            font-size: 12px;
+        margin-bottom: 15px;
+      }
 
-            line-height: 1.5;
+      .project-date {
+        color: #557f88;
 
-            min-height: 35px;
+        font-size: 10px;
 
-            margin-bottom: 15px;
-        }
+        letter-spacing: 1px;
 
-        .project-date {
+        margin-bottom: 18px;
+      }
 
-            color: #557f88;
-
-            font-size: 10px;
-
-            letter-spacing: 1px;
-
-            margin-bottom: 18px;
-        }
-
-
-        /* =========================================
+      /* =========================================
            PROJECT ACTIONS
         ========================================= */
 
-        .project-actions {
+      .project-actions {
+        display: flex;
 
-            display: flex;
+        gap: 8px;
+      }
 
-            gap: 8px;
-        }
+      .project-btn {
+        flex: 1;
 
-        .project-btn {
+        padding: 9px 5px;
 
-            flex: 1;
+        border-radius: 4px;
 
-            padding:
-                9px 5px;
+        cursor: pointer;
 
-            border-radius: 4px;
+        font-size: 10px;
 
-            cursor: pointer;
+        letter-spacing: 1px;
 
-            font-size: 10px;
+        text-transform: uppercase;
 
-            letter-spacing: 1px;
+        transition: 0.3s;
+      }
 
-            text-transform:
-                uppercase;
+      .open-project {
+        background: rgba(0, 255, 255, 0.08);
 
-            transition: 0.3s;
-        }
+        border: 1px solid #00ffff;
 
-        .open-project {
+        color: #ffffff;
+      }
 
-            background:
-                rgba(0, 255, 255, 0.08);
+      .open-project:hover {
+        background: #00ffff;
 
-            border:
-                1px solid #00ffff;
+        color: #000;
+      }
 
-            color: #ffffff;
-        }
+      .rename-project {
+        background: rgba(255, 255, 255, 0.04);
 
-        .open-project:hover {
+        border: 1px solid #557f88;
 
-            background: #00ffff;
+        color: #ffffff;
+      }
 
-            color: #000;
-        }
+      .rename-project:hover {
+        border-color: #fff;
 
-        .rename-project {
+        color: #fff;
+      }
 
-            background:
-                rgba(255, 255, 255, 0.04);
+      .delete-project {
+        background: rgba(255, 51, 51, 0.05);
 
-            border:
-                1px solid #557f88;
+        border: 1px solid #ff3333;
 
-            color: #ffffff;
-        }
+        color: #ff5555;
+      }
 
-        .rename-project:hover {
+      .delete-project:hover {
+        background: #ff3333;
 
-            border-color: #fff;
+        color: #fff;
+      }
 
-            color: #fff;
-        }
-
-        .delete-project {
-
-            background:
-                rgba(255, 51, 51, 0.05);
-
-            border:
-                1px solid #ff3333;
-
-            color: #ff5555;
-        }
-
-        .delete-project:hover {
-
-            background: #ff3333;
-
-            color: #fff;
-        }
-
-
-        /* =========================================
+      /* =========================================
            EMPTY STATE
         ========================================= */
 
-        .empty-projects {
+      .empty-projects {
+        text-align: center;
 
-            text-align: center;
+        padding: 70px 20px;
 
-            padding:
-                70px 20px;
+        color: #88ccdd;
+      }
 
-            color: #88ccdd;
-        }
+      .empty-projects-icon {
+        font-size: 45px;
 
-        .empty-projects-icon {
+        margin-bottom: 20px;
 
-            font-size: 45px;
+        opacity: 0.6;
+      }
 
-            margin-bottom: 20px;
+      .empty-projects h3 {
+        color: #00ffff;
 
-            opacity: 0.6;
-        }
+        letter-spacing: 3px;
 
-        .empty-projects h3 {
+        margin-bottom: 10px;
 
-            color: #00ffff;
+        font-size: 18px;
+      }
 
-            letter-spacing: 3px;
+      .empty-projects p {
+        font-size: 12px;
 
-            margin-bottom: 10px;
+        letter-spacing: 1px;
 
-            font-size: 18px;
-        }
+        margin-bottom: 25px;
+      }
 
-        .empty-projects p {
-
-            font-size: 12px;
-
-            letter-spacing: 1px;
-
-            margin-bottom: 25px;
-        }
-
-
-        /* =========================================
+      /* =========================================
            LOADING
         ========================================= */
 
-        .loading-projects {
+      .loading-projects {
+        text-align: center;
 
-            text-align: center;
+        padding: 60px;
 
-            padding: 60px;
+        color: #00ffff;
 
-            color: #00ffff;
+        letter-spacing: 3px;
 
-            letter-spacing: 3px;
+        font-size: 12px;
 
-            font-size: 12px;
+        animation: loadingPulse 1.5s infinite alternate;
+      }
 
-            animation:
-                loadingPulse 1.5s infinite alternate;
+      @keyframes loadingPulse {
+        from {
+          opacity: 0.35;
         }
 
-        @keyframes loadingPulse {
-
-            from {
-                opacity: 0.35;
-            }
-
-            to {
-                opacity: 1;
-            }
-
+        to {
+          opacity: 1;
         }
+      }
 
-
-        /* =========================================
+      /* =========================================
            MOBILE
         ========================================= */
 
-        @media (max-width: 768px) {
+      @media (max-width: 768px) {
+        nav {
+          flex-direction: column;
 
-            nav {
+          gap: 15px;
 
-                flex-direction: column;
-
-                gap: 15px;
-
-                padding: 20px;
-            }
-
-            .logo-block {
-
-                flex-direction: column;
-
-                gap: 5px;
-            }
-
-            .logo-img {
-
-                height: 60px;
-            }
-
-            .nav-links {
-
-                gap: 15px;
-
-                flex-wrap: wrap;
-
-                justify-content: center;
-
-                margin-top: 10px;
-
-                margin-bottom: 10px;
-            }
-
-            .nav-link {
-
-                font-size: 12px;
-            }
-
-            #auth-section {
-
-                flex-wrap: wrap;
-
-                justify-content: center;
-            }
-
-            .page-header {
-
-                padding:
-                    60px 20px 35px;
-            }
-
-            .page-header h1 {
-
-                font-size: 2.5rem;
-
-                letter-spacing: 5px;
-            }
-
-            .page-header p {
-
-                font-size: 0.85rem;
-            }
-
-            #projects-section {
-
-                width: 94%;
-
-                padding: 20px;
-
-                margin-bottom: 60px;
-            }
-
-            .projects-header {
-
-                flex-direction: column;
-
-                align-items: flex-start;
-
-                gap: 15px;
-            }
-
-            .projects-header
-            .create-project-btn {
-
-                width: 100%;
-            }
-
-            #projects-grid {
-
-                grid-template-columns: 1fr;
-            }
-
-            .project-actions {
-
-                flex-wrap: wrap;
-            }
-
-            .project-btn {
-
-                min-width: 30%;
-            }
-
+          padding: 20px;
         }
 
+        .logo-block {
+          flex-direction: column;
+
+          gap: 5px;
+        }
+
+        .logo-img {
+          height: 60px;
+        }
+
+        .nav-links {
+          gap: 15px;
+
+          flex-wrap: wrap;
+
+          justify-content: center;
+
+          margin-top: 10px;
+
+          margin-bottom: 10px;
+        }
+
+        .nav-link {
+          font-size: 12px;
+        }
+
+        #auth-section {
+          flex-wrap: wrap;
+
+          justify-content: center;
+        }
+
+        .page-header {
+          padding: 60px 20px 35px;
+        }
+
+        .page-header h1 {
+          font-size: 2.5rem;
+
+          letter-spacing: 5px;
+        }
+
+        .page-header p {
+          font-size: 0.85rem;
+        }
+
+        #projects-section {
+          width: 94%;
+
+          padding: 20px;
+
+          margin-bottom: 60px;
+        }
+
+        .projects-header {
+          flex-direction: column;
+
+          align-items: flex-start;
+
+          gap: 15px;
+        }
+
+        .projects-header .create-project-btn {
+          width: 100%;
+        }
+
+        #projects-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .project-actions {
+          flex-wrap: wrap;
+        }
+
+        .project-btn {
+          min-width: 30%;
+        }
+      }
     </style>
+  </head>
 
-</head>
-
-
-<body>
-
-
+  <body>
     <!-- =========================================
          BACKGROUND
     ========================================= -->
 
     <div class="grid-container">
-
-        <div class="moving-grid"></div>
-
+      <div class="moving-grid"></div>
     </div>
 
     <div class="glow-orb"></div>
-
 
     <!-- =========================================
          NAVIGATION
     ========================================= -->
 
     <nav>
+      <a href="index.html" class="logo-block">
+        <img src="logo.png" alt="Aether Forge" class="logo-img" />
+      </a>
 
-        <a href="index.html"
-           class="logo-block">
+      <div class="nav-links">
+        <a href="index.html" class="nav-link"> Home </a>
 
-            <img
-                src="logo.png"
-                alt="Aether Forge"
-                class="logo-img">
+        <a href="projects.html" class="nav-link active"> Projects </a>
 
-        </a>
+        <a href="index.html#features" class="nav-link"> Features </a>
 
+        <a href="community.html" class="nav-link"> Community </a>
 
-        <div class="nav-links">
+        <a href="contact.html" class="nav-link"> Contact </a>
+      </div>
 
-            <a
-                href="index.html"
-                class="nav-link">
-
-                Home
-
-            </a>
-
-            <a
-                href="projects.html"
-                class="nav-link active">
-
-                Projects
-
-            </a>
-
-            <a
-                href="index.html#features"
-                class="nav-link">
-
-                Features
-
-            </a>
-
-            <a
-                href="index.html#community"
-                class="nav-link">
-
-                Community
-
-            </a>
-
-            <a
-                href="contact.html"
-                class="nav-link">
-
-                Contact
-
-            </a>
-
-        </div>
-
-
-        <div id="auth-section"></div>
-
+      <div id="auth-section"></div>
     </nav>
-
 
     <!-- =========================================
          PAGE HEADER
     ========================================= -->
 
     <section class="page-header">
+      <h1>MY <span>PROJECTS</span></h1>
 
-        <h1>
-            MY <span>PROJECTS</span>
-        </h1>
-
-        <p>
-            Manage your construction projects,
-            open existing designs, and initialize
-            new creations.
-        </p>
-
+      <p>
+        Manage your construction projects, open existing designs, and initialize
+        new creations.
+      </p>
     </section>
-
 
     <!-- =========================================
          PROJECT DASHBOARD
     ========================================= -->
 
     <section id="projects-section">
+      <div class="projects-header">
+        <div>
+          <div class="projects-title">PROJECT ARCHIVE</div>
 
-        <div class="projects-header">
-
-            <div>
-
-                <div class="projects-title">
-
-                    PROJECT ARCHIVE
-
-                </div>
-
-                <div
-                    class="project-count"
-                    id="project-count">
-
-                    LOADING PROJECTS...
-
-                </div>
-
-            </div>
-
-
-            <button
-                class="create-project-btn"
-                id="create-project-btn">
-
-                + NEW PROJECT
-
-            </button>
-
+          <div class="project-count" id="project-count">
+            LOADING PROJECTS...
+          </div>
         </div>
 
+        <button class="create-project-btn" id="create-project-btn">
+          + NEW PROJECT
+        </button>
+      </div>
 
-        <div id="projects-grid">
-
-            <div class="loading-projects">
-
-                LOADING PROJECT DATABASE...
-
-            </div>
-
-        </div>
-
+      <div id="projects-grid">
+        <div class="loading-projects">LOADING PROJECT DATABASE...</div>
+      </div>
     </section>
-
 
     <!-- =========================================
          JAVASCRIPT
     ========================================= -->
 
     <script>
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            async () => {
-
-
-                /* =====================================
+      document.addEventListener("DOMContentLoaded", async () => {
+        /* =====================================
                    ELEMENTS
                 ===================================== */
 
-                const authSection =
-                    document.getElementById(
-                        'auth-section'
-                    );
+        const authSection = document.getElementById("auth-section");
 
-                const projectsGrid =
-                    document.getElementById(
-                        'projects-grid'
-                    );
+        const projectsGrid = document.getElementById("projects-grid");
 
-                const projectCount =
-                    document.getElementById(
-                        'project-count'
-                    );
+        const projectCount = document.getElementById("project-count");
 
-                const createProjectBtn =
-                    document.getElementById(
-                        'create-project-btn'
-                    );
+        const createProjectBtn = document.getElementById("create-project-btn");
 
+        let projects = [];
 
-                let projects = [];
-
-
-                /* =====================================
+        /* =====================================
                    HTML ESCAPE
                 ===================================== */
 
-                function escapeHtml(value) {
+        function escapeHtml(value) {
+          const div = document.createElement("div");
 
-                    const div =
-                        document.createElement(
-                            'div'
-                        );
+          div.textContent = value || "";
 
-                    div.textContent =
-                        value || '';
+          return div.innerHTML;
+        }
 
-                    return div.innerHTML;
-
-                }
-
-
-                /* =====================================
+        /* =====================================
                    FORMAT DATE
                 ===================================== */
 
-                function formatDate(dateString) {
+        function formatDate(dateString) {
+          if (!dateString) {
+            return "UNKNOWN";
+          }
 
-                    if (!dateString) {
+          const date = new Date(dateString);
 
-                        return "UNKNOWN";
+          if (Number.isNaN(date.getTime())) {
+            return "UNKNOWN";
+          }
 
-                    }
+          return date.toLocaleString([], {
+            dateStyle: "medium",
+            timeStyle: "short",
+          });
+        }
 
-                    const date =
-                        new Date(dateString);
-
-                    if (
-                        Number.isNaN(
-                            date.getTime()
-                        )
-                    ) {
-
-                        return "UNKNOWN";
-
-                    }
-
-                    return date.toLocaleString(
-                        [],
-                        {
-                            dateStyle: 'medium',
-                            timeStyle: 'short'
-                        }
-                    );
-
-                }
-
-
-                /* =====================================
+        /* =====================================
                    OPEN PROJECT
                 ===================================== */
 
-                function openProject(projectId) {
+        function openProject(projectId) {
+          window.location.href = `AetherForge.html?project_id=${projectId}`;
+        }
 
-                    window.location.href =
-                        `AetherForge.html?project_id=${projectId}`;
-
-                }
-
-
-                /* =====================================
+        /* =====================================
                    CREATE PROJECT
                 ===================================== */
 
-                async function createProject() {
+        async function createProject() {
+          const projectName = prompt("ENTER NEW PROJECT NAME:");
 
-                    const projectName =
-                        prompt(
-                            "ENTER NEW PROJECT NAME:"
-                        );
+          if (!projectName || !projectName.trim()) {
+            return;
+          }
 
-                    if (
-                        !projectName ||
-                        !projectName.trim()
-                    ) {
+          try {
+            const response = await fetch("/api/projects", {
+              method: "POST",
 
-                        return;
+              credentials: "include",
 
-                    }
+              headers: {
+                "Content-Type": "application/json",
+              },
 
+              body: JSON.stringify({
+                name: projectName.trim(),
 
-                    try {
+                description: "Aether Forge Constructor Project",
+              }),
+            });
 
-                        const response =
-                            await fetch(
-                                '/api/projects',
-                                {
-                                    method: 'POST',
+            const data = await response.json();
 
-                                    credentials:
-                                        'include',
+            if (!response.ok) {
+              alert(
+                "PROJECT CREATION FAILED: " +
+                  (data.message || "Unknown error."),
+              );
 
-                                    headers: {
-                                        'Content-Type':
-                                            'application/json'
-                                    },
+              return;
+            }
 
-                                    body:
-                                        JSON.stringify({
+            await loadProjects();
 
-                                            name:
-                                                projectName.trim(),
+            if (data.project && data.project.id) {
+              window.location.href = `AetherForge.html?project_id=${data.project.id}`;
+            }
+          } catch (error) {
+            console.error("Project creation error:", error);
 
-                                            description:
-                                                "Aether Forge Constructor Project"
+            alert("PROJECT SYSTEM OFFLINE.");
+          }
+        }
 
-                                        })
-                                }
-                            );
-
-
-                        const data =
-                            await response.json();
-
-
-                        if (!response.ok) {
-
-                            alert(
-                                "PROJECT CREATION FAILED: " +
-                                (
-                                    data.message ||
-                                    "Unknown error."
-                                )
-                            );
-
-                            return;
-
-                        }
-
-
-                        await loadProjects();
-
-
-                        if (
-                            data.project &&
-                            data.project.id
-                        ) {
-
-                            window.location.href =
-                                `AetherForge.html?project_id=${data.project.id}`;
-
-                        }
-
-                    }
-
-                    catch (error) {
-
-                        console.error(
-                            "Project creation error:",
-                            error
-                        );
-
-                        alert(
-                            "PROJECT SYSTEM OFFLINE."
-                        );
-
-                    }
-
-                }
-
-
-                /* =====================================
+        /* =====================================
                    DELETE PROJECT
                 ===================================== */
 
-                async function deleteProject(
-                    projectId,
-                    projectName
-                ) {
+        async function deleteProject(projectId, projectName) {
+          const confirmed = confirm(
+            `DELETE PROJECT "${projectName}"?\n\nThis action cannot be undone.`,
+          );
 
-                    const confirmed =
-                        confirm(
-                            `DELETE PROJECT "${projectName}"?\n\nThis action cannot be undone.`
-                        );
+          if (!confirmed) {
+            return;
+          }
 
-                    if (!confirmed) {
+          try {
+            const response = await fetch(`/api/projects/${projectId}`, {
+              method: "DELETE",
 
-                        return;
+              credentials: "include",
+            });
 
-                    }
+            const data = await response.json();
 
+            if (!response.ok) {
+              alert("DELETE FAILED: " + (data.message || "Unknown error."));
 
-                    try {
+              return;
+            }
 
-                        const response =
-                            await fetch(
-                                `/api/projects/${projectId}`,
-                                {
-                                    method: 'DELETE',
+            await loadProjects();
+          } catch (error) {
+            console.error("Delete error:", error);
 
-                                    credentials:
-                                        'include'
-                                }
-                            );
+            alert("PROJECT SYSTEM OFFLINE.");
+          }
+        }
 
-
-                        const data =
-                            await response.json();
-
-
-                        if (!response.ok) {
-
-                            alert(
-                                "DELETE FAILED: " +
-                                (
-                                    data.message ||
-                                    "Unknown error."
-                                )
-                            );
-
-                            return;
-
-                        }
-
-
-                        await loadProjects();
-
-                    }
-
-                    catch (error) {
-
-                        console.error(
-                            "Delete error:",
-                            error
-                        );
-
-                        alert(
-                            "PROJECT SYSTEM OFFLINE."
-                        );
-
-                    }
-
-                }
-
-
-                /* =====================================
+        /* =====================================
                    RENAME PROJECT
                 ===================================== */
 
-                async function renameProject(
-                    projectId,
-                    currentName,
-                    currentDescription
-                ) {
+        async function renameProject(
+          projectId,
+          currentName,
+          currentDescription,
+        ) {
+          const newName = prompt("ENTER NEW PROJECT NAME:", currentName);
 
-                    const newName =
-                        prompt(
-                            "ENTER NEW PROJECT NAME:",
-                            currentName
-                        );
+          if (!newName || !newName.trim()) {
+            return;
+          }
 
-                    if (
-                        !newName ||
-                        !newName.trim()
-                    ) {
+          try {
+            const response = await fetch(`/api/projects/${projectId}`, {
+              method: "PUT",
 
-                        return;
+              credentials: "include",
 
-                    }
+              headers: {
+                "Content-Type": "application/json",
+              },
 
+              body: JSON.stringify({
+                name: newName.trim(),
 
-                    try {
+                description: currentDescription || "",
+              }),
+            });
 
-                        const response =
-                            await fetch(
-                                `/api/projects/${projectId}`,
-                                {
-                                    method: 'PUT',
+            const data = await response.json();
 
-                                    credentials:
-                                        'include',
+            if (!response.ok) {
+              alert("RENAME FAILED: " + (data.message || "Unknown error."));
 
-                                    headers: {
-                                        'Content-Type':
-                                            'application/json'
-                                    },
+              return;
+            }
 
-                                    body:
-                                        JSON.stringify({
+            await loadProjects();
+          } catch (error) {
+            console.error("Rename error:", error);
 
-                                            name:
-                                                newName.trim(),
+            alert("PROJECT SYSTEM OFFLINE.");
+          }
+        }
 
-                                            description:
-                                                currentDescription || ""
-
-                                        })
-                                }
-                            );
-
-
-                        const data =
-                            await response.json();
-
-
-                        if (!response.ok) {
-
-                            alert(
-                                "RENAME FAILED: " +
-                                (
-                                    data.message ||
-                                    "Unknown error."
-                                )
-                            );
-
-                            return;
-
-                        }
-
-
-                        await loadProjects();
-
-                    }
-
-                    catch (error) {
-
-                        console.error(
-                            "Rename error:",
-                            error
-                        );
-
-                        alert(
-                            "PROJECT SYSTEM OFFLINE."
-                        );
-
-                    }
-
-                }
-
-
-                /* =====================================
+        /* =====================================
                    RENDER PROJECTS
                 ===================================== */
 
-                function renderProjects() {
+        function renderProjects() {
+          projectsGrid.innerHTML = "";
 
-                    projectsGrid.innerHTML =
-                        '';
+          projectCount.innerText = `${projects.length} PROJECT${projects.length === 1 ? "" : "S"} AVAILABLE`;
 
-
-                    projectCount.innerText =
-                        `${projects.length} PROJECT${projects.length === 1 ? '' : 'S'} AVAILABLE`;
-
-
-                    if (
-                        projects.length === 0
-                    ) {
-
-                        projectsGrid.innerHTML = `
+          if (projects.length === 0) {
+            projectsGrid.innerHTML = `
 
                             <div
                                 class="empty-projects"
@@ -1562,36 +1118,19 @@
 
                         `;
 
+            document
+              .getElementById("create-first-project")
+              .addEventListener("click", createProject);
 
-                        document
-                            .getElementById(
-                                'create-first-project'
-                            )
-                            .addEventListener(
-                                'click',
-                                createProject
-                            );
+            return;
+          }
 
+          projects.forEach((project) => {
+            const card = document.createElement("div");
 
-                        return;
+            card.className = "project-card";
 
-                    }
-
-
-                    projects.forEach(
-                        project => {
-
-                            const card =
-                                document.createElement(
-                                    'div'
-                                );
-
-
-                            card.className =
-                                'project-card';
-
-
-                            card.innerHTML = `
+            card.innerHTML = `
 
                                 <div
                                     class="project-icon">
@@ -1603,9 +1142,7 @@
                                 <div
                                     class="project-name">
 
-                                    ${escapeHtml(
-                                        project.name
-                                    )}
+                                    ${escapeHtml(project.name)}
 
                                 </div>
 
@@ -1613,8 +1150,8 @@
                                     class="project-description">
 
                                     ${escapeHtml(
-                                        project.description ||
-                                        'Aether Forge Constructor Project'
+                                      project.description ||
+                                        "Aether Forge Constructor Project",
                                     )}
 
                                 </div>
@@ -1623,9 +1160,7 @@
                                     class="project-date">
 
                                     LAST UPDATED:
-                                    ${formatDate(
-                                        project.updated_at
-                                    )}
+                                    ${formatDate(project.updated_at)}
 
                                 </div>
 
@@ -1660,113 +1195,56 @@
 
                             `;
 
+            /* OPEN */
 
-                            /* OPEN */
+            card
+              .querySelector('[data-action="open"]')
+              .addEventListener("click", () => {
+                openProject(project.id);
+              });
 
-                            card
-                                .querySelector(
-                                    '[data-action="open"]'
-                                )
-                                .addEventListener(
-                                    'click',
-                                    () => {
+            /* RENAME */
 
-                                        openProject(
-                                            project.id
-                                        );
+            card
+              .querySelector('[data-action="rename"]')
+              .addEventListener("click", () => {
+                renameProject(project.id, project.name, project.description);
+              });
 
-                                    }
-                                );
+            /* DELETE */
 
+            card
+              .querySelector('[data-action="delete"]')
+              .addEventListener("click", () => {
+                deleteProject(project.id, project.name);
+              });
 
-                            /* RENAME */
+            projectsGrid.appendChild(card);
+          });
+        }
 
-                            card
-                                .querySelector(
-                                    '[data-action="rename"]'
-                                )
-                                .addEventListener(
-                                    'click',
-                                    () => {
-
-                                        renameProject(
-                                            project.id,
-                                            project.name,
-                                            project.description
-                                        );
-
-                                    }
-                                );
-
-
-                            /* DELETE */
-
-                            card
-                                .querySelector(
-                                    '[data-action="delete"]'
-                                )
-                                .addEventListener(
-                                    'click',
-                                    () => {
-
-                                        deleteProject(
-                                            project.id,
-                                            project.name
-                                        );
-
-                                    }
-                                );
-
-
-                            projectsGrid.appendChild(
-                                card
-                            );
-
-                        }
-                    );
-
-                }
-
-
-                /* =====================================
+        /* =====================================
                    LOAD PROJECTS
                 ===================================== */
 
-                async function loadProjects() {
+        async function loadProjects() {
+          try {
+            projectCount.innerText = "LOADING PROJECTS...";
 
-                    try {
+            const response = await fetch("/api/projects", {
+              method: "GET",
 
-                        projectCount.innerText =
-                            "LOADING PROJECTS...";
+              credentials: "include",
+            });
 
+            const data = await response.json();
 
-                        const response =
-                            await fetch(
-                                '/api/projects',
-                                {
-                                    method: 'GET',
+            if (!response.ok) {
+              console.error("Project loading failed:", data);
 
-                                    credentials:
-                                        'include'
-                                }
-                            );
+              projectCount.innerText = "PROJECT SYSTEM OFFLINE";
 
-
-                        const data =
-                            await response.json();
-
-
-                        if (!response.ok) {
-
-                            console.error(
-                                "Project loading failed:",
-                                data
-                            );
-
-                            projectCount.innerText =
-                                "PROJECT SYSTEM OFFLINE";
-
-                            projectsGrid.innerHTML = `
+              projectsGrid.innerHTML = `
 
                                 <div
                                     class="empty-projects"
@@ -1796,32 +1274,18 @@
 
                             `;
 
-                            return;
+              return;
+            }
 
-                        }
+            projects = data.projects || [];
 
+            renderProjects();
+          } catch (error) {
+            console.error("Project loading error:", error);
 
-                        projects =
-                            data.projects || [];
+            projectCount.innerText = "PROJECT SYSTEM OFFLINE";
 
-
-                        renderProjects();
-
-                    }
-
-                    catch (error) {
-
-                        console.error(
-                            "Project loading error:",
-                            error
-                        );
-
-
-                        projectCount.innerText =
-                            "PROJECT SYSTEM OFFLINE";
-
-
-                        projectsGrid.innerHTML = `
+            projectsGrid.innerHTML = `
 
                             <div
                                 class="empty-projects"
@@ -1850,44 +1314,28 @@
                             </div>
 
                         `;
+          }
+        }
 
-                    }
-
-                }
-
-
-                /* =====================================
+        /* =====================================
                    CHECK AUTHENTICATION
                 ===================================== */
 
-                try {
+        try {
+          const response = await fetch("/api/auth/me", {
+            method: "GET",
 
-                    const response =
-                        await fetch(
-                            '/api/auth/me',
-                            {
-                                method: 'GET',
+            credentials: "include",
+          });
 
-                                credentials:
-                                    'include'
-                            }
-                        );
+          const data = await response.json();
 
+          if (!response.ok || !data.authenticated) {
+            /*
+             * Projects require login.
+             */
 
-                    const data =
-                        await response.json();
-
-
-                    if (
-                        !response.ok ||
-                        !data.authenticated
-                    ) {
-
-                        /*
-                         * Projects require login.
-                         */
-
-                        authSection.innerHTML = `
+            authSection.innerHTML = `
 
                             <a
                                 href="login.html"
@@ -1907,8 +1355,7 @@
 
                         `;
 
-
-                        projectsGrid.innerHTML = `
+            projectsGrid.innerHTML = `
 
                             <div
                                 class="empty-projects"
@@ -1950,25 +1397,18 @@
 
                         `;
 
+            projectCount.innerText = "AUTHENTICATION REQUIRED";
 
-                        projectCount.innerText =
-                            "AUTHENTICATION REQUIRED";
+            return;
+          }
 
-
-                        return;
-
-                    }
-
-
-                    /* =================================
+          /* =================================
                        LOGGED IN
                     ================================= */
 
-                    const username =
-                        data.user.username;
+          const username = data.user.username;
 
-
-                    authSection.innerHTML = `
+          authSection.innerHTML = `
 
                         <div
                             class="operative-badge">
@@ -1988,79 +1428,41 @@
 
                     `;
 
-
-                    /* =================================
+          /* =================================
                        LOGOUT
                     ================================= */
 
-                    document
-                        .getElementById(
-                            'logout-btn'
-                        )
-                        .addEventListener(
-                            'click',
-                            async () => {
+          document
+            .getElementById("logout-btn")
+            .addEventListener("click", async () => {
+              try {
+                await fetch("/api/auth/logout", {
+                  method: "POST",
 
-                                try {
+                  credentials: "include",
+                });
+              } catch (error) {
+                console.error("Logout error:", error);
+              }
 
-                                    await fetch(
-                                        '/api/auth/logout',
-                                        {
-                                            method:
-                                                'POST',
+              window.location.href = "index.html";
+            });
 
-                                            credentials:
-                                                'include'
-                                        }
-                                    );
-
-                                }
-
-                                catch (error) {
-
-                                    console.error(
-                                        "Logout error:",
-                                        error
-                                    );
-
-                                }
-
-
-                                window.location.href =
-                                    'index.html';
-
-                            }
-                        );
-
-
-                    /* =================================
+          /* =================================
                        CREATE BUTTON
                     ================================= */
 
-                    createProjectBtn
-                        .addEventListener(
-                            'click',
-                            createProject
-                        );
+          createProjectBtn.addEventListener("click", createProject);
 
-
-                    /* =================================
+          /* =================================
                        LOAD PROJECTS
                     ================================= */
 
-                    await loadProjects();
+          await loadProjects();
+        } catch (error) {
+          console.error("Authentication check failed:", error);
 
-                }
-
-                catch (error) {
-
-                    console.error(
-                        "Authentication check failed:",
-                        error
-                    );
-
-
-                    authSection.innerHTML = `
+          authSection.innerHTML = `
 
                         <a
                             href="login.html"
@@ -2080,18 +1482,9 @@
 
                     `;
 
-                    projectCount.innerText =
-                        "AUTHENTICATION ERROR";
-
-                }
-
-            }
-
-        );
-
+          projectCount.innerText = "AUTHENTICATION ERROR";
+        }
+      });
     </script>
-
-</body>
-
+  </body>
 </html>
-

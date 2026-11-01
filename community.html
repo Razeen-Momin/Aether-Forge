@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AETHER FORGE | Community</title>
+    <style>
+      :root {
+        --bg: #020608;
+        --panel: rgba(7, 20, 26, 0.82);
+        --line: rgba(0, 255, 255, 0.2);
+        --cyan: #00ffff;
+        --muted: #91aab1;
+        --white: #eefcff;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family:
+          Segoe UI,
+          Tahoma,
+          sans-serif;
+      }
+      body {
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--white);
+        overflow-x: hidden;
+      }
+      body:before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        background-image:
+          linear-gradient(rgba(0, 255, 255, 0.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 255, 255, 0.055) 1px, transparent 1px);
+        background-size: 48px 48px;
+        transform: perspective(700px) rotateX(58deg) scale(1.8);
+        transform-origin: center 70%;
+      }
+      body:after {
+        content: "";
+        position: fixed;
+        width: 65vw;
+        height: 65vw;
+        left: 17vw;
+        top: 8vh;
+        z-index: -1;
+        pointer-events: none;
+        background: radial-gradient(
+          circle,
+          rgba(0, 190, 255, 0.12),
+          transparent 68%
+        );
+      }
+      nav {
+        height: 82px;
+        padding: 0 6%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+        background: rgba(2, 8, 12, 0.78);
+        backdrop-filter: blur(16px);
+        position: sticky;
+        top: 0;
+        z-index: 5;
+      }
+      .brand {
+        font-size: 1.25rem;
+        letter-spacing: 3px;
+        font-weight: 800;
+        color: var(--cyan);
+        text-decoration: none;
+        text-shadow: 0 0 16px #00ffff66;
+      }
+      .links {
+        display: flex;
+        gap: 25px;
+        align-items: center;
+      }
+      .links a {
+        color: #c4d9df;
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+      .links a:hover,
+      .links a.active {
+        color: var(--cyan);
+      }
+      main {
+        width: min(1180px, 90%);
+        margin: 48px auto 80px;
+      }
+      .eyebrow {
+        color: var(--cyan);
+        letter-spacing: 4px;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+      .hero {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 25px;
+        margin-bottom: 32px;
+      }
+      .hero h1 {
+        font-size: clamp(2.2rem, 5vw, 4rem);
+        letter-spacing: 2px;
+        margin: 9px 0;
+      }
+      .hero p {
+        color: var(--muted);
+        max-width: 610px;
+        line-height: 1.6;
+      }
+      .user-chip {
+        border: 1px solid var(--line);
+        padding: 10px 15px;
+        border-radius: 30px;
+        color: var(--cyan);
+        white-space: nowrap;
+        font-size: 0.85rem;
+      }
+      .toolbar {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin: 25px 0;
+      }
+      .search {
+        flex: 1;
+        min-width: 220px;
+      }
+      .field,
+      select,
+      textarea {
+        width: 100%;
+        background: #061319;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        color: var(--white);
+        padding: 13px 14px;
+        outline: none;
+      }
+      .field:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--cyan);
+        box-shadow: 0 0 0 3px #00ffff12;
+      }
+      .toolbar select {
+        width: 175px;
+      }
+      .btn {
+        border: 1px solid var(--cyan);
+        background: rgba(0, 255, 255, 0.09);
+        color: var(--cyan);
+        padding: 12px 17px;
+        border-radius: 9px;
+        cursor: pointer;
+        font-weight: 700;
+        transition: 0.2s;
+      }
+      .btn:hover {
+        background: var(--cyan);
+        color: #001014;
+        box-shadow: 0 0 20px #00ffff44;
+      }
+      .btn.secondary {
+        border-color: #52717a;
+        color: #c0d5db;
+        background: #102027;
+      }
+      .btn.danger {
+        border-color: #ff647c;
+        color: #ff8798;
+        background: #30121b;
+      }
+      .tabs {
+        display: flex;
+        gap: 8px;
+        border-bottom: 1px solid var(--line);
+        margin: 12px 0 24px;
+      }
+      .tab {
+        padding: 12px 18px;
+        background: none;
+        border: 0;
+        color: var(--muted);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+      }
+      .tab.active {
+        color: var(--cyan);
+        border-color: var(--cyan);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
+        gap: 18px;
+      }
+      .asset {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px #0007;
+        transition: 0.2s;
+      }
+      .asset:hover {
+        transform: translateY(-4px);
+        border-color: #00ffff88;
+      }
+      .preview {
+        height: 150px;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle, #0a3440, #071117 70%);
+        border-bottom: 1px solid var(--line);
+        font-size: 3rem;
+        color: #00ffff99;
+      }
+      .preview span {
+        font-size: 0.78rem;
+        letter-spacing: 2px;
+        margin-top: -32px;
+        color: #8cb4bd;
+      }
+      .asset-body {
+        padding: 16px;
+      }
+      .asset h3 {
+        font-size: 1.05rem;
+        margin-bottom: 7px;
+        overflow-wrap: anywhere;
+      }
+      .desc {
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.5;
+        min-height: 40px;
+        overflow-wrap: anywhere;
+      }
+      .meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        color: #8caab2;
+        font-size: 0.75rem;
+        margin: 14px 0;
+      }
+      .format {
+        color: var(--cyan);
+        border: 1px solid var(--line);
+        padding: 4px 7px;
+        border-radius: 5px;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
+      .actions .btn {
+        flex: 1;
+        padding: 9px 8px;
+        font-size: 0.78rem;
+      }
+      .empty,
+      .loading {
+        grid-column: 1/-1;
+        text-align: center;
+        padding: 55px 15px;
+        border: 1px dashed var(--line);
+        border-radius: 14px;
+        color: var(--muted);
+      }
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: #000b;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        z-index: 10;
+      }
+      .modal-backdrop.show {
+        display: flex;
+      }
+      .modal {
+        width: min(520px, 100%);
+        background: #07151b;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 0 45px #00ffff20;
+      }
+      .modal h2 {
+        margin-bottom: 8px;
+      }
+      .modal p {
+        color: var(--muted);
+        font-size: 0.88rem;
+        line-height: 1.5;
+        margin-bottom: 18px;
+      }
+      .form-group {
+        margin: 13px 0;
+      }
+      .form-group label {
+        display: block;
+        font-size: 0.82rem;
+        color: #b8d0d6;
+        margin-bottom: 7px;
+      }
+      .form-group textarea {
+        min-height: 90px;
+        resize: vertical;
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 18px;
+      }
+      .notice {
+        margin: 16px 0;
+        padding: 12px 15px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        color: #b9dce3;
+        display: none;
+      }
+      .notice.show {
+        display: block;
+      }
+      .notice.error {
+        border-color: #ff647c;
+        color: #ff9cac;
+      }
+      .small-note {
+        color: #7f9ba3;
+        font-size: 0.78rem;
+        margin-top: 13px;
+        line-height: 1.5;
+      }
+      @media (max-width: 650px) {
+        nav {
+          height: auto;
+          padding: 18px 5%;
+          align-items: flex-start;
+          gap: 15px;
+          flex-direction: column;
+        }
+        .links {
+          gap: 16px;
+          flex-wrap: wrap;
+        }
+        .hero {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        .user-chip {
+          white-space: normal;
+        }
+        .toolbar select {
+          flex: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a class="brand" href="index.html">AETHER FORGE</a>
+      <div class="links">
+        <a href="index.html">Home</a><a href="projects.html">Projects</a
+        ><a class="active" href="community.html">Community</a
+        ><a href="contact.html">Contact</a>
+      </div>
+    </nav>
+    <main>
+      <section class="hero">
+        <div>
+          <div class="eyebrow">THE CREATOR NETWORK</div>
+          <h1>COMMUNITY</h1>
+          <p>
+            Discover 3D creations shared by other makers, contribute your own
+            models, and build together.
+          </p>
+        </div>
+        <div class="user-chip" id="userChip">Checking account…</div>
+      </section>
+      <div id="notice" class="notice" role="status"></div>
+      <div class="toolbar">
+        <div class="search">
+          <input
+            id="searchInput"
+            class="field"
+            type="search"
+            placeholder="Search models, descriptions or categories…"
+          />
+        </div>
+        <select id="categoryFilter">
+          <option value="">All categories</option>
+          <option>Architecture</option>
+          <option>Characters</option>
+          <option>Props</option>
+          <option>Vehicles</option>
+          <option>Nature</option>
+          <option>Other</option></select
+        ><button class="btn" id="uploadOpen">＋ Upload model</button>
+      </div>
+      <div class="tabs">
+        <button class="tab active" data-tab="explore">Explore</button
+        ><button class="tab" data-tab="mine">My uploads</button>
+      </div>
+      <section id="assetGrid" class="grid">
+        <div class="loading">Loading community models…</div>
+      </section>
+      <p class="small-note">
+        Supported uploads: OBJ, GLB, GLTF, FBX, STL, PLY, 3MF and USDZ · Maximum
+        file size: 50 MB. GLTF files that depend on separate textures or .bin
+        files are not yet packaged; use a self-contained GLB when possible.
+      </p>
+    </main>
+    <div class="modal-backdrop" id="uploadModal">
+      <form class="modal" id="uploadForm">
+        <h2>Share a 3D model</h2>
+        <p>Upload a model to the Aether Forge community library.</p>
+        <div class="form-group">
+          <label for="assetTitle">Model title</label
+          ><input
+            class="field"
+            id="assetTitle"
+            name="title"
+            maxlength="160"
+            required
+            placeholder="e.g. Sci-fi Helmet"
+          />
+        </div>
+        <div class="form-group">
+          <label for="assetDescription">Description</label
+          ><textarea
+            id="assetDescription"
+            name="description"
+            maxlength="1000"
+            placeholder="Tell the community about your model…"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="assetCategory">Category</label
+          ><select id="assetCategory" name="category">
+            <option>Other</option>
+            <option>Architecture</option>
+            <option>Characters</option>
+            <option>Props</option>
+            <option>Vehicles</option>
+            <option>Nature</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="assetFile">3D model file</label
+          ><input
+            class="field"
+            id="assetFile"
+            name="file"
+            type="file"
+            accept=".obj,.glb,.gltf,.fbx,.stl,.ply,.3mf,.usdz"
+            required
+          />
+        </div>
+        <div class="small-note">
+          By uploading, you confirm that you have permission to share this file.
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn secondary" id="uploadCancel">
+            Cancel</button
+          ><button type="submit" class="btn" id="uploadSubmit">Upload</button>
+        </div>
+      </form>
+    </div>
+    <script>
+      const API = "";
+      let currentUser = null;
+      let activeTab = "explore";
+      let searchTimer = null;
+      const grid = document.getElementById("assetGrid");
+      const notice = document.getElementById("notice");
+      function showNotice(message, error = false) {
+        notice.textContent = message;
+        notice.className = "notice show" + (error ? " error" : "");
+      }
+      function hideNotice() {
+        notice.className = "notice";
+      }
+      async function api(url, options = {}) {
+        const response = await fetch(API + url, {
+          credentials: "include",
+          ...options,
+        });
+        let data = {};
+        try {
+          data = await response.json();
+        } catch {}
+        if (!response.ok)
+          throw new Error(
+            data.message || `Request failed (${response.status})`,
+          );
+        return data;
+      }
+      async function init() {
+        try {
+          const data = await api("/api/auth/me");
+          currentUser = data.user;
+          document.getElementById("userChip").textContent =
+            `Signed in as ${currentUser.username}`;
+        } catch {
+          document.getElementById("userChip").textContent =
+            "Sign in to upload models";
+        }
+        await loadAssets();
+      }
+      function safe(value) {
+        return String(value ?? "").replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      }
+      function formatSize(bytes) {
+        if (!bytes) return "—";
+        const units = ["B", "KB", "MB"];
+        let n = bytes,
+          i = 0;
+        while (n >= 1024 && i < 2) {
+          n /= 1024;
+          i++;
+        }
+        return `${n.toFixed(i ? 1 : 0)} ${units[i]}`;
+      }
+      function card(asset) {
+        const own = currentUser && asset.creator === currentUser.username;
+        const date = asset.created_at
+          ? new Date(asset.created_at).toLocaleDateString()
+          : "";
+        const importLabel =
+          asset.file_format === "obj" ? "Import (OBJ)" : "Download";
+        return `<article class="asset"><div class="preview">◇<span>${safe(asset.file_format.toUpperCase())} MODEL</span></div><div class="asset-body"><h3>${safe(asset.title)}</h3><p class="desc">${safe(asset.description || "No description provided.")}</p><div class="meta"><span>by ${safe(asset.creator)}</span><span class="format">.${safe(asset.file_format)}</span></div><div class="meta"><span>${safe(asset.category)}</span><span>${formatSize(asset.file_size)} · ↓ ${asset.downloads_count || 0}</span></div><div class="actions"><button class="btn" data-download="${asset.id}">Download</button>${own ? `<button class="btn danger" data-delete="${asset.id}">Delete</button>` : ""}</div><div class="small-note">Uploaded ${safe(date)}</div></div></article>`;
+      }
+      async function loadAssets() {
+        grid.innerHTML = '<div class="loading">Loading…</div>';
+        hideNotice();
+        try {
+          const q = document.getElementById("searchInput").value.trim();
+          const category = document.getElementById("categoryFilter").value;
+          const params = new URLSearchParams();
+          if (q) params.set("q", q);
+          if (category) params.set("category", category);
+          const data = await api("/api/community?" + params.toString());
+          let assets = data.assets || [];
+          if (activeTab === "mine")
+            assets = assets.filter(
+              (a) => currentUser && a.creator === currentUser.username,
+            );
+          grid.innerHTML = assets.length
+            ? assets.map(card).join("")
+            : `<div class="empty">${activeTab === "mine" ? "You have not uploaded any models yet." : "No models found. Try another search or upload the first model."}</div>`;
+        } catch (error) {
+          grid.innerHTML =
+            '<div class="empty">Could not load community models.</div>';
+          showNotice(error.message, true);
+        }
+      }
+      document.getElementById("searchInput").addEventListener("input", () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(loadAssets, 300);
+      });
+      document
+        .getElementById("categoryFilter")
+        .addEventListener("change", loadAssets);
+      document.querySelectorAll(".tab").forEach((button) =>
+        button.addEventListener("click", () => {
+          document
+            .querySelectorAll(".tab")
+            .forEach((b) => b.classList.toggle("active", b === button));
+          activeTab = button.dataset.tab;
+          loadAssets();
+        }),
+      );
+      document.getElementById("uploadOpen").addEventListener("click", () => {
+        if (!currentUser) {
+          showNotice("Please log in before uploading a model.", true);
+          return;
+        }
+        document.getElementById("uploadModal").classList.add("show");
+      });
+      function closeModal() {
+        document.getElementById("uploadModal").classList.remove("show");
+      }
+      document
+        .getElementById("uploadCancel")
+        .addEventListener("click", closeModal);
+      document
+        .getElementById("uploadForm")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const file = document.getElementById("assetFile").files[0];
+          if (!file) return;
+          if (file.size > 50 * 1024 * 1024) {
+            showNotice("File exceeds the 50 MB limit.", true);
+            return;
+          }
+          const button = document.getElementById("uploadSubmit");
+          button.disabled = true;
+          button.textContent = "Uploading…";
+          try {
+            const form = new FormData(event.currentTarget);
+            await api("/api/community", { method: "POST", body: form });
+            closeModal();
+            event.currentTarget.reset();
+            activeTab = "explore";
+            document
+              .querySelectorAll(".tab")
+              .forEach((b) =>
+                b.classList.toggle("active", b.dataset.tab === "explore"),
+              );
+            showNotice("Your model has been uploaded successfully.");
+            await loadAssets();
+          } catch (error) {
+            showNotice(error.message, true);
+          } finally {
+            button.disabled = false;
+            button.textContent = "Upload";
+          }
+        });
+      grid.addEventListener("click", async (event) => {
+        const download = event.target.closest("[data-download]");
+        const del = event.target.closest("[data-delete]");
+        if (download) {
+          try {
+            const data = await api(
+              `/api/community/${download.dataset.download}/download`,
+            );
+            const a = document.createElement("a");
+            a.href = data.download_url;
+            a.target = "_blank";
+            a.rel = "noopener";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          } catch (error) {
+            showNotice(error.message, true);
+          }
+        }
+        if (del) {
+          if (!confirm("Delete this uploaded model from the community?"))
+            return;
+          try {
+            await api(`/api/community/${del.dataset.delete}`, {
+              method: "DELETE",
+            });
+            showNotice("Your model was deleted.");
+            await loadAssets();
+          } catch (error) {
+            showNotice(error.message, true);
+          }
+        }
+      });
+      init();
+    </script>
+  </body>
+</html>
