@@ -22,17 +22,8 @@ def _storage_config():
     project_url = os.getenv("SUPABASE_URL", "").strip().rstrip("/")
     service_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "").strip()
     bucket = os.getenv("SUPABASE_BUCKET", "community-assets").strip()
-
-    current_app.logger.info(
-        "SUPABASE CONFIG CHECK | URL present: %s | KEY present: %s | BUCKET present: %s",
-        bool(project_url),
-        bool(service_key),
-        bool(bucket)
-    )
-
     if not project_url or not service_key:
         return None
-
     return project_url, service_key, bucket
 
 
