@@ -251,6 +251,76 @@ def get_asset_download_url(asset_id):
     db.session.commit()
     return jsonify({"download_url": download_url, "expires_in": SIGNED_URL_SECONDS}), 200
 
+@community_bp.get("/<int:asset_id>/edit")
+def get_asset_edit_url(asset_id):
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return jsonify({"message": "Please log in first."}), 401
+
+    asset = CommunityAsset.query.filter_by(
+        id=asset_id,
+        user_id=user_id
+    ).first()
+
+    if not asset:
+        return jsonify({
+            "message": "Asset not found or you do not own it."
+        }), 404
+
+    if asset.file_format.lower() != "obj":
+        return jsonify({
+            "message": "Direct Constructor editing currently supports OBJ files only."
+        }), 400
+
+    supabase_url = os.getenv("SUPABASE_URL")
+    service_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    bucket = os.getenv("SUPABASE_BUCKET", "community-assets")
+
+    if not supabase_url or not service_key:
+        return jsonify({"message": "Storage configuration is missing."}), 500
+
+    try:
+        response = requests.post(
+            f"{supabase_url}/storage/v1/object/sign/{bucket}/{asset.storage_path}",
+            headers={
+                "apikey": service_key,
+                "Authorization": f"Bearer {service_key}",
+                "Content-Type": "application/json"
+            },
+            json={"expiresIn": 300},
+            timeout=20
+        )
+
+        if response.status_code not in (200, 201):
+            return jsonify({
+                "message": "Could not prepare the model for editing."
+            }), 502
+
+        result = response.json()
+        signed_path = result.get("signedURL") or result.get("signedUrl")
+
+        if not signed_path:
+            return jsonify({
+                "message": "Storage did not return an edit URL."
+            }), 502
+
+        if signed_path.startswith("http"):
+            edit_url = signed_path
+        else:
+            edit_url = f"{supabase_url}/storage/v1{signed_path}"
+
+        return jsonify({
+            "edit_url": edit_url,
+            "asset_id": asset.id,
+            "title": asset.title,
+            "file_format": asset.file_format
+        }), 200
+
+    except requests.RequestException:
+        return jsonify({
+            "message": "Unable to connect to model storage."
+        }), 502
 
 @community_bp.delete("/<int:asset_id>")
 def delete_community_asset(asset_id):
