@@ -818,10 +818,19 @@
           Uploaded ${safe(date)}
         </div>
 
-        <div class="actions">
-          <button class="btn" data-download="${asset.id}">
-            Download Model
-          </button>
+       <div class="actions">
+  <button class="btn" data-download="${asset.id}">Download</button>
+  ${
+    own && asset.file_format.toLowerCase() === "obj"
+      ? `<button class="btn" data-edit="${asset.id}">Edit in Constructor</button>`
+      : ""
+  }
+  ${
+    own
+      ? `<button class="btn danger" data-delete="${asset.id}">Delete</button>`
+      : ""
+  }
+</div>
 
           ${
             own
@@ -935,6 +944,20 @@
           }
         });
       grid.addEventListener("click", async (event) => {
+        const editInConstructor = event.target.closest("[data-edit]");
+
+        if (editInConstructor) {
+          if (!currentUser) {
+            showNotice("Please log in to edit your model.", true);
+            return;
+          }
+
+          const assetId = editInConstructor.dataset.edit;
+
+          window.location.href = `AetherForge.html?community_asset_id=${encodeURIComponent(assetId)}`;
+
+          return;
+        }
         const download = event.target.closest("[data-download]");
         const del = event.target.closest("[data-delete]");
         if (download) {

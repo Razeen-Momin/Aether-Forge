@@ -2267,14 +2267,15 @@
       /* =========================================
    PROJECT
 ========================================= */
-
       const urlParams = new URLSearchParams(window.location.search);
 
       const projectId = urlParams.get("project_id");
 
+      const communityAssetId = urlParams.get("community_asset_id");
+
       const v11DemoMode = urlParams.get("demo") === "wineglass";
 
-      if (!projectId && !v11DemoMode) {
+      if (!projectId && !communityAssetId && !v11DemoMode) {
         alert("NO PROJECT SELECTED.");
 
         window.location.href = "index.html";
@@ -3727,6 +3728,87 @@
         }
       }
 
+      async function saveCommunityAsset() {
+        if (isSaving) return;
+
+        const button = document.getElementById("btn-save-project");
+
+        isSaving = true;
+        button.disabled = true;
+        button.innerText = "⏳ UPDATING...";
+        setWorkspaceStatus("saving");
+
+        try {
+          // Return selected objects to the main construction group
+          normalizeSelectionForSave();
+
+          // Select only objects belonging to this Community upload
+          const communityObjects = constructionZone.children.filter(
+            (obj) =>
+              obj.isMesh &&
+              String(obj.userData.communityAssetId) ===
+                String(communityAssetId),
+          );
+
+          if (communityObjects.length === 0) {
+            throw new Error("No Community model objects found to update.");
+          }
+
+          // Clone the model objects so the live scene is not changed
+          const exportGroup = new THREE.Group();
+
+          communityObjects.forEach((obj) => {
+            exportGroup.add(obj.clone());
+          });
+
+          // Convert the edited model into OBJ format
+          const exporter = new OBJExporter();
+          const objText = exporter.parse(exportGroup);
+
+          // Prepare the file for the backend
+          const formData = new FormData();
+
+          formData.append(
+            "file",
+            new Blob([objText], { type: "text/plain" }),
+            "community-model.obj",
+          );
+
+          // Update the original Community upload
+          const response = await fetch(
+            `/api/community/${communityAssetId}/file`,
+            {
+              method: "PUT",
+              credentials: "include",
+              body: formData,
+            },
+          );
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.message || "Community model update failed.");
+          }
+
+          button.innerText = "✓ UPDATED";
+          setWorkspaceStatus("saved");
+          showStatus("COMMUNITY MODEL UPDATED SUCCESSFULLY");
+        } catch (error) {
+          console.error("Community model update failed:", error);
+
+          button.innerText = "⚠ UPDATE FAILED";
+          setWorkspaceStatus("error");
+          showStatus(`UPDATE FAILED: ${error.message}`);
+        } finally {
+          setTimeout(() => {
+            button.innerText = communityAssetId ? "UPDATE MODEL" : "SAVE";
+          }, 1800);
+
+          button.disabled = false;
+          isSaving = false;
+        }
+      }
+
       /* =========================================
    LOAD
 ========================================= */
@@ -3779,6 +3861,112 @@
           console.error(error);
           setWorkspaceStatus("error");
           showStatus(`Unable to load project data: ${error.message}`);
+        } finally {
+          projectLoading = false;
+        }
+      }
+
+      async function loadCommunityAsset() {
+        projectLoading = true;
+        setWorkspaceStatus("loading");
+
+        try {
+          // Get a temporary editing URL from the backend
+          const response = await fetch(
+            `/api/community/${communityAssetId}/edit`,
+            {
+              credentials: "include",
+            },
+          );
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(
+              data.message || "Unable to access Community model.",
+            );
+          }
+
+          // Download the OBJ file using its temporary signed URL
+          const fileResponse = await fetch(data.edit_url);
+
+          if (!fileResponse.ok) {
+            throw new Error("Unable to download the Community model.");
+          }
+
+          const objText = await fileResponse.text();
+
+          // Parse the OBJ file
+          const loader = new OBJLoader();
+          const loadedObj = loader.parse(objText);
+
+          const imported = [];
+
+          const assembly = {
+            id: crypto.randomUUID
+              ? crypto.randomUUID()
+              : `community_${Date.now()}`,
+            name: data.title || "Community Model",
+            sourceFile: `${data.title || "Community Model"}.obj`,
+          };
+
+          let componentIndex = 0;
+
+          loadedObj.traverse((child) => {
+            if (!child.isMesh) return;
+
+            componentIndex++;
+
+            const geometry = child.geometry?.clone();
+            if (!geometry) return;
+
+            const mesh = new THREE.Mesh(geometry, createMaterial());
+
+            const sourceName = (child.name || child.parent?.name || "").trim();
+
+            mesh.userData.name = generateObjectName(
+              sourceName || `${assembly.name} Component`,
+            );
+
+            attachImportedMetadata(mesh, assembly);
+
+            mesh.userData.importAssembly.componentIndex = componentIndex;
+            mesh.userData.importAssembly.originalObjectName =
+              sourceName || `Object_${componentIndex}`;
+
+            mesh.userData.shapeType = null;
+            mesh.userData.shapeParams = null;
+            mesh.userData.isCustomGeometry = true;
+
+            // Identify this mesh as belonging to the Community asset
+            mesh.userData.communityAssetId = String(communityAssetId);
+            mesh.userData.isCommunityAsset = true;
+            mesh.userData.communityAssetTitle = assembly.name;
+
+            mesh.position.copy(child.position);
+            mesh.rotation.copy(child.rotation);
+            mesh.scale.copy(child.scale);
+
+            // Add it without removing existing scene objects
+            constructionZone.add(mesh);
+            imported.push(mesh);
+          });
+
+          if (imported.length === 0) {
+            throw new Error("No editable objects were found in this OBJ file.");
+          }
+
+          updateSelection(imported);
+          saveSnapshot();
+          refreshOutliner();
+          frameObjects(imported);
+
+          showStatus(`COMMUNITY MODEL LOADED • ${assembly.name}`);
+          setWorkspaceStatus("saved");
+        } catch (error) {
+          console.error("Community model loading failed:", error);
+          setWorkspaceStatus("error");
+          showStatus(`COMMUNITY MODEL ERROR: ${error.message}`);
         } finally {
           projectLoading = false;
         }
@@ -5236,8 +5424,14 @@
    SAVE
 ========================================= */
 
-      document.getElementById("btn-save-project").onclick = saveProject;
+      const saveButton = document.getElementById("btn-save-project");
 
+      if (communityAssetId) {
+        saveButton.onclick = saveCommunityAsset;
+        saveButton.innerText = "UPDATE MODEL";
+      } else {
+        saveButton.onclick = saveProject;
+      }
       /* =========================================
    UNDO
 ========================================= */
@@ -6757,6 +6951,8 @@
 
       if (v11DemoMode) {
         createV11WineGlassDemo();
+      } else if (communityAssetId) {
+        await loadCommunityAsset();
       } else {
         await loadProject();
       }
