@@ -322,6 +322,95 @@ def get_asset_edit_url(asset_id):
             "message": "Unable to connect to model storage."
         }), 502
 
+@community_bp.put("/<int:asset_id>/file")
+def update_community_asset_file(asset_id):
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return jsonify({"message": "Please log in first."}), 401
+
+    asset = CommunityAsset.query.filter_by(
+        id=asset_id,
+        user_id=user_id
+    ).first()
+
+    if not asset:
+        return jsonify({"message": "Asset not found or you do not own it."}), 404
+
+    if asset.file_format.lower() != "obj":
+        return jsonify({"message": "Only OBJ models can be edited in Constructor."}), 400
+
+    uploaded_file = request.files.get("file")
+
+    if not uploaded_file or not uploaded_file.filename:
+        return jsonify({"message": "Please select an OBJ file."}), 400
+
+    filename = secure_filename(uploaded_file.filename)
+
+    if not filename.lower().endswith(".obj"):
+        return jsonify({"message": "Please upload an OBJ file."}), 400
+
+    file_data = uploaded_file.read(50 * 1024 * 1024 + 1)
+
+    if not file_data:
+        return jsonify({"message": "The selected file is empty."}), 400
+
+    if len(file_data) > 50 * 1024 * 1024:
+        return jsonify({"message": "File exceeds the 50 MB limit."}), 400
+
+    supabase_url = os.getenv("SUPABASE_URL")
+    service_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    bucket = os.getenv("SUPABASE_BUCKET", "community-assets")
+
+    if not supabase_url or not service_key:
+        return jsonify({"message": "Storage configuration is missing."}), 500
+
+    try:
+        response = requests.put(
+            f"{supabase_url}/storage/v1/object/{bucket}/{asset.storage_path}",
+            headers={
+                "apikey": service_key,
+                "Authorization": f"Bearer {service_key}",
+                "Content-Type": "application/octet-stream",
+                "x-upsert": "true"
+            },
+            data=file_data,
+            timeout=60
+        )
+
+        if response.status_code not in (200, 201):
+            current_app.logger.error(
+                "Community model replacement failed: %s",
+                response.text
+            )
+            return jsonify({
+                "message": "Could not replace the model in cloud storage."
+            }), 502
+
+        asset.file_size = len(file_data)
+        asset.original_filename = filename
+
+        db.session.commit()
+
+        return jsonify({
+            "message": "Community model updated successfully.",
+            "asset_id": asset.id,
+            "file_size": asset.file_size,
+            "original_filename": asset.original_filename
+        }), 200
+
+    except requests.RequestException:
+        return jsonify({
+            "message": "Unable to connect to cloud storage."
+        }), 502
+
+    except Exception:
+        db.session.rollback()
+        current_app.logger.exception("Community model update failed")
+        return jsonify({
+            "message": "Could not save the updated model details."
+        }), 500
+
 @community_bp.delete("/<int:asset_id>")
 def delete_community_asset(asset_id):
     user_id = session.get("user_id")
