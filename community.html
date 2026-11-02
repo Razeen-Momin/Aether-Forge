@@ -607,6 +607,15 @@
           </select>
         </div>
         <div class="form-group">
+          <label for="assetVisibility">Who can access this model?</label>
+          <select id="assetVisibility" name="visibility">
+            <option value="public">
+              Public — Everyone can view and download
+            </option>
+            <option value="private">Private — Only I can access it</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label for="assetFile">3D model file</label
           ><input
             class="field"
@@ -724,7 +733,15 @@
           : "";
         const importLabel =
           asset.file_format === "obj" ? "Import (OBJ)" : "Download";
-        return `<article class="asset"><div class="preview">◇<span>${safe(asset.file_format.toUpperCase())} MODEL</span></div><div class="asset-body"><h3>${safe(asset.title)}</h3><p class="desc">${safe(asset.description || "No description provided.")}</p><div class="meta"><span>by ${safe(asset.creator)}</span><span class="format">.${safe(asset.file_format)}</span></div><div class="meta"><span>${safe(asset.category)}</span><span>${formatSize(asset.file_size)} · ↓ ${asset.downloads_count || 0}</span></div><div class="actions"><button class="btn" data-download="${asset.id}">Download</button>${own ? `<button class="btn danger" data-delete="${asset.id}">Delete</button>` : ""}</div><div class="small-note">Uploaded ${safe(date)}</div></div></article>`;
+        return `<article class="asset"><div class="preview">◇<span>${safe(asset.file_format.toUpperCase())} MODEL</span></div><div class="asset-body"><h3>${safe(asset.title)}</h3><p class="desc">${safe(asset.description || "No description provided.")}</p><div class="meta"><span>by ${safe(asset.creator)}</span><span class="format">.${safe(asset.file_format)}</span>
+          <div class="meta">
+  <span>${safe(asset.category)}</span>
+  <span>${asset.visibility === "private" ? "🔒 Private" : "🌐 Public"}</span>
+</div>
+<div class="meta">
+  <span>${formatSize(asset.file_size)}</span>
+  <span>↓ ${asset.downloads_count || 0}</span>
+</div><div class="actions"><button class="btn" data-download="${asset.id}">Download</button>${own ? `<button class="btn danger" data-delete="${asset.id}">Delete</button>` : ""}</div><div class="small-note">Uploaded ${safe(date)}</div></div></article>`;
       }
       async function loadAssets() {
         grid.innerHTML = '<div class="loading">Loading…</div>';
@@ -735,12 +752,18 @@
           const params = new URLSearchParams();
           if (q) params.set("q", q);
           if (category) params.set("category", category);
+          if (activeTab === "mine") {
+            if (!currentUser) {
+              grid.innerHTML =
+                '<div class="empty">Please log in to view your uploads.</div>';
+              return;
+            }
+
+            params.set("mine", "true");
+          }
+
           const data = await api("/api/community?" + params.toString());
-          let assets = data.assets || [];
-          if (activeTab === "mine")
-            assets = assets.filter(
-              (a) => currentUser && a.creator === currentUser.username,
-            );
+          const assets = data.assets || [];
           grid.innerHTML = assets.length
             ? assets.map(card).join("")
             : `<div class="empty">${activeTab === "mine" ? "You have not uploaded any models yet." : "No models found. Try another search or upload the first model."}</div>`;

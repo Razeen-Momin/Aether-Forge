@@ -53,6 +53,7 @@ def _asset_json(asset, owner_name=None):
         "description": asset.description or "",
         "category": asset.category or "Other",
         "file_format": asset.file_format,
+        "visibility": asset.visibility,
         "file_size": asset.file_size,
         "downloads_count": asset.downloads_count,
         "creator": owner_name or (asset.owner.username if asset.owner else "Unknown"),
@@ -73,6 +74,18 @@ def list_community_assets():
     query = db.session.query(CommunityAsset, User.username).join(
         User, CommunityAsset.user_id == User.id
     )
+
+    mine = request.args.get("mine") == "true"
+    user_id = session.get("user_id")
+
+    if mine:
+        if not user_id:
+            return jsonify({"message": "Please log in to view your uploads."}), 401
+
+        query = query.filter(CommunityAsset.user_id == user_id)
+    else:
+        query = query.filter(CommunityAsset.visibility == "public")
+
     if search:
         pattern = f"%{search}%"
         query = query.filter(or_(
@@ -153,6 +166,11 @@ def upload_community_asset():
         current_app.logger.error("Supabase upload failed: %s", _storage_error(response))
         return jsonify({"message": "Cloud storage rejected the upload. Check bucket configuration."}), 502
 
+    visibility = (request.form.get("visibility") or "public").strip().lower()
+
+    if visibility not in ("public", "private"):
+        return jsonify({"message": "Invalid visibility selection."}), 400
+
     asset = CommunityAsset(
         user_id=user_id,
         title=title,
@@ -162,6 +180,7 @@ def upload_community_asset():
         file_format=extension,
         storage_path=storage_path,
         file_size=len(file_bytes),
+        visibility=visibility,
     )
     try:
         db.session.add(asset)
@@ -196,6 +215,10 @@ def get_asset_download_url(asset_id):
     asset = db.session.get(CommunityAsset, asset_id)
     if not asset:
         return jsonify({"message": "Community asset not found."}), 404
+
+    if asset.visibility == "private":
+         if session.get("user_id") != asset.user_id:
+            return jsonify({"message": "This is a private model."}), 403
 
     project_url, service_key, bucket = config
     sign_url = f"{project_url}/storage/v1/object/sign/{bucket}/{asset.storage_path}"
