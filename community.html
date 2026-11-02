@@ -362,12 +362,15 @@
       }
       .actions {
         display: flex;
-        gap: 8px;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 18px;
       }
+
       .actions .btn {
-        flex: 1;
-        padding: 9px 8px;
-        font-size: 0.78rem;
+        width: 100%;
+        padding: 11px;
+        font-size: 0.85rem;
       }
       .empty,
       .loading {
@@ -728,20 +731,62 @@
       }
       function card(asset) {
         const own = currentUser && asset.creator === currentUser.username;
+
         const date = asset.created_at
           ? new Date(asset.created_at).toLocaleDateString()
           : "";
-        const importLabel =
-          asset.file_format === "obj" ? "Import (OBJ)" : "Download";
-        return `<article class="asset"><div class="preview">◇<span>${safe(asset.file_format.toUpperCase())} MODEL</span></div><div class="asset-body"><h3>${safe(asset.title)}</h3><p class="desc">${safe(asset.description || "No description provided.")}</p><div class="meta"><span>by ${safe(asset.creator)}</span><span class="format">.${safe(asset.file_format)}</span>
-          <div class="meta">
-  <span>${safe(asset.category)}</span>
-  <span>${asset.visibility === "private" ? "🔒 Private" : "🌐 Public"}</span>
-</div>
-<div class="meta">
-  <span>${formatSize(asset.file_size)}</span>
-  <span>↓ ${asset.downloads_count || 0}</span>
-</div><div class="actions"><button class="btn" data-download="${asset.id}">Download</button>${own ? `<button class="btn danger" data-delete="${asset.id}">Delete</button>` : ""}</div><div class="small-note">Uploaded ${safe(date)}</div></div></article>`;
+
+        return `
+    <article class="asset">
+      <div class="preview">
+        ◇
+        <span>${safe(asset.file_format.toUpperCase())} MODEL</span>
+      </div>
+
+      <div class="asset-body">
+        <h3>${safe(asset.title)}</h3>
+
+        <p class="desc">
+          ${safe(asset.description || "No description provided.")}
+        </p>
+
+        <div class="meta">
+          <span>By ${safe(asset.creator)}</span>
+          <span class="format">.${safe(asset.file_format)}</span>
+        </div>
+
+        <div class="meta">
+          <span>${safe(asset.category)}</span>
+          <span>
+            ${asset.visibility === "private" ? "🔒 Private" : "🌐 Public"}
+          </span>
+        </div>
+
+        <div class="meta">
+          <span>${formatSize(asset.file_size)}</span>
+          <span>↓ ${asset.downloads_count || 0} downloads</span>
+        </div>
+
+        <div class="small-note">
+          Uploaded ${safe(date)}
+        </div>
+
+        <div class="actions">
+          <button class="btn" data-download="${asset.id}">
+            Download Model
+          </button>
+
+          ${
+            own
+              ? `<button class="btn danger" data-delete="${asset.id}">
+                   🗑 Delete Upload
+                 </button>`
+              : ""
+          }
+        </div>
+      </div>
+    </article>
+  `;
       }
       async function loadAssets() {
         grid.innerHTML = '<div class="loading">Loading…</div>';
