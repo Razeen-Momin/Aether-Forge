@@ -151,6 +151,11 @@ def upload_community_asset():
     content_type = uploaded_file.mimetype or "application/octet-stream"
     upload_url = f"{project_url}/storage/v1/object/{bucket}/{storage_path}"
 
+    visibility = (request.form.get("visibility") or "public").strip().lower()
+    
+    if visibility not in ("public", "private"):
+        return jsonify({"message": "Invalid visibility selection."}), 400
+
     try:
         response = requests.post(
             upload_url,
@@ -166,10 +171,7 @@ def upload_community_asset():
         current_app.logger.error("Supabase upload failed: %s", _storage_error(response))
         return jsonify({"message": "Cloud storage rejected the upload. Check bucket configuration."}), 502
 
-    visibility = (request.form.get("visibility") or "public").strip().lower()
-
-    if visibility not in ("public", "private"):
-        return jsonify({"message": "Invalid visibility selection."}), 400
+    
 
     asset = CommunityAsset(
         user_id=user_id,
@@ -283,3 +285,63 @@ def delete_community_asset(asset_id):
     db.session.delete(asset)
     db.session.commit()
     return jsonify({"message": "Community asset deleted successfully."}), 200
+
+
+@community_bp.put("/<int:asset_id>")
+def update_community_asset(asset_id):
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return jsonify({
+            "message": "Please log in to edit a community asset."
+        }), 401
+
+    asset = CommunityAsset.query.filter_by(
+        id=asset_id,
+        user_id=user_id
+    ).first()
+
+    if not asset:
+        return jsonify({
+            "message": "Asset not found or you do not own it."
+        }), 404
+
+    data = request.get_json(silent=True) or {}
+
+    title = str(data.get("title", asset.title)).strip()
+    description = str(
+        data.get("description", asset.description or "")
+    ).strip()
+    category = str(
+        data.get("category", asset.category or "Other")
+    ).strip()
+    visibility = str(
+        data.get("visibility", asset.visibility)
+    ).strip().lower()
+
+    if not title:
+        return jsonify({"message": "Title is required."}), 400
+
+    if len(title) > 160 or len(description) > 1000 or len(category) > 60:
+        return jsonify({"message": "One or more fields are too long."}), 400
+
+    if visibility not in ("public", "private"):
+        return jsonify({"message": "Invalid visibility selection."}), 400
+
+    asset.title = title
+    asset.description = description or None
+    asset.category = category or "Other"
+    asset.visibility = visibility
+
+    try:
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        current_app.logger.exception("Community asset update failed.")
+        return jsonify({"message": "Could not update asset details."}), 500
+
+    return jsonify({
+        "message": "Community asset details updated successfully.",
+        "asset": _asset_json(asset)
+    }), 200
+

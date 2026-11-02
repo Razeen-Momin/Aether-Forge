@@ -639,6 +639,53 @@
         </div>
       </form>
     </div>
+
+    <div class="modal-backdrop" id="editModal">
+      <form class="modal" id="editForm">
+        <h2>Edit Model Details</h2>
+        <p>Update the information for your uploaded model.</p>
+
+        <input type="hidden" id="editAssetId" />
+
+        <div class="form-group">
+          <label for="editTitle">Model title</label>
+          <input class="field" id="editTitle" maxlength="160" required />
+        </div>
+
+        <div class="form-group">
+          <label for="editDescription">Description</label>
+          <textarea id="editDescription" maxlength="1000"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="editCategory">Category</label>
+          <select id="editCategory">
+            <option>Other</option>
+            <option>Architecture</option>
+            <option>Characters</option>
+            <option>Props</option>
+            <option>Vehicles</option>
+            <option>Nature</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="editVisibility">Who can access this model?</label>
+          <select id="editVisibility">
+            <option value="public">Public — Everyone can access</option>
+            <option value="private">Private — Only I can access</option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn secondary" id="editCancel">
+            Cancel
+          </button>
+          <button type="submit" class="btn" id="editSave">Save Changes</button>
+        </div>
+      </form>
+    </div>
+
     <script>
       const API = "";
       let currentUser = null;
@@ -778,9 +825,15 @@
 
           ${
             own
-              ? `<button class="btn danger" data-delete="${asset.id}">
-                   🗑 Delete Upload
-                 </button>`
+              ? `
+      <button class="btn secondary" data-edit="${asset.id}">
+        ✎ Edit Details
+      </button>
+
+      <button class="btn danger" data-delete="${asset.id}">
+        🗑 Delete Upload
+      </button>
+    `
               : ""
           }
         </div>
@@ -900,6 +953,36 @@
             showNotice(error.message, true);
           }
         }
+
+        const edit = event.target.closest("[data-edit]");
+
+        if (edit) {
+          try {
+            const data = await api("/api/community?mine=true");
+            const asset = (data.assets || []).find(
+              (item) => String(item.id) === edit.dataset.edit,
+            );
+
+            if (!asset) {
+              showNotice("Could not find your uploaded model.", true);
+              return;
+            }
+
+            document.getElementById("editAssetId").value = asset.id;
+            document.getElementById("editTitle").value = asset.title;
+            document.getElementById("editDescription").value =
+              asset.description || "";
+            document.getElementById("editCategory").value =
+              asset.category || "Other";
+            document.getElementById("editVisibility").value =
+              asset.visibility || "public";
+
+            document.getElementById("editModal").classList.add("show");
+          } catch (error) {
+            showNotice(error.message, true);
+          }
+        }
+
         if (del) {
           if (!confirm("Delete this uploaded model from the community?"))
             return;
@@ -914,6 +997,52 @@
           }
         }
       });
+
+      const editModal = document.getElementById("editModal");
+
+      document.getElementById("editCancel").addEventListener("click", () => {
+        editModal.classList.remove("show");
+      });
+
+      document
+        .getElementById("editForm")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const id = document.getElementById("editAssetId").value;
+          const button = document.getElementById("editSave");
+
+          const updatedData = {
+            title: document.getElementById("editTitle").value.trim(),
+            description: document
+              .getElementById("editDescription")
+              .value.trim(),
+            category: document.getElementById("editCategory").value,
+            visibility: document.getElementById("editVisibility").value,
+          };
+
+          button.disabled = true;
+          button.textContent = "Saving...";
+
+          try {
+            const result = await api(`/api/community/${id}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updatedData),
+            });
+
+            editModal.classList.remove("show");
+            showNotice(result.message || "Model details updated successfully.");
+            await loadAssets();
+          } catch (error) {
+            showNotice(error.message, true);
+          } finally {
+            button.disabled = false;
+            button.textContent = "Save Changes";
+          }
+        });
       init();
     </script>
   </body>
