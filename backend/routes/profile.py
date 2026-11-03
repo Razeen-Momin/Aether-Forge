@@ -1,7 +1,8 @@
 # Profile page API: one-call summary + password change.
-
+import re
 from flask import Blueprint, request, jsonify, session
 from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from backend.extensions import db
@@ -16,7 +17,10 @@ RECENT_LIMIT = 4
 MIN_PASSWORD_LENGTH = 6
 MAX_DISPLAY_NAME = 50
 MAX_BIO = 160
-
+MIN_USERNAME = 3
+MAX_USERNAME = 80
+MAX_EMAIL = 255
+EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 def _current_user():
     """Return the logged-in user, or None (clearing a stale session)."""
@@ -157,6 +161,147 @@ def update_profile():
         "message": "Profile updated.",
         "display_name": user.display_name,
         "bio": user.bio,
+    }), 200
+
+# --------------------------------------------------
+# Change username
+# --------------------------------------------------
+
+def _clean_line(value):
+    """Single-line text: printable characters only, trimmed."""
+    return "".join(
+        ch for ch in str(value or "") if ch.isprintable()
+    ).strip()
+
+
+@profile_bp.route("/username", methods=["PUT"])
+def change_username():
+
+    user = _current_user()
+
+    if not user:
+        return jsonify({"message": "Authentication required."}), 401
+
+    data = request.get_json(silent=True) or {}
+    new_username = _clean_line(data.get("username"))
+
+    if len(new_username) < MIN_USERNAME:
+        return jsonify({
+            "message": (
+                f"Username must contain at least {MIN_USERNAME} characters."
+            )
+        }), 400
+
+    if len(new_username) > MAX_USERNAME:
+        return jsonify({
+            "message": (
+                f"Username must be {MAX_USERNAME} characters or fewer."
+            )
+        }), 400
+
+    if new_username == user.username:
+        return jsonify({
+            "message": "That is already your username."
+        }), 400
+
+    # Case-insensitive check so "Razeen" and "razeen" cannot both exist.
+    # (Your own account is excluded, so changing only the capitalisation
+    # of your own name is allowed.)
+    taken = User.query.filter(
+        func.lower(User.username) == new_username.lower(),
+        User.id != user.id
+    ).first()
+
+    if taken:
+        return jsonify({"message": "Username already exists."}), 409
+
+    user.username = new_username
+
+    try:
+        db.session.commit()
+    except IntegrityError:
+        # Someone grabbed the name between the check and the save
+        db.session.rollback()
+        return jsonify({"message": "Username already exists."}), 409
+
+    session["username"] = user.username
+
+    return jsonify({
+        "message": "Username updated. Use it the next time you sign in.",
+        "username": user.username,
+    }), 200
+
+
+# --------------------------------------------------
+# Change email (password accounts only)
+# --------------------------------------------------
+
+@profile_bp.route("/email", methods=["PUT"])
+def change_email():
+
+    user = _current_user()
+
+    if not user:
+        return jsonify({"message": "Authentication required."}), 401
+
+    # A Google account's email comes from Google and is tied to its
+    # google_id, so it must not be edited here.
+    if user.google_id:
+        return jsonify({
+            "message": "Your email is managed by your Google account."
+        }), 400
+
+    data = request.get_json(silent=True) or {}
+    new_email = _clean_line(data.get("email")).lower()
+    current_password = data.get("current_password", "")
+
+    if not current_password:
+        return jsonify({
+            "message": "Enter your current password to change your email."
+        }), 400
+
+    if not check_password_hash(user.password_hash, current_password):
+        return jsonify({
+            "message": "Current password is incorrect."
+        }), 403
+
+    if (
+        not new_email
+        or len(new_email) > MAX_EMAIL
+        or not EMAIL_PATTERN.match(new_email)
+    ):
+        return jsonify({
+            "message": "Enter a valid email address."
+        }), 400
+
+    if new_email == (user.email or "").lower():
+        return jsonify({
+            "message": "That is already your email."
+        }), 400
+
+    taken = User.query.filter(
+        func.lower(User.email) == new_email,
+        User.id != user.id
+    ).first()
+
+    if taken:
+        return jsonify({
+            "message": "That email is already in use."
+        }), 409
+
+    user.email = new_email
+
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return jsonify({
+            "message": "That email is already in use."
+        }), 409
+
+    return jsonify({
+        "message": "Email updated.",
+        "email": user.email,
     }), 200
 
 # --------------------------------------------------

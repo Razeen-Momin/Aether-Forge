@@ -593,6 +593,53 @@
           </div>`;
       }
 
+      function usernameSection(profile) {
+        const u = profile.user;
+        return `
+          <div class="card">
+            <h2>Change username</h2>
+            <p class="sub">This is the name you sign in with. Use at least 3 characters.</p>
+            <form id="usernameForm" class="form-grid">
+              <div>
+                <label for="newUsername">Username</label>
+                <input type="text" id="newUsername" minlength="3" maxlength="80" value="${safe(u.username)}" required autocomplete="username" />
+              </div>
+              <button type="submit" class="btn-primary" id="usernameBtn">Update username</button>
+            </form>
+          </div>`;
+      }
+
+      function emailSection(profile) {
+        const u = profile.user;
+        if (u.sign_in_method === "google") {
+          return `
+            <div class="card">
+              <h2>Email</h2>
+              <p class="sub">Your email is managed by Google.</p>
+              <div class="info-box">
+                ${safe(u.email || "No email on file")} comes from your Google
+                account, so it can't be changed here.
+              </div>
+            </div>`;
+        }
+        return `
+          <div class="card">
+            <h2>Email address</h2>
+            <p class="sub">Confirm with your current password to change it.</p>
+            <form id="emailForm" class="form-grid">
+              <div>
+                <label for="newEmail">Email</label>
+                <input type="text" inputmode="email" id="newEmail" maxlength="255" value="${safe(u.email || "")}" placeholder="you@example.com" required autocomplete="email" />
+              </div>
+              <div>
+                <label for="emailPassword">Current password</label>
+                <input type="password" id="emailPassword" autocomplete="current-password" required />
+              </div>
+              <button type="submit" class="btn-primary" id="emailBtn">Update email</button>
+            </form>
+          </div>`;
+      }
+
       function passwordSection(profile) {
         if (!profile.can_change_password) {
           return `
@@ -679,6 +726,10 @@
           </div>
           ${editSection(profile)}
 
+          ${usernameSection(profile)}
+
+          ${emailSection(profile)}
+
           ${passwordSection(profile)}
 
         `;
@@ -686,7 +737,70 @@
         // The notice element was re-created, so look it up again
         window.noticeEl = document.getElementById("notice");
         attachProfileForm();
+        attachAccountForms();
         attachPasswordForm();
+      }
+
+      // Reload everything from the server after a change
+      async function reloadProfile(message) {
+        const fresh = await api("/api/profile");
+        renderAuth(fresh.user); // the navbar badge shows the username
+        render(fresh);
+        flash(message);
+      }
+
+      function attachAccountForms() {
+        const usernameForm = document.getElementById("usernameForm");
+        if (usernameForm) {
+          usernameForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const button = document.getElementById("usernameBtn");
+            button.disabled = true;
+            button.textContent = "Updating…";
+
+            try {
+              const data = await api("/api/profile/username", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  username: document.getElementById("newUsername").value,
+                }),
+              });
+              await reloadProfile(data.message);
+            } catch (error) {
+              flash(error.message, true);
+              button.disabled = false;
+              button.textContent = "Update username";
+            }
+          });
+        }
+
+        const emailForm = document.getElementById("emailForm");
+        if (emailForm) {
+          emailForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const button = document.getElementById("emailBtn");
+            button.disabled = true;
+            button.textContent = "Updating…";
+
+            try {
+              const data = await api("/api/profile/email", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  email: document.getElementById("newEmail").value,
+                  current_password:
+                    document.getElementById("emailPassword").value,
+                }),
+              });
+              await reloadProfile(data.message);
+            } catch (error) {
+              flash(error.message, true);
+              button.disabled = false;
+              button.textContent = "Update email";
+            }
+          });
+        }
       }
 
       function attachProfileForm() {
