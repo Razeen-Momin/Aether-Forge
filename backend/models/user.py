@@ -40,3 +40,9 @@ class User(db.Model):
         nullable=True,
         default=datetime.utcnow
     )
+
+    # Optional public-facing name (the login username never changes)
+    display_name = db.Column(db.String(50), nullable=True)
+
+    # Short "about me" text
+    bio = db.Column(db.String(160), nullable=True)

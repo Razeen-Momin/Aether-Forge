@@ -14,6 +14,8 @@ profile_bp = Blueprint("profile", __name__, url_prefix="/api/profile")
 
 RECENT_LIMIT = 4
 MIN_PASSWORD_LENGTH = 6
+MAX_DISPLAY_NAME = 50
+MAX_BIO = 160
 
 
 def _current_user():
@@ -73,6 +75,8 @@ def get_profile():
             "id": user.id,
             "username": user.username,
             "email": user.email,
+            "display_name": user.display_name,
+            "bio": user.bio,
             "sign_in_method": "google" if is_google else "password",
             "created_at": _iso(user.created_at),
         },
@@ -106,6 +110,54 @@ def get_profile():
         "can_change_password": not is_google,
     }), 200
 
+# --------------------------------------------------
+# Update display name and bio
+# --------------------------------------------------
+
+def _clean_text(value):
+    """Trim, collapse stray control characters, and turn '' into None."""
+    text = "".join(
+        ch for ch in str(value or "")
+        if ch in "\n" or ch.isprintable()
+    ).strip()
+    return text or None
+
+
+@profile_bp.route("", methods=["PUT"])
+def update_profile():
+
+    user = _current_user()
+
+    if not user:
+        return jsonify({"message": "Authentication required."}), 401
+
+    data = request.get_json(silent=True) or {}
+
+    display_name = _clean_text(data.get("display_name"))
+    bio = _clean_text(data.get("bio"))
+
+    if display_name and len(display_name) > MAX_DISPLAY_NAME:
+        return jsonify({
+            "message": (
+                f"Display name must be {MAX_DISPLAY_NAME} characters "
+                "or fewer."
+            )
+        }), 400
+
+    if bio and len(bio) > MAX_BIO:
+        return jsonify({
+            "message": f"Bio must be {MAX_BIO} characters or fewer."
+        }), 400
+
+    user.display_name = display_name
+    user.bio = bio
+    db.session.commit()
+
+    return jsonify({
+        "message": "Profile updated.",
+        "display_name": user.display_name,
+        "bio": user.bio,
+    }), 200
 
 # --------------------------------------------------
 # Change password

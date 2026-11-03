@@ -322,7 +322,9 @@
         color: var(--muted);
         margin-bottom: 5px;
       }
-      input[type="password"] {
+      input[type="password"],
+      input[type="text"],
+      textarea {
         width: 100%;
         background: var(--surface);
         border: 1px solid var(--line);
@@ -332,7 +334,31 @@
         outline: none;
         font-size: 0.95rem;
       }
-      input[type="password"]:focus {
+      textarea {
+        resize: vertical;
+        min-height: 90px;
+        font-family: inherit;
+      }
+      .counter {
+        color: var(--muted);
+        font-size: 0.78rem;
+        text-align: right;
+        margin-top: 4px;
+      }
+      .pf-username {
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin-bottom: 4px;
+      }
+      .pf-bio {
+        margin: 6px 0 10px;
+        max-width: 60ch;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      input[type="password"]:focus,
+      input[type="text"]:focus,
+      textarea:focus {
         border-color: var(--accent);
       }
       .btn-primary {
@@ -546,6 +572,27 @@
           .join("");
       }
 
+      function editSection(profile) {
+        const u = profile.user;
+        return `
+          <div class="card">
+            <h2>Edit profile</h2>
+            <p class="sub">Your display name and bio are shown on your profile. Your login username stays <strong>${safe(u.username)}</strong>.</p>
+            <form id="profileForm" class="form-grid">
+              <div>
+                <label for="displayName">Display name</label>
+                <input type="text" id="displayName" maxlength="50" value="${safe(u.display_name || "")}" placeholder="${safe(u.username)}" />
+              </div>
+              <div>
+                <label for="bio">Bio</label>
+                <textarea id="bio" maxlength="160" placeholder="Tell people a little about yourself">${safe(u.bio || "")}</textarea>
+                <div class="counter"><span id="bioCount">0</span>/160</div>
+              </div>
+              <button type="submit" class="btn-primary" id="profileBtn">Save profile</button>
+            </form>
+          </div>`;
+      }
+
       function passwordSection(profile) {
         if (!profile.can_change_password) {
           return `
@@ -583,7 +630,8 @@
       function render(profile) {
         const u = profile.user;
         const s = profile.stats;
-        const initial = (u.username || "?").charAt(0).toUpperCase();
+        const shownName = u.display_name || u.username;
+        const initial = (shownName || "?").charAt(0).toUpperCase();
 
         page.innerHTML = `
           <div id="notice" class="notice"></div>
@@ -592,7 +640,9 @@
             <div class="pf-header">
               <div class="pf-avatar">${safe(initial)}</div>
               <div class="pf-info">
-                <h1>${safe(u.username)}</h1>
+                <h1>${safe(shownName)}</h1>
+                ${u.display_name ? `<div class="pf-username">@${safe(u.username)}</div>` : ""}
+                ${u.bio ? `<p class="pf-bio">${safe(u.bio)}</p>` : ""}
                 <div class="pf-email">${safe(u.email || "No email on file")}</div>
                 <div class="pf-tags">
                   <span class="tag">${u.sign_in_method === "google" ? "Google account" : "Password account"}</span>
@@ -627,13 +677,53 @@
               <div class="list">${uploadRows(profile.recent_uploads)}</div>
             </section>
           </div>
+          ${editSection(profile)}
 
           ${passwordSection(profile)}
+
         `;
 
         // The notice element was re-created, so look it up again
         window.noticeEl = document.getElementById("notice");
+        attachProfileForm();
         attachPasswordForm();
+      }
+
+      function attachProfileForm() {
+        const form = document.getElementById("profileForm");
+        if (!form) return;
+
+        const bio = document.getElementById("bio");
+        const count = document.getElementById("bioCount");
+        const updateCount = () => (count.textContent = bio.value.length);
+        bio.addEventListener("input", updateCount);
+        updateCount();
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const button = document.getElementById("profileBtn");
+          button.disabled = true;
+          button.textContent = "Saving…";
+
+          try {
+            await api("/api/profile", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                display_name: document.getElementById("displayName").value,
+                bio: bio.value,
+              }),
+            });
+            // Reload so the header shows the new name and bio
+            const fresh = await api("/api/profile");
+            render(fresh);
+            flash("Profile updated.");
+          } catch (error) {
+            flash(error.message, true);
+            button.disabled = false;
+            button.textContent = "Save profile";
+          }
+        });
       }
 
       function attachPasswordForm() {

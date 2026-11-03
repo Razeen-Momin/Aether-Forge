@@ -223,6 +223,24 @@ def create_app():
                             "ADD COLUMN google_id VARCHAR(255)"
                         )
                     )
+
+                # Optional profile fields
+                if "display_name" not in user_columns:
+                    connection.execute(
+                        text(
+                            "ALTER TABLE users "
+                            "ADD COLUMN display_name VARCHAR(50)"
+                        )
+                    )
+
+                if "bio" not in user_columns:
+                    connection.execute(
+                        text(
+                            "ALTER TABLE users "
+                            "ADD COLUMN bio VARCHAR(160)"
+                        )
+                    )
+
                 # Member-since date for the profile page.
                 # Existing accounts have no real signup date, so they are
                 # backfilled with the moment this migration first runs.
