@@ -9,7 +9,7 @@
     />
 
     <title>AETHER FORGE | Projects</title>
-
+    <script src="theme.js"></script>
     <style>
       * {
         margin: 0;
@@ -19,8 +19,8 @@
       }
 
       body {
-        background: #020202;
-        color: #ffffff;
+        background: var(--bg);
+        color: var(--text);
         overflow-x: hidden;
         min-height: 100vh;
         perspective: 1200px;
@@ -49,8 +49,12 @@
         top: -50%;
 
         background-image:
-          linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+          linear-gradient(rgba(var(--accent-rgb), 0.1) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(var(--accent-rgb), 0.1) 1px,
+            transparent 1px
+          );
 
         background-size: 50px 50px;
 
@@ -80,7 +84,7 @@
 
         background: radial-gradient(
           circle,
-          rgba(0, 200, 255, 0.15) 0%,
+          rgba(var(--accent-rgb), 0.15) 0%,
           transparent 60%
         );
 
@@ -111,11 +115,11 @@
 
         padding: 20px 50px;
 
-        background: rgba(0, 5, 10, 0.6);
+        background: var(--nav-bg);
 
         backdrop-filter: blur(15px);
 
-        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        border-bottom: 1px solid rgba(var(--accent-rgb), 0.2);
 
         position: relative;
 
@@ -140,7 +144,7 @@
 
         opacity: 0.85;
 
-        filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.4));
+        filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.4));
 
         transition:
           transform 0.3s ease,
@@ -153,7 +157,7 @@
 
         opacity: 1;
 
-        filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.7));
+        filter: drop-shadow(0 0 15px rgba(var(--accent-rgb), 0.7));
       }
 
       .nav-links {
@@ -165,7 +169,7 @@
       }
 
       .nav-link {
-        color: #88ccdd;
+        color: var(--muted);
 
         text-decoration: none;
 
@@ -186,9 +190,9 @@
 
       .nav-link:hover,
       .nav-link.active {
-        color: #00ffff;
+        color: var(--accent);
 
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+        text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.6);
       }
 
       .nav-link::after {
@@ -202,9 +206,9 @@
         width: 0%;
         height: 2px;
 
-        background: #00ffff;
+        background: var(--accent);
 
-        box-shadow: 0 0 10px #00ffff;
+        box-shadow: 0 0 10px var(--accent);
 
         transition: width 0.3s ease;
       }
@@ -243,70 +247,70 @@
       }
 
       .btn-nav-login {
-        background: rgba(0, 255, 255, 0.05);
+        background: rgba(var(--accent-rgb), 0.05);
 
-        border: 1px solid #00ffff;
+        border: 1px solid var(--accent);
 
-        color: #00ffff;
+        color: var(--accent);
 
         text-decoration: none;
       }
 
       .btn-nav-register {
-        background: rgba(0, 255, 255, 0.1);
+        background: rgba(var(--accent-rgb), 0.1);
 
-        border: 1px solid #00ffff;
+        border: 1px solid var(--accent);
 
-        color: #00ffff;
+        color: var(--accent);
 
         text-decoration: none;
       }
 
       .btn-nav-login:hover,
       .btn-nav-register:hover {
-        background: #00ffff;
+        background: var(--accent);
 
-        color: #000;
+        color: var(--on-accent);
 
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+        box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.6);
 
         transform: translateY(-2px);
       }
 
       .btn-nav-logout {
-        background: rgba(255, 51, 51, 0.1);
+        background: rgba(var(--danger-rgb), 0.1);
 
-        border: 1px solid #ff3333;
+        border: 1px solid var(--danger);
 
-        color: #ff3333;
+        color: var(--danger);
 
         cursor: pointer;
       }
 
       .btn-nav-logout:hover {
-        background: #ff3333;
+        background: var(--danger);
 
         color: #fff;
 
-        box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
+        box-shadow: 0 0 20px rgba(var(--danger-rgb), 0.6);
 
         transform: translateY(-2px);
       }
 
       .operative-badge {
-        color: #fff;
+        color: var(--text);
 
         font-size: 12px;
 
         letter-spacing: 2px;
 
-        background: rgba(0, 255, 255, 0.1);
+        background: rgba(var(--accent-rgb), 0.1);
 
         padding: 8px 20px;
 
         border-radius: 4px;
 
-        border: 1px solid rgba(0, 255, 255, 0.3);
+        border: 1px solid rgba(var(--accent-rgb), 0.3);
       }
 
       /* =========================================
@@ -330,19 +334,19 @@
 
         text-transform: uppercase;
 
-        color: #fff;
+        color: var(--text);
 
         margin-bottom: 15px;
 
-        text-shadow: 0 0 30px rgba(0, 255, 255, 0.35);
+        text-shadow: 0 0 30px rgba(var(--accent-rgb), 0.35);
       }
 
       .page-header h1 span {
-        color: #00ffff;
+        color: var(--accent);
       }
 
       .page-header p {
-        color: #88ccdd;
+        color: var(--muted);
 
         font-size: 1rem;
 
@@ -368,15 +372,15 @@
 
         padding: 35px;
 
-        background: rgba(0, 10, 20, 0.72);
+        background: var(--panel);
 
-        border: 1px solid rgba(0, 255, 255, 0.2);
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
 
         border-radius: 16px;
 
         backdrop-filter: blur(15px);
 
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 20px 60px var(--shadow);
       }
 
       /* =========================================
@@ -394,11 +398,11 @@
 
         padding-bottom: 20px;
 
-        border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+        border-bottom: 1px solid rgba(var(--accent-rgb), 0.15);
       }
 
       .projects-title {
-        color: #00ffff;
+        color: var(--accent);
 
         font-size: 22px;
 
@@ -406,11 +410,11 @@
 
         text-transform: uppercase;
 
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+        text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.4);
       }
 
       .project-count {
-        color: #88ccdd;
+        color: var(--muted);
 
         font-size: 11px;
 
@@ -424,11 +428,11 @@
         ========================================= */
 
       .create-project-btn {
-        background: rgba(0, 255, 255, 0.08);
+        background: rgba(var(--accent-rgb), 0.08);
 
-        border: 1px solid #00ffff;
+        border: 1px solid var(--accent);
 
-        color: #ffffff;
+        color: var(--text);
 
         padding: 10px 18px;
 
@@ -446,11 +450,11 @@
       }
 
       .create-project-btn:hover {
-        background: #00ffff;
+        background: var(--accent);
 
-        color: #000;
+        color: var(--on-accent);
 
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.5);
       }
 
       /* =========================================
@@ -470,9 +474,9 @@
         ========================================= */
 
       .project-card {
-        background: rgba(0, 20, 30, 0.65);
+        background: var(--panel);
 
-        border: 1px solid rgba(0, 255, 255, 0.18);
+        border: 1px solid rgba(var(--accent-rgb), 0.18);
 
         border-radius: 10px;
 
@@ -499,7 +503,12 @@
         width: 100%;
         height: 2px;
 
-        background: linear-gradient(90deg, transparent, #00ffff, transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--accent),
+          transparent
+        );
 
         opacity: 0.5;
       }
@@ -507,9 +516,9 @@
       .project-card:hover {
         transform: translateY(-6px);
 
-        border-color: rgba(0, 255, 255, 0.7);
+        border-color: rgba(var(--accent-rgb), 0.7);
 
-        box-shadow: 0 15px 35px rgba(0, 255, 255, 0.12);
+        box-shadow: 0 15px 35px rgba(var(--accent-rgb), 0.12);
       }
 
       /* =========================================
@@ -525,21 +534,21 @@
         align-items: center;
         justify-content: center;
 
-        border: 1px solid rgba(0, 255, 255, 0.3);
+        border: 1px solid rgba(var(--accent-rgb), 0.3);
 
         border-radius: 8px;
 
-        color: #00ffff;
+        color: var(--accent);
 
         font-size: 20px;
 
         margin-bottom: 15px;
 
-        background: rgba(0, 255, 255, 0.05);
+        background: rgba(var(--accent-rgb), 0.05);
       }
 
       .project-name {
-        color: #fff;
+        color: var(--text);
 
         font-size: 18px;
 
@@ -551,7 +560,7 @@
       }
 
       .project-description {
-        color: #88ccdd;
+        color: var(--muted);
 
         font-size: 12px;
 
@@ -563,7 +572,7 @@
       }
 
       .project-date {
-        color: #557f88;
+        color: var(--muted);
 
         font-size: 10px;
 
@@ -601,43 +610,43 @@
       }
 
       .open-project {
-        background: rgba(0, 255, 255, 0.08);
+        background: rgba(var(--accent-rgb), 0.08);
 
-        border: 1px solid #00ffff;
+        border: 1px solid var(--accent);
 
-        color: #ffffff;
+        color: var(--text);
       }
 
       .open-project:hover {
-        background: #00ffff;
+        background: var(--accent);
 
-        color: #000;
+        color: var(--on-accent);
       }
 
       .rename-project {
-        background: rgba(255, 255, 255, 0.04);
+        background: rgba(var(--accent-rgb), 0.06);
 
-        border: 1px solid #557f88;
+        border: 1px solid var(--muted);
 
-        color: #ffffff;
+        color: var(--text);
       }
 
       .rename-project:hover {
-        border-color: #fff;
+        border-color: var(--text);
 
-        color: #fff;
+        color: var(--text);
       }
 
       .delete-project {
-        background: rgba(255, 51, 51, 0.05);
+        background: rgba(var(--danger-rgb), 0.05);
 
-        border: 1px solid #ff3333;
+        border: 1px solid var(--danger);
 
-        color: #ff5555;
+        color: var(--danger);
       }
 
       .delete-project:hover {
-        background: #ff3333;
+        background: var(--danger);
 
         color: #fff;
       }
@@ -651,7 +660,7 @@
 
         padding: 70px 20px;
 
-        color: #88ccdd;
+        color: var(--muted);
       }
 
       .empty-projects-icon {
@@ -663,7 +672,7 @@
       }
 
       .empty-projects h3 {
-        color: #00ffff;
+        color: var(--accent);
 
         letter-spacing: 3px;
 
@@ -689,7 +698,7 @@
 
         padding: 60px;
 
-        color: #00ffff;
+        color: var(--accent);
 
         letter-spacing: 3px;
 
@@ -800,6 +809,7 @@
         }
       }
     </style>
+    <link rel="stylesheet" href="theme.css" />
   </head>
 
   <body>
@@ -832,6 +842,15 @@
         <a href="community.html" class="nav-link"> Community </a>
 
         <a href="contact.html" class="nav-link"> Contact </a>
+
+        <button
+          id="themeToggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Toggle theme"
+        >
+          ☀️
+        </button>
       </div>
 
       <div id="auth-section"></div>
