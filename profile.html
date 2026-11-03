@@ -380,6 +380,32 @@
         opacity: 0.5;
         cursor: not-allowed;
       }
+      .danger-card {
+        border-color: var(--danger);
+      }
+      .danger-card h2 {
+        color: var(--danger);
+      }
+      .btn-danger {
+        background: rgba(var(--danger-rgb), 0.1);
+        color: var(--danger);
+        border: 1px solid var(--danger);
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        width: fit-content;
+        transition: 0.2s;
+      }
+      .btn-danger:hover:not(:disabled) {
+        background: var(--danger);
+        color: #fff;
+      }
+      .btn-danger:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
       .info-box {
         color: var(--muted);
         font-size: 0.9rem;
@@ -640,6 +666,32 @@
           </div>`;
       }
 
+      function deleteSection(profile) {
+        const u = profile.user;
+        const s = profile.stats;
+        const isGoogle = u.sign_in_method === "google";
+
+        const field = isGoogle
+          ? `<label for="deleteConfirm">Type your username (<strong>${safe(u.username)}</strong>) to confirm</label>
+             <input type="text" id="deleteConfirm" autocomplete="off" />`
+          : `<label for="deleteConfirm">Enter your password to confirm</label>
+             <input type="password" id="deleteConfirm" autocomplete="current-password" />`;
+
+        return `
+          <div class="card danger-card">
+            <h2>Delete account</h2>
+            <p class="sub">
+              This permanently deletes your account, <strong>${s.projects}</strong>
+              project(s) and <strong>${s.uploads}</strong> Community upload(s),
+              including the uploaded files. This cannot be undone.
+            </p>
+            <form id="deleteForm" class="form-grid">
+              <div>${field}</div>
+              <button type="submit" class="btn-danger" id="deleteBtn" disabled>Delete my account</button>
+            </form>
+          </div>`;
+      }
+
       function passwordSection(profile) {
         if (!profile.can_change_password) {
           return `
@@ -732,6 +784,8 @@
 
           ${passwordSection(profile)}
 
+          ${deleteSection(profile)}
+
         `;
 
         // The notice element was re-created, so look it up again
@@ -739,6 +793,59 @@
         attachProfileForm();
         attachAccountForms();
         attachPasswordForm();
+        attachDeleteForm(profile);
+      }
+
+      function attachDeleteForm(profile) {
+        const form = document.getElementById("deleteForm");
+        if (!form) return;
+
+        const isGoogle = profile.user.sign_in_method === "google";
+        const input = document.getElementById("deleteConfirm");
+        const button = document.getElementById("deleteBtn");
+
+        // The button stays disabled until the confirmation is filled in
+        const ready = () =>
+          isGoogle
+            ? input.value === profile.user.username
+            : input.value.length > 0;
+
+        input.addEventListener("input", () => {
+          button.disabled = !ready();
+        });
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          if (!ready()) return;
+
+          if (
+            !window.confirm(
+              "Delete your account permanently? This cannot be undone.",
+            )
+          ) {
+            return;
+          }
+
+          button.disabled = true;
+          button.textContent = "Deleting…";
+
+          try {
+            await api("/api/profile", {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(
+                isGoogle
+                  ? { confirm_username: input.value }
+                  : { current_password: input.value },
+              ),
+            });
+            window.location.href = "index.html";
+          } catch (error) {
+            flash(error.message, true);
+            button.textContent = "Delete my account";
+            button.disabled = !ready();
+          }
+        });
       }
 
       // Reload everything from the server after a change

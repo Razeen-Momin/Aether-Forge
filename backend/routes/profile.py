@@ -1,6 +1,7 @@
 # Profile page API: one-call summary + password change.
 import re
-from flask import Blueprint, request, jsonify, session
+import requests
+from flask import Blueprint, current_app, request, jsonify, session
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -9,6 +10,11 @@ from backend.extensions import db
 from backend.models.user import User
 from backend.models.project import Project
 from backend.models.community_asset import CommunityAsset
+from backend.routes.community import (
+    _storage_config,
+    _storage_headers,
+    _storage_error,
+)
 
 
 profile_bp = Blueprint("profile", __name__, url_prefix="/api/profile")
@@ -21,6 +27,7 @@ MIN_USERNAME = 3
 MAX_USERNAME = 80
 MAX_EMAIL = 255
 EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+STORAGE_DELETE_CHUNK = 100
 
 def _current_user():
     """Return the logged-in user, or None (clearing a stale session)."""
@@ -303,6 +310,130 @@ def change_email():
         "message": "Email updated.",
         "email": user.email,
     }), 200
+
+# --------------------------------------------------
+# Delete account
+# --------------------------------------------------
+# Order matters: cloud files are removed FIRST. If storage fails we stop
+# and leave the account untouched, so nothing is ever left in storage
+# that no database row points to. Deleting a file that is already gone
+# is harmless, so after a failure the user can simply try again.
+
+@profile_bp.route("", methods=["DELETE"])
+def delete_account():
+
+    user = _current_user()
+
+    if not user:
+        return jsonify({"message": "Authentication required."}), 401
+
+    data = request.get_json(silent=True) or {}
+
+    # --- confirmation -------------------------------------------------
+    if user.google_id:
+        # Google accounts have no password, so they type their username
+        if data.get("confirm_username", "") != user.username:
+            return jsonify({
+                "message": "Type your username exactly to confirm."
+            }), 400
+    else:
+        password = data.get("current_password", "")
+
+        if not password:
+            return jsonify({
+                "message": "Enter your password to delete your account."
+            }), 400
+
+        if not check_password_hash(user.password_hash, password):
+            return jsonify({
+                "message": "Current password is incorrect."
+            }), 403
+
+    user_id = user.id
+
+    # --- 1. delete the uploaded files from Supabase -------------------
+    storage_paths = [
+        path for (path,) in db.session.query(
+            CommunityAsset.storage_path
+        ).filter(CommunityAsset.user_id == user_id).all()
+    ]
+
+    if storage_paths:
+        config = _storage_config()
+
+        if not config:
+            return jsonify({
+                "message": (
+                    "Community storage is not configured on the server. "
+                    "Your account was not deleted."
+                )
+            }), 503
+
+        project_url, service_key, bucket = config
+
+        for start in range(0, len(storage_paths), STORAGE_DELETE_CHUNK):
+            chunk = storage_paths[start:start + STORAGE_DELETE_CHUNK]
+
+            try:
+                response = requests.delete(
+                    f"{project_url}/storage/v1/object/{bucket}",
+                    headers=_storage_headers(
+                        service_key, "application/json"
+                    ),
+                    json={"prefixes": chunk},
+                    timeout=30,
+                )
+            except requests.RequestException:
+                current_app.logger.exception(
+                    "Supabase delete request failed during account deletion."
+                )
+                return jsonify({
+                    "message": (
+                        "Could not reach cloud storage. "
+                        "Your account was not deleted - please try again."
+                    )
+                }), 502
+
+            if response.status_code not in (200, 204):
+                current_app.logger.error(
+                    "Supabase delete failed during account deletion: %s",
+                    _storage_error(response)
+                )
+                return jsonify({
+                    "message": (
+                        "Cloud storage could not delete your files. "
+                        "Your account was not deleted - please try again."
+                    )
+                }), 502
+
+    # --- 2. delete database rows (one transaction) --------------------
+    try:
+        CommunityAsset.query.filter_by(
+            user_id=user_id
+        ).delete(synchronize_session=False)
+
+        Project.query.filter_by(
+            user_id=user_id
+        ).delete(synchronize_session=False)
+
+        User.query.filter_by(
+            id=user_id
+        ).delete(synchronize_session=False)
+
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        current_app.logger.exception("Account deletion failed in database.")
+        return jsonify({
+            "message": (
+                "Something went wrong while deleting your account. "
+                "Please try again."
+            )
+        }), 500
+
+    session.clear()
+
+    return jsonify({"message": "Account deleted."}), 200
 
 # --------------------------------------------------
 # Change password
