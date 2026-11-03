@@ -1,0 +1,56 @@
+/* DARK (default) */
+:root {
+  --bg: #0b0a14;
+  --panel: rgba(20, 17, 36, 0.82);
+  --surface: #120f22; /* inputs, modal, card previews */
+  --surface-2: #1b1633; /* secondary buttons, preview glow */
+  --nav-bg: rgba(11, 10, 20, 0.7);
+  --line: rgba(167, 139, 250, 0.22);
+  --accent: #a78bfa;
+  --accent-rgb: 167, 139, 250;
+  --accent-2: #ff8a3d;
+  --accent-2-rgb: 255, 138, 61;
+  --text: #f1eefc;
+  --muted: #9a93b8;
+  --on-accent: #0b0a14; /* text on a filled accent button */
+  --danger: #ff5d73;
+  --danger-rgb: 255, 93, 115;
+  --shadow: rgba(0, 0, 0, 0.45);
+  --overlay: rgba(5, 4, 12, 0.72);
+}
+
+/* LIGHT */
+html[data-theme="light"] {
+  --bg: #f6f3fb;
+  --panel: rgba(255, 255, 255, 0.9);
+  --surface: #ffffff;
+  --surface-2: #ece7f8;
+  --nav-bg: rgba(246, 243, 251, 0.8);
+  --line: rgba(91, 60, 196, 0.2);
+  --accent: #6d45e0;
+  --accent-rgb: 109, 69, 224;
+  --accent-2: #d9570b;
+  --accent-2-rgb: 217, 87, 11;
+  --text: #1a1530;
+  --muted: #6a6486;
+  --on-accent: #ffffff;
+  --danger: #d6293f;
+  --danger-rgb: 214, 41, 63;
+  --shadow: rgba(60, 40, 120, 0.18);
+  --overlay: rgba(30, 20, 60, 0.45);
+}
+
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.theme-toggle:hover {
+  border-color: var(--accent);
+}

@@ -138,6 +138,20 @@ def create_app():
             "logo.png"
         )
 
+    @app.route("/theme.css")
+    def theme_css():
+        return send_from_directory(
+            PROJECT_ROOT,
+            "theme.css"
+        )
+
+    @app.route("/theme.js")
+    def theme_js():
+        return send_from_directory(
+            PROJECT_ROOT,
+            "theme.js"
+        )
+
     # -----------------------------
     # Create database tables
     # -----------------------------

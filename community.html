@@ -4,15 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AETHER FORGE | Community</title>
+    <link rel="stylesheet" href="theme.css" />
+    <script src="theme.js"></script>
     <style>
-      :root {
-        --bg: #020608;
-        --panel: rgba(7, 20, 26, 0.82);
-        --line: rgba(0, 255, 255, 0.2);
-        --cyan: #00ffff;
-        --muted: #91aab1;
-        --white: #eefcff;
-      }
       * {
         box-sizing: border-box;
         margin: 0;
@@ -25,7 +19,7 @@
       body {
         min-height: 100vh;
         background: var(--bg);
-        color: var(--white);
+        color: var(--text);
         overflow-x: hidden;
       }
       body:before {
@@ -34,8 +28,8 @@
         inset: 0;
         z-index: -2;
         background-image:
-          linear-gradient(rgba(0, 255, 255, 0.055) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(0, 255, 255, 0.055) 1px, transparent 1px);
+          linear-gradient(rgba(var(--accent-rgb), 0.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(var(--accent-rgb), 0.055) 1px, transparent 1px);
         background-size: 48px 48px;
         transform: perspective(700px) rotateX(58deg) scale(1.8);
         transform-origin: center 70%;
@@ -51,7 +45,7 @@
         pointer-events: none;
         background: radial-gradient(
           circle,
-          rgba(0, 190, 255, 0.12),
+          rgba(var(--accent-rgb), 0.12),
           transparent 68%
         );
       }
@@ -60,9 +54,9 @@
         justify-content: space-between;
         align-items: center;
         padding: 20px 50px;
-        background: rgba(0, 5, 10, 0.6);
+        background: var(--nav-bg);
         backdrop-filter: blur(15px);
-        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        border-bottom: 1px solid rgba(var(--accent-rgb), 0.2);
         position: relative;
         z-index: 100;
         gap: 24px;
@@ -79,7 +73,7 @@
         height: 80px;
         width: auto;
         opacity: 0.85;
-        filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.4));
+        filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.4));
         transition:
           transform 0.3s ease,
           opacity 0.3s,
@@ -88,7 +82,7 @@
       .logo-block:hover .logo-img {
         transform: scale(1.05);
         opacity: 1;
-        filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.7));
+        filter: drop-shadow(0 0 15px rgba(var(--accent-rgb), 0.7));
       }
       .nav-links {
         display: flex;
@@ -96,7 +90,7 @@
         align-items: center;
       }
       .nav-link {
-        color: #88ccdd;
+        color: var(--muted);
         text-decoration: none;
         font-size: 14px;
         letter-spacing: 2px;
@@ -110,8 +104,8 @@
       }
       .nav-link:hover,
       .nav-link.active {
-        color: #00ffff;
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+        color: var(--accent);
+        text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.6);
       }
       .nav-link:after {
         content: "";
@@ -120,8 +114,8 @@
         left: 0;
         width: 0;
         height: 2px;
-        background: #00ffff;
-        box-shadow: 0 0 10px #00ffff;
+        background: var(--accent);
+        box-shadow: 0 0 10px var(--accent);
         transition: width 0.3s ease;
       }
       .nav-link:hover:after,
@@ -146,44 +140,44 @@
         white-space: nowrap;
       }
       .btn-nav-login {
-        background: rgba(0, 255, 255, 0.05);
-        border: 1px solid #00ffff;
-        color: #00ffff;
+        background: rgba(var(--accent-rgb), 0.05);
+        border: 1px solid var(--accent);
+        color: var(--accent);
         text-decoration: none;
       }
       .btn-nav-register {
-        background: rgba(0, 255, 255, 0.1);
-        border: 1px solid #00ffff;
-        color: #00ffff;
+        background: rgba(var(--accent-rgb), 0.1);
+        border: 1px solid var(--accent);
+        color: var(--accent);
         text-decoration: none;
       }
       .btn-nav-login:hover,
       .btn-nav-register:hover {
-        background: #00ffff;
-        color: #000;
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+        background: var(--accent);
+        color: var(--on-accent);  
+        box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.6);
         transform: translateY(-2px);
       }
       .btn-nav-logout {
-        background: rgba(255, 51, 51, 0.1);
-        border: 1px solid #ff3333;
-        color: #ff3333;
+        background: rgba(var(--danger-rgb), 0.1);
+        border: 1px solid var(--danger);
+        color: var(--danger);
         cursor: pointer;
       }
       .btn-nav-logout:hover {
-        background: #ff3333;
+        background: var(--danger);
         color: #fff;
-        box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
+        box-shadow: 0 0 20px rgba(var(--danger-rgb), 0.6);
         transform: translateY(-2px);
       }
       .operative-badge {
         color: #fff;
         font-size: 12px;
         letter-spacing: 2px;
-        background: rgba(0, 255, 255, 0.1);
+        background: rgba(var(--accent-rgb), 0.1);
         padding: 8px 20px;
         border-radius: 4px;
-        border: 1px solid rgba(0, 255, 255, 0.3);
+        border: 1px solid rgba(var(--accent-rgb), 0.3);
         white-space: nowrap;
       }
       main {
@@ -200,15 +194,15 @@
         font-size: 3.5rem;
         letter-spacing: 10px;
         text-transform: uppercase;
-        color: #fff;
+        color: var(--text);
         margin-bottom: 15px;
-        text-shadow: 0 0 30px rgba(0, 255, 255, 0.35);
+        text-shadow: 0 0 30px rgba(var(--accent-rgb), 0.35);
       }
       .page-header h1 span {
-        color: var(--cyan);
+        color: var(--accent);
       }
       .page-header p {
-        color: #88ccdd;
+        color: var(--muted);
         font-size: 1rem;
         letter-spacing: 2px;
         line-height: 1.7;
@@ -222,7 +216,7 @@
         border: 1px solid var(--line);
         padding: 10px 15px;
         border-radius: 30px;
-        color: var(--cyan);
+        color: var(--accent);
         white-space: nowrap;
         font-size: 0.85rem;
       }
@@ -240,26 +234,26 @@
       select,
       textarea {
         width: 100%;
-        background: #061319;
+        background: var(--surface);
         border: 1px solid var(--line);
         border-radius: 10px;
-        color: var(--white);
+        color: var(--text);
         padding: 13px 14px;
         outline: none;
       }
       .field:focus,
       select:focus,
       textarea:focus {
-        border-color: var(--cyan);
-        box-shadow: 0 0 0 3px #00ffff12;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.08);
       }
       .toolbar select {
         width: 175px;
       }
       .btn {
-        border: 1px solid var(--cyan);
-        background: rgba(0, 255, 255, 0.09);
-        color: var(--cyan);
+        border: 1px solid var(--accent);
+        background: rgba(var(--accent-rgb), 0.09);
+        color: var(--accent);
         padding: 12px 17px;
         border-radius: 9px;
         cursor: pointer;
@@ -267,19 +261,19 @@
         transition: 0.2s;
       }
       .btn:hover {
-        background: var(--cyan);
-        color: #001014;
-        box-shadow: 0 0 20px #00ffff44;
+        background: var(--accent);
+        color: var(--on-accent);
+        box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.27);
       }
       .btn.secondary {
         border-color: #52717a;
-        color: #c0d5db;
-        background: #102027;
+        color: var(--text);
+        background: var(--surface-2);
       }
       .btn.danger {
-        border-color: #ff647c;
-        color: #ff8798;
-        background: #30121b;
+        border-color: var(--danger);
+        color: var(--danger);
+        background: rgba(var(--danger-rgb), 0.12);
       }
       .tabs {
         display: flex;
@@ -296,8 +290,8 @@
         border-bottom: 2px solid transparent;
       }
       .tab.active {
-        color: var(--cyan);
-        border-color: var(--cyan);
+        color: var(--accent);
+        border-color: var(--accent);
       }
       .grid {
         display: grid;
@@ -309,27 +303,27 @@
         background: var(--panel);
         border-radius: 15px;
         overflow: hidden;
-        box-shadow: 0 12px 35px #0007;
+        box-shadow: 0 12px 35px var(--shadow);
         transition: 0.2s;
       }
       .asset:hover {
         transform: translateY(-4px);
-        border-color: #00ffff88;
+        border-color: rgba(var(--accent-rgb), 0.53);
       }
       .preview {
         height: 150px;
         display: grid;
         place-items: center;
-        background: radial-gradient(circle, #0a3440, #071117 70%);
+        background: radial-gradient(circle, var(--surface-2), var(--surface) 70%);
         border-bottom: 1px solid var(--line);
         font-size: 3rem;
-        color: #00ffff99;
+        color: rgba(var(--accent-rgb), 0.6);
       }
       .preview span {
         font-size: 0.78rem;
         letter-spacing: 2px;
         margin-top: -32px;
-        color: #8cb4bd;
+        color: var(--muted);
       }
       .asset-body {
         padding: 16px;
@@ -350,12 +344,12 @@
         display: flex;
         justify-content: space-between;
         gap: 8px;
-        color: #8caab2;
+        color: var(--muted);
         font-size: 0.75rem;
         margin: 14px 0;
       }
       .format {
-        color: var(--cyan);
+        color: var(--accent);
         border: 1px solid var(--line);
         padding: 4px 7px;
         border-radius: 5px;
@@ -402,7 +396,7 @@
       .modal-backdrop {
         position: fixed;
         inset: 0;
-        background: #000b;
+        background: var(--overlay);
         display: none;
         align-items: center;
         justify-content: center;
@@ -414,11 +408,11 @@
       }
       .modal {
         width: min(520px, 100%);
-        background: #07151b;
+        background: var(--surface);
         border: 1px solid var(--line);
         border-radius: 16px;
         padding: 24px;
-        box-shadow: 0 0 45px #00ffff20;
+        box-shadow: 0 0 45px rgba(var(--accent-rgb), 0.13);
       }
       .modal h2 {
         margin-bottom: 8px;
@@ -435,7 +429,7 @@
       .form-group label {
         display: block;
         font-size: 0.82rem;
-        color: #b8d0d6;
+        color: var(--muted);
         margin-bottom: 7px;
       }
       .form-group textarea {
@@ -453,18 +447,18 @@
         padding: 12px 15px;
         border: 1px solid var(--line);
         border-radius: 9px;
-        color: #b9dce3;
+        color: var(--muted);
         display: none;
       }
       .notice.show {
         display: block;
       }
       .notice.error {
-        border-color: #ff647c;
-        color: #ff9cac;
+        border-color: var(--danger);
+        color: var(--danger);
       }
       .small-note {
-        color: #7f9ba3;
+        color: var(--muted);
         font-size: 0.78rem;
         margin-top: 13px;
         line-height: 1.5;
@@ -548,6 +542,8 @@
         <a href="index.html#features" class="nav-link">Features</a>
         <a href="community.html" class="nav-link active">Community</a>
         <a href="contact.html" class="nav-link">Contact</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme">☀️</button>
+      </div>
       </div>
       <div id="auth-section"></div>
     </nav>
