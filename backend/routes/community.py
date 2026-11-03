@@ -56,7 +56,11 @@ def _asset_json(asset, owner_name=None):
         "visibility": asset.visibility,
         "file_size": asset.file_size,
         "downloads_count": asset.downloads_count,
-        "creator": owner_name or (asset.owner.username if asset.owner else "Unknown"),
+        "creator": owner_name or (
+            (asset.owner.display_name or asset.owner.username)
+            if asset.owner else "Unknown"
+        ),
+        "creator_id": asset.user_id,
         "created_at": asset.created_at.isoformat() + "Z",
     }
 
@@ -71,7 +75,9 @@ def list_community_assets():
     except ValueError:
         return jsonify({"message": "Page values must be whole numbers."}), 400
 
-    query = db.session.query(CommunityAsset, User.username).join(
+    query = db.session.query(
+        CommunityAsset, User.username, User.display_name
+    ).join(
         User, CommunityAsset.user_id == User.id
     )
 
@@ -102,7 +108,10 @@ def list_community_assets():
     ).limit(per_page).all()
 
     return jsonify({
-        "assets": [_asset_json(asset, username) for asset, username in rows],
+        "assets": [
+            _asset_json(asset, display_name or username)
+            for asset, username, display_name in rows
+        ],
         "page": page,
         "per_page": per_page,
         "total": total,
