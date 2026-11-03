@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>AETHER FORGE | Home</title>
-
+    <script src="theme.js"></script>
     <style>
       * {
         margin: 0;
@@ -16,8 +16,8 @@
       }
 
       body {
-        background: #020202;
-        color: #ffffff;
+        background: var(--bg);
+        color: var(--text);
         overflow-x: hidden;
         min-height: 100vh;
         perspective: 1200px;
@@ -46,8 +46,12 @@
         top: -50%;
 
         background-image:
-          linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+          linear-gradient(rgba(var(--accent-rgb), 0.1) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(var(--accent-rgb), 0.1) 1px,
+            transparent 1px
+          );
 
         background-size: 50px 50px;
 
@@ -73,7 +77,7 @@
 
         background: radial-gradient(
           circle,
-          rgba(0, 200, 255, 0.15) 0%,
+          rgba(var(--accent-rgb), 0.15) 0%,
           transparent 60%
         );
 
@@ -104,11 +108,11 @@
 
         padding: 20px 50px;
 
-        background: rgba(0, 5, 10, 0.6);
+        background: var(--nav-bg);
 
         backdrop-filter: blur(15px);
 
-        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        border-bottom: 1px solid rgba(var(--accent-rgb), 0.2);
 
         position: relative;
 
@@ -133,7 +137,7 @@
 
         opacity: 0.85;
 
-        filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.4));
+        filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.4));
 
         transition:
           transform 0.3s ease,
@@ -146,7 +150,7 @@
 
         opacity: 1;
 
-        filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.7));
+        filter: drop-shadow(0 0 15px rgba(var(--accent-rgb), 0.7));
       }
 
       .nav-links {
@@ -158,7 +162,7 @@
       }
 
       .nav-link {
-        color: #88ccdd;
+        color: var(--muted);
 
         text-decoration: none;
 
@@ -179,9 +183,9 @@
 
       .nav-link:hover,
       .nav-link.active {
-        color: #00ffff;
+        color: var(--accent);
 
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+        text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.6);
       }
 
       .nav-link::after {
@@ -195,9 +199,9 @@
         width: 0%;
         height: 2px;
 
-        background: #00ffff;
+        background: var(--accent);
 
-        box-shadow: 0 0 10px #00ffff;
+        box-shadow: 0 0 10px var(--accent);
 
         transition: width 0.3s ease;
       }
@@ -232,70 +236,68 @@
       }
 
       .btn-nav-login {
-        background: rgba(0, 255, 255, 0.05);
+        background: rgba(var(--accent-rgb), 0.05);
 
-        border: 1px solid #00ffff;
+        border: 1px solid var(--accent);
 
-        color: #00ffff;
+        color: var(--accent);
 
         text-decoration: none;
       }
 
       .btn-nav-register {
-        background: rgba(0, 255, 255, 0.1);
+        background: rgba(var(--accent-rgb), 0.1);
 
-        border: 1px solid #00ffff;
+        border: 1px solid var(--accent);
 
-        color: #00ffff;
+        color: var(--accent);
 
         text-decoration: none;
       }
 
       .btn-nav-login:hover,
       .btn-nav-register:hover {
-        background: #00ffff;
+        background: var(--accent);
 
-        color: #000;
+        color: var(--on-accent);
 
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+        box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.6);
 
         transform: translateY(-2px);
       }
 
       .btn-nav-logout {
-        background: rgba(255, 51, 51, 0.1);
+        background: rgba(var(--danger-rgb), 0.1);
 
-        border: 1px solid #ff3333;
+        border: 1px solid var(--danger);
 
-        color: #ff3333;
+        color: var(--danger);
 
         cursor: pointer;
       }
 
       .btn-nav-logout:hover {
-        background: #ff3333;
+        background: var(--danger);
 
         color: #fff;
-
-        box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
+        box-shadow: 0 0 20px rgba(var(--danger-rgb), 0.6);
 
         transform: translateY(-2px);
       }
 
       .operative-badge {
         color: #fff;
-
         font-size: 12px;
 
         letter-spacing: 2px;
 
-        background: rgba(0, 255, 255, 0.1);
+        background: rgba(var(--accent-rgb), 0.1);
 
         padding: 8px 20px;
 
         border-radius: 4px;
 
-        border: 1px solid rgba(0, 255, 255, 0.3);
+        border: 1px solid rgba(var(--accent-rgb), 0.3);
       }
 
       /* =========================================
@@ -342,17 +344,17 @@
 
         text-transform: uppercase;
 
-        color: #fff;
+        color: var(--text);
 
-        text-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        text-shadow: 0 0 30px rgba(var(--accent-rgb), 0.3);
       }
 
       h1 span {
-        color: #00ffff;
+        color: var(--accent);
       }
 
       p.subtitle {
-        color: #88ccdd;
+        color: var(--muted);
 
         font-size: 1.2rem;
 
@@ -366,11 +368,11 @@
       .btn-launch {
         display: inline-block;
 
-        background: rgba(0, 20, 30, 0.8);
+        background: var(--panel);
 
-        border: 2px solid #00ffff;
+        border: 2px solid var(--accent);
 
-        color: #00ffff;
+        color: var(--accent);
 
         padding: 18px 60px;
 
@@ -390,11 +392,11 @@
       }
 
       .btn-launch:hover {
-        background: #00ffff;
+        background: var(--accent);
 
-        color: #000;
+        color: var(--on-accent);
 
-        box-shadow: 0 0 40px rgba(0, 255, 255, 0.8);
+        box-shadow: 0 0 40px rgba(var(--accent-rgb), 0.8);
 
         transform: scale(1.05);
       }
@@ -416,15 +418,15 @@
 
         padding: 35px;
 
-        background: rgba(0, 10, 20, 0.72);
+        background: var(--panel);
 
-        border: 1px solid rgba(0, 255, 255, 0.2);
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
 
         border-radius: 16px;
 
         backdrop-filter: blur(15px);
 
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 20px 60px var(--shadow);
 
         display: none;
       }
@@ -440,11 +442,11 @@
 
         padding-bottom: 20px;
 
-        border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+        border-bottom: 1px solid rgba(var(--accent-rgb), 0.15);
       }
 
       .projects-title {
-        color: #00ffff;
+        color: var(--accent);
 
         font-size: 22px;
 
@@ -452,11 +454,11 @@
 
         text-transform: uppercase;
 
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+        text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.4);
       }
 
       .project-count {
-        color: #88ccdd;
+        color: var(--muted);
 
         font-size: 11px;
 
@@ -464,11 +466,11 @@
       }
 
       .create-project-btn {
-        background: rgba(0, 255, 255, 0.08);
+        background: rgba(var(--accent-rgb), 0.08);
 
-        border: 1px solid #00ffff;
+        border: 1px solid var(--accent);
 
-        color: #00ffff;
+        color: var(--accent);
 
         padding: 10px 18px;
 
@@ -486,11 +488,11 @@
       }
 
       .create-project-btn:hover {
-        background: #00ffff;
+        background: var(--accent);
 
-        color: #000;
+        color: var(--on-accent);
 
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.5);
       }
 
       #projects-grid {
@@ -502,9 +504,9 @@
       }
 
       .project-card {
-        background: rgba(0, 20, 30, 0.65);
+        background: var(--panel);
 
-        border: 1px solid rgba(0, 255, 255, 0.18);
+        border: 1px solid rgba(var(--accent-rgb), 0.18);
 
         border-radius: 10px;
 
@@ -531,7 +533,12 @@
         width: 100%;
         height: 2px;
 
-        background: linear-gradient(90deg, transparent, #00ffff, transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--accent),
+          transparent
+        );
 
         opacity: 0.5;
       }
@@ -539,9 +546,9 @@
       .project-card:hover {
         transform: translateY(-6px);
 
-        border-color: rgba(0, 255, 255, 0.7);
+        border-color: rgba(var(--accent-rgb), 0.7);
 
-        box-shadow: 0 15px 35px rgba(0, 255, 255, 0.12);
+        box-shadow: 0 15px 35px rgba(var(--accent-rgb), 0.12);
       }
 
       .project-icon {
@@ -553,21 +560,21 @@
         align-items: center;
         justify-content: center;
 
-        border: 1px solid rgba(0, 255, 255, 0.3);
+        border: 1px solid rgba(var(--accent-rgb), 0.3);
 
         border-radius: 8px;
 
-        color: #00ffff;
+        color: var(--accent);
 
         font-size: 20px;
 
         margin-bottom: 15px;
 
-        background: rgba(0, 255, 255, 0.05);
+        background: rgba(var(--accent-rgb), 0.05);
       }
 
       .project-name {
-        color: #fff;
+        color: var(--text);
 
         font-size: 18px;
 
@@ -579,7 +586,7 @@
       }
 
       .project-description {
-        color: #88ccdd;
+        color: var(--muted);
 
         font-size: 12px;
 
@@ -591,7 +598,7 @@
       }
 
       .project-date {
-        color: #557f88;
+        color: var(--muted);
 
         font-size: 10px;
 
@@ -625,45 +632,45 @@
       }
 
       .open-project {
-        background: rgba(0, 255, 255, 0.08);
+        background: rgba(var(--accent-rgb), 0.08);
 
-        border: 1px solid #00ffff;
+        border: 1px solid var(--accent);
 
-        color: #00ffff;
+        color: var(--accent);
       }
 
       .open-project:hover {
-        background: #00ffff;
+        background: var(--accent);
 
-        color: #000;
+        color: var(--on-accent);
       }
 
       .rename-project {
-        background: rgba(255, 255, 255, 0.04);
+        background: rgba(var(--accent-rgb), 0.06);
 
-        border: 1px solid #557f88;
+        border: 1px solid var(--muted);
 
-        color: #88ccdd;
+        color: var(--muted);
       }
 
       .rename-project:hover {
-        border-color: #fff;
+        border-color: var(--text);
 
-        color: #fff;
+        color: var(--text);
       }
 
       .delete-project {
-        background: rgba(255, 51, 51, 0.05);
+        background: rgba(var(--danger-rgb), 0.05);
 
-        border: 1px solid #ff3333;
+        border: 1px solid var(--danger);
 
-        color: #ff5555;
+        color: var(--danger);
       }
 
       .delete-project:hover {
-        background: #ff3333;
+        background: var(--danger);
 
-        color: #fff;
+        color: var(--text);
       }
 
       .empty-projects {
@@ -671,7 +678,7 @@
 
         padding: 60px 20px;
 
-        color: #88ccdd;
+        color: var(--muted);
       }
 
       .empty-projects-icon {
@@ -683,7 +690,7 @@
       }
 
       .empty-projects h3 {
-        color: #00ffff;
+        color: var(--accent);
 
         letter-spacing: 3px;
 
@@ -721,9 +728,9 @@
       }
 
       .feature-card {
-        background: rgba(0, 10, 20, 0.7);
+        background: var(--panel);
 
-        border: 1px solid rgba(0, 255, 255, 0.2);
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
 
         padding: 40px;
 
@@ -743,9 +750,9 @@
       .feature-card:hover {
         transform: translateZ(40px) rotateX(10deg) rotateY(-5deg);
 
-        border-color: #00ffff;
+        border-color: var(--accent);
 
-        box-shadow: -15px 15px 30px rgba(0, 255, 255, 0.15);
+        box-shadow: -15px 15px 30px rgba(var(--accent-rgb), 0.15);
       }
 
       .feature-icon {
@@ -753,7 +760,7 @@
 
         margin-bottom: 20px;
 
-        color: #00ffff;
+        color: var(--accent);
 
         transition: 0.4s;
 
@@ -761,7 +768,7 @@
       }
 
       .feature-title {
-        color: #fff;
+        color: var(--text);
 
         font-size: 1.2rem;
 
@@ -773,7 +780,7 @@
       }
 
       .feature-desc {
-        color: #88ccdd;
+        color: var(--muted);
 
         font-size: 0.95rem;
 
@@ -793,7 +800,7 @@
         width: 100vw;
         height: 100vh;
 
-        background: #020202;
+        background: var(--bg);
 
         z-index: 9999;
 
@@ -834,11 +841,11 @@
         width: 180px;
         height: 180px;
 
-        fill: rgba(0, 255, 255, 0);
+        fill: rgba(var(--accent-rgb), 0);
 
         stroke-width: 0.5;
 
-        filter: drop-shadow(0 0 10px #00ffff);
+        filter: drop-shadow(0 0 10px var(--accent));
 
         stroke-dasharray: 400;
 
@@ -857,7 +864,7 @@
 
         white-space: nowrap;
 
-        border-right: 4px solid #00ffff;
+        border-right: 4px solid var(--accent);
 
         max-width: 0;
 
@@ -871,7 +878,7 @@
       }
 
       .splash-typewriter {
-        color: #00ffff;
+        color: var(--accent);
 
         font-family: "Courier New", Courier, monospace;
 
@@ -881,7 +888,7 @@
 
         font-weight: bold;
 
-        text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+        text-shadow: 0 0 20px rgba(var(--accent-rgb), 0.8);
       }
 
       .aether-surge {
@@ -893,7 +900,7 @@
         width: 10px;
         height: 10px;
 
-        background: #00ffff;
+        background: var(--accent);
 
         border-radius: 50%;
 
@@ -907,7 +914,7 @@
       }
 
       .constructor-data {
-        color: #88ccdd;
+        color: var(--muted);
 
         font-size: 11px;
 
@@ -930,7 +937,7 @@
 
       @keyframes solidifyAnvil {
         100% {
-          fill: rgba(0, 255, 255, 0.2);
+          fill: rgba(var(--accent-rgb), 0.2);
 
           stroke-width: 1;
         }
@@ -968,13 +975,13 @@
         0% {
           opacity: 0.8;
 
-          filter: drop-shadow(0 0 10px #00ffff);
+          filter: drop-shadow(0 0 10px var(--accent));
         }
 
         100% {
           opacity: 1;
 
-          filter: drop-shadow(0 0 25px #00ffff);
+          filter: drop-shadow(0 0 25px var(--accent));
         }
       }
 
@@ -1128,7 +1135,7 @@
         }
 
         .splash-text-container {
-          border-right: 2px solid #00ffff;
+          border-right: 2px solid var(--accent);
         }
       }
 
@@ -1406,7 +1413,49 @@
           transition-duration: 0.01ms !important;
         }
       }
+
+      /* ===== 3D HERO ===== */
+      body {
+        perspective: none;
+      }
+
+      header {
+        min-height: 85vh;
+        justify-content: center;
+        animation: none;
+        transform: none;
+      }
+
+      #hero-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      @media (max-width: 899px) {
+        #hero-canvas {
+          opacity: 0.35;
+        }
+      }
+
+      @media (min-width: 900px) {
+        header {
+          align-items: flex-start;
+          text-align: left;
+          padding-left: 8vw;
+        }
+        header > :not(#hero-canvas) {
+          max-width: 46vw;
+        }
+        h1 {
+          font-size: clamp(2.6rem, 4.6vw, 4.2rem);
+        }
+      }
     </style>
+    <link rel="stylesheet" href="theme.css" />
   </head>
 
   <body>
@@ -1423,12 +1472,12 @@
             preserveAspectRatio="xMidYMid meet"
           >
             <path
-              stroke="#00ffff"
+              stroke="var(--accent)"
               d="M10,80 L20,80 L15,60 C15,60 10,60 10,55 L10,35 C10,35 10,30 15,30 L85,30 C85,30 90,30 90,35 L90,55 C90,55 90,60 85,60 L80,60 L75,80 L10,80 Z"
             />
 
             <path
-              stroke="rgba(0, 255, 255, 0.15)"
+              stroke="rgba(var(--accent-rgb), 0.15)"
               d="M50,15 L50,10 M50,10 L60,10 M60,10 L60,15 M60,15 L50,15 Z"
             />
           </svg>
@@ -1473,6 +1522,14 @@
         <a href="community.html" class="nav-link"> Community </a>
 
         <a href="contact.html" class="nav-link"> Contact </a>
+        <button
+          id="themeToggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Toggle theme"
+        >
+          ☀️
+        </button>
       </div>
 
       <div id="auth-section"></div>
@@ -1483,6 +1540,8 @@
     ========================================= -->
 
     <header>
+      <canvas id="hero-canvas"></canvas>
+
       <h1>Aether <span>Forge</span></h1>
 
       <p class="subtitle">
@@ -1522,6 +1581,202 @@
         </p>
       </div>
     </section>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import * as THREE from "three";
+
+      const header = document.querySelector("header");
+      const canvas = document.getElementById("hero-canvas");
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      try {
+        const renderer = new THREE.WebGLRenderer({
+          canvas,
+          alpha: true,
+          antialias: true,
+        });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+        camera.position.z = 9;
+
+        // ---------- Shapes ----------
+        const hero = new THREE.Group(); // everything that follows the mouse
+        scene.add(hero);
+
+        const knot = new THREE.Mesh(
+          new THREE.TorusKnotGeometry(1.1, 0.34, 220, 32),
+          new THREE.MeshStandardMaterial({ metalness: 0.2, roughness: 0.45 }),
+        );
+        hero.add(knot);
+
+        const shell = new THREE.Mesh(
+          new THREE.IcosahedronGeometry(2.1, 1),
+          new THREE.MeshBasicMaterial({
+            wireframe: true,
+            transparent: true,
+            opacity: 0.1,
+          }),
+        );
+        hero.add(shell);
+
+        // Orbit ring with small crystals travelling around it
+        const orbit = new THREE.Group();
+        orbit.rotation.set(1.1, 0.3, 0);
+        hero.add(orbit);
+
+        const ring = new THREE.Mesh(
+          new THREE.TorusGeometry(2.9, 0.012, 8, 160),
+          new THREE.MeshBasicMaterial(),
+        );
+        orbit.add(ring);
+
+        const satMat = new THREE.MeshStandardMaterial({
+          emissiveIntensity: 0.1,
+        });
+        const satellites = [];
+        for (let i = 0; i < 6; i++) {
+          const s = new THREE.Mesh(new THREE.OctahedronGeometry(0.16), satMat);
+          s.userData.offset = (i / 6) * Math.PI * 2;
+          orbit.add(s);
+          satellites.push(s);
+        }
+
+        // Floating particles
+        const COUNT = 100;
+        const pos = new Float32Array(COUNT * 3);
+        for (let i = 0; i < COUNT; i++) {
+          const r = 4 + Math.random() * 5;
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.acos(2 * Math.random() - 1);
+          pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+          pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+          pos[i * 3 + 2] = r * Math.cos(phi);
+        }
+        const starGeo = new THREE.BufferGeometry();
+        starGeo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+        const stars = new THREE.Points(
+          starGeo,
+          new THREE.PointsMaterial({
+            size: 0.03,
+            transparent: true,
+            opacity: 0.35,
+          }),
+        );
+        scene.add(stars);
+
+        // ---------- Lights ----------
+        scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+        const light1 = new THREE.PointLight(0xffffff, 60);
+        light1.position.set(5, 4, 6);
+        const light2 = new THREE.PointLight(0xffffff, 40);
+        light2.position.set(-5, -3, 5);
+        scene.add(light1, light2);
+
+        // ---------- Colours come from your theme variables ----------
+        function applyColors() {
+          const css = getComputedStyle(document.documentElement);
+          const accent = css.getPropertyValue("--accent").trim() || "#a78bfa";
+          const accent2 =
+            css.getPropertyValue("--accent-2").trim() || "#ff8a3d";
+
+          knot.material.color.set(accent);
+          shell.material.color.set(accent);
+          ring.material.color.set(accent2);
+          satMat.color.set(accent2);
+          satMat.emissive.set(accent2);
+          stars.material.color.set(accent);
+          light1.color.set(accent);
+          light2.color.set(accent2);
+          if (reduceMotion) frame();
+        }
+        // Re-colour when the toggle button changes data-theme
+        new MutationObserver(applyColors).observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ["data-theme"],
+        });
+
+        // ---------- Size and position ----------
+        function resize() {
+          const w = header.clientWidth;
+          const h = header.clientHeight;
+          renderer.setSize(w, h, false);
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+
+          const halfW =
+            Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) *
+            camera.position.z *
+            camera.aspect;
+          const wide = w >= 900;
+          hero.position.x = wide ? halfW * 0.5 : 0; // right side on desktop
+          hero.scale.setScalar(wide ? 1 : 0.75);
+          if (reduceMotion) frame();
+        }
+        new ResizeObserver(resize).observe(header);
+
+        // ---------- Mouse ----------
+        const mouse = { x: 0, y: 0 };
+        window.addEventListener("pointermove", (e) => {
+          mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+          mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
+        });
+
+        // ---------- Animation ----------
+        const clock = new THREE.Clock();
+        function frame() {
+          const t = clock.getElapsedTime();
+          knot.rotation.x = t * 0.25;
+          knot.rotation.y = t * 0.35;
+          shell.rotation.y = -t * 0.12;
+          shell.rotation.x = t * 0.08;
+
+          satellites.forEach((s) => {
+            const a = t * 0.5 + s.userData.offset;
+            s.position.set(Math.cos(a) * 2.9, Math.sin(a) * 2.9, 0);
+            s.rotation.x = t;
+            s.rotation.y = t * 1.2;
+          });
+
+          stars.rotation.y = t * 0.02;
+          hero.rotation.y += (mouse.x * 0.5 - hero.rotation.y) * 0.05;
+          hero.rotation.x += (mouse.y * 0.3 - hero.rotation.x) * 0.05;
+
+          renderer.render(scene, camera);
+        }
+
+        // Only animate while the hero is visible (saves battery and GPU)
+        let inView = true;
+        function updateLoop() {
+          const run = inView && !document.hidden && !reduceMotion;
+          renderer.setAnimationLoop(run ? frame : null);
+        }
+        new IntersectionObserver(([entry]) => {
+          inView = entry.isIntersecting;
+          updateLoop();
+        }).observe(header);
+        document.addEventListener("visibilitychange", updateLoop);
+
+        applyColors();
+        resize();
+        updateLoop();
+      } catch (err) {
+        // If WebGL isn't available, the page still works without the 3D scene
+        console.warn("3D hero disabled:", err);
+        canvas.remove();
+      }
+    </script>
 
     <!-- =========================================
          JAVASCRIPT

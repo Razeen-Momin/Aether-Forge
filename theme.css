@@ -1,50 +1,53 @@
-/* DARK (default) */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* ===== DARK (default): charcoal + muted violet ===== */
 :root {
-  --bg: #0b0a14;
-  --panel: rgba(20, 17, 36, 0.82);
-  --surface: #120f22; /* inputs, modal, card previews */
-  --surface-2: #1b1633; /* secondary buttons, preview glow */
-  --nav-bg: rgba(11, 10, 20, 0.7);
-  --line: rgba(167, 139, 250, 0.22);
-  --accent: #a78bfa;
-  --accent-rgb: 167, 139, 250;
-  --accent-2: #ff8a3d;
-  --accent-2-rgb: 255, 138, 61;
-  --text: #f1eefc;
-  --muted: #9a93b8;
-  --on-accent: #0b0a14; /* text on a filled accent button */
-  --danger: #ff5d73;
-  --danger-rgb: 255, 93, 115;
-  --shadow: rgba(0, 0, 0, 0.45);
-  --overlay: rgba(5, 4, 12, 0.72);
+  --bg: #0f1117;
+  --panel: #161922;
+  --surface: #1a1d28;
+  --surface-2: #212536;
+  --nav-bg: rgba(15, 17, 23, 0.85);
+  --line: rgba(255, 255, 255, 0.09);
+  --accent: #8f82f5;
+  --accent-rgb: 143, 130, 245;
+  --accent-2: #e8833a;
+  --accent-2-rgb: 232, 131, 58;
+  --text: #eceef5;
+  --muted: #98a0b3;
+  --on-accent: #0f1117;
+  --danger: #ef5b6d;
+  --danger-rgb: 239, 91, 109;
+  --shadow: rgba(0, 0, 0, 0.35);
+  --overlay: rgba(5, 6, 10, 0.7);
 }
 
-/* LIGHT */
+/* ===== LIGHT ===== */
 html[data-theme="light"] {
-  --bg: #f6f3fb;
-  --panel: rgba(255, 255, 255, 0.9);
+  --bg: #f7f8fb;
+  --panel: #ffffff;
   --surface: #ffffff;
-  --surface-2: #ece7f8;
-  --nav-bg: rgba(246, 243, 251, 0.8);
-  --line: rgba(91, 60, 196, 0.2);
-  --accent: #6d45e0;
-  --accent-rgb: 109, 69, 224;
-  --accent-2: #d9570b;
-  --accent-2-rgb: 217, 87, 11;
-  --text: #1a1530;
-  --muted: #6a6486;
+  --surface-2: #f0f2f7;
+  --nav-bg: rgba(247, 248, 251, 0.88);
+  --line: rgba(15, 23, 42, 0.1);
+  --accent: #5b4bd6;
+  --accent-rgb: 91, 75, 214;
+  --accent-2: #c2570f;
+  --accent-2-rgb: 194, 87, 15;
+  --text: #141827;
+  --muted: #5d6579;
   --on-accent: #ffffff;
-  --danger: #d6293f;
-  --danger-rgb: 214, 41, 63;
-  --shadow: rgba(60, 40, 120, 0.18);
-  --overlay: rgba(30, 20, 60, 0.45);
+  --danger: #c62a3f;
+  --danger-rgb: 198, 42, 63;
+  --shadow: rgba(20, 24, 39, 0.1);
+  --overlay: rgba(20, 24, 39, 0.4);
 }
 
+/* ===== THEME TOGGLE BUTTON ===== */
 .theme-toggle {
   width: 40px;
   height: 40px;
   border: 1px solid var(--line);
-  border-radius: 9px;
+  border-radius: 10px;
   background: transparent;
   color: var(--accent);
   font-size: 1.05rem;
@@ -53,4 +56,136 @@ html[data-theme="light"] {
 }
 .theme-toggle:hover {
   border-color: var(--accent);
+}
+
+/* ===== PROFESSIONAL POLISH (shared by all pages) ===== */
+
+/* Font */
+* {
+  font-family:
+    "Inter",
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+/* Remove the neon grid and glow backgrounds */
+.grid-container,
+.moving-grid {
+  display: none !important;
+}
+body::before,
+body::after {
+  display: none !important;
+}
+
+/* Logo and navigation: no glow, no all-caps */
+.logo-img,
+.logo-block:hover .logo-img {
+  filter: none;
+}
+.nav-link,
+.btn-nav-login,
+.btn-nav-register,
+.btn-nav-logout,
+.operative-badge {
+  text-transform: none;
+  letter-spacing: 0.2px;
+}
+.nav-link {
+  font-weight: 500;
+}
+.nav-link.active {
+  text-shadow: none;
+}
+.nav-link::after,
+.nav-link:after {
+  box-shadow: none;
+}
+
+/* Headings: normal case, tight spacing, no glow */
+h1,
+.page-header h1 {
+  text-transform: none;
+  letter-spacing: -0.02em;
+  text-shadow: none;
+  font-weight: 700;
+}
+.page-header p,
+.projects-title,
+.project-count,
+.feature-title,
+.empty-projects h3,
+.empty-projects p,
+.project-name,
+.project-date,
+.preview span,
+.splash-typewriter {
+  text-transform: none;
+  letter-spacing: 0.2px;
+  text-shadow: none;
+}
+
+/* Buttons: solid, calm, no glow */
+.btn-launch,
+.create-project-btn,
+.project-btn {
+  text-transform: none;
+  letter-spacing: 0.2px;
+  font-weight: 600;
+  border-radius: 10px;
+}
+.btn-launch {
+  padding: 14px 30px;
+  font-size: 1rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 1px solid var(--accent);
+}
+.btn-launch:hover {
+  background: var(--accent);
+  color: var(--on-accent);
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(var(--accent-rgb), 0.25);
+}
+.btn:hover,
+.btn-nav-register:hover,
+.btn-nav-logout:hover,
+.create-project-btn:hover {
+  box-shadow: none;
+}
+
+/* Cards and popups: soft shadows instead of glow */
+.asset,
+.project-card,
+.feature-card,
+.modal {
+  border-radius: 14px;
+}
+.asset {
+  box-shadow:
+    0 1px 2px var(--shadow),
+    0 8px 24px var(--shadow);
+}
+.modal {
+  box-shadow: 0 24px 60px var(--shadow);
+}
+.project-card:hover,
+.feature-card:hover {
+  box-shadow: 0 12px 30px var(--shadow);
+}
+
+/* Focus ring on inputs */
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.18);
+}
+
+/* Splash screen glow */
+.forge-wireframe,
+.constructor-data {
+  filter: none !important;
 }
