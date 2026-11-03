@@ -10,6 +10,7 @@ from backend.models.project import Project
 from backend.routes.project import projects_bp
 from backend.models.user import User
 from backend.models.community_asset import CommunityAsset
+from backend.models.email_change import EmailChangeRequest
 from backend.routes.community import community_bp
 from dotenv import load_dotenv
 from backend.routes.profile import profile_bp

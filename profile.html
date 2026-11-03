@@ -704,7 +704,8 @@
         return `
           <div class="card">
             <h2>Email address</h2>
-            <p class="sub">Confirm with your current password to change it.</p>
+            <p class="sub">We'll email a confirmation link to the new address. Your email only changes after you click it.</p>
+${u.pending_email ? `<div class="info-box" style="margin-bottom: 12px">Waiting for confirmation: <strong>${safe(u.pending_email)}</strong>. Open the link we emailed you (it expires after 1 hour).</div>` : ""}
             <form id="emailForm" class="form-grid">
               <div>
                 <label for="newEmail">Email</label>
@@ -714,7 +715,7 @@
                 <label for="emailPassword">Current password</label>
                 <input type="password" id="emailPassword" autocomplete="current-password" required />
               </div>
-              <button type="submit" class="btn-primary" id="emailBtn">Update email</button>
+              <button type="submit" class="btn-primary" id="emailBtn">Send confirmation link</button>
             </form>
           </div>`;
       }

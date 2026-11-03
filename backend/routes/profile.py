@@ -1,7 +1,12 @@
 # Profile page API: one-call summary + password change.
+import hashlib
+import os
 import re
+import secrets
+from datetime import datetime, timedelta
+
 import requests
-from flask import Blueprint, current_app, request, jsonify, session
+from flask import Blueprint, Response, current_app, request, jsonify, session
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,6 +15,8 @@ from backend.extensions import db
 from backend.models.user import User
 from backend.models.project import Project
 from backend.models.community_asset import CommunityAsset
+from backend.models.email_change import EmailChangeRequest
+from backend.email_service import send_email, EmailNotConfigured, EmailSendError
 from backend.routes.community import (
     _storage_config,
     _storage_headers,
@@ -30,6 +37,9 @@ MAX_USERNAME = 80
 MAX_EMAIL = 255
 EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 STORAGE_DELETE_CHUNK = 100
+EMAIL_LINK_MINUTES = 60
+EMAIL_RESEND_SECONDS = 60
+EMAIL_DAILY_LIMIT = 5
 
 def _current_user():
     """Return the logged-in user, or None (clearing a stale session)."""
@@ -81,6 +91,17 @@ def get_profile():
         .all()
     )
 
+    pending_request = (
+        EmailChangeRequest.query
+        .filter(
+            EmailChangeRequest.user_id == user.id,
+            EmailChangeRequest.used_at.is_(None),
+            EmailChangeRequest.expires_at > datetime.utcnow(),
+        )
+        .order_by(EmailChangeRequest.created_at.desc())
+        .first()
+    )
+
     is_google = bool(user.google_id)
 
     return jsonify({
@@ -92,6 +113,9 @@ def get_profile():
             "bio": user.bio,
             "sign_in_method": "google" if is_google else "password",
             "created_at": _iso(user.created_at),
+            "pending_email": (
+                pending_request.new_email if pending_request else None
+            ),
         },
         "stats": {
             "projects": project_count,
@@ -249,8 +273,54 @@ def change_username():
 # Change email (password accounts only)
 # --------------------------------------------------
 
+def _hash_token(token):
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
+def _public_base_url():
+    """Address used inside the emailed link, e.g. https://your-app.onrender.com"""
+    configured = (os.getenv("APP_BASE_URL") or "").strip().rstrip("/")
+    return configured or request.host_url.rstrip("/")
+
+
+def _result_page(title, message, ok):
+    # Only fixed text is placed in this page, never user input.
+    colour = "#5b4bd6" if ok else "#c62a3f"
+    html = f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title} | Aether Forge</title>
+<style>
+  body {{ margin:0; min-height:100vh; display:flex; align-items:center;
+         justify-content:center; background:#0f1117; color:#eceef5;
+         font-family:Inter,"Segoe UI",system-ui,sans-serif; }}
+  .box {{ max-width:420px; margin:20px; padding:32px; text-align:center;
+         background:#161922; border:1px solid rgba(255,255,255,.09);
+         border-radius:14px; }}
+  h1 {{ font-size:1.4rem; margin:0 0 12px; color:{colour}; }}
+  p {{ color:#98a0b3; line-height:1.6; margin:0 0 22px; }}
+  a {{ display:inline-block; background:{colour}; color:#fff;
+       padding:11px 22px; border-radius:10px; text-decoration:none;
+       font-weight:600; }}
+</style>
+</head>
+<body>
+  <div class="box">
+    <h1>{title}</h1>
+    <p>{message}</p>
+    <a href="/profile.html">Go to your profile</a>
+  </div>
+</body>
+</html>"""
+    return Response(html, mimetype="text/html")
+
+
 @profile_bp.route("/email", methods=["PUT"])
 def change_email():
+    """Step 1: verify the password, then email a confirmation link to the
+    NEW address. The account's email is NOT changed here."""
 
     user = _current_user()
 
@@ -302,20 +372,168 @@ def change_email():
             "message": "That email is already in use."
         }), 409
 
-    user.email = new_email
+    # --- limits, so this cannot be used to spam someone's inbox ---------
+    now = datetime.utcnow()
+
+    recent = (
+        EmailChangeRequest.query
+        .filter(
+            EmailChangeRequest.user_id == user.id,
+            EmailChangeRequest.created_at > now - timedelta(hours=24),
+        )
+        .order_by(EmailChangeRequest.created_at.desc())
+        .all()
+    )
+
+    if len(recent) >= EMAIL_DAILY_LIMIT:
+        return jsonify({
+            "message": "Too many email change requests today. Try again tomorrow."
+        }), 429
+
+    if recent and (now - recent[0].created_at).total_seconds() < EMAIL_RESEND_SECONDS:
+        return jsonify({
+            "message": "Please wait a minute before requesting another link."
+        }), 429
+
+    # Older pending links stop working as soon as a newer one is made
+    EmailChangeRequest.query.filter(
+        EmailChangeRequest.user_id == user.id,
+        EmailChangeRequest.used_at.is_(None),
+    ).update({"used_at": now}, synchronize_session=False)
+
+    token = secrets.token_urlsafe(32)
+
+    db.session.add(EmailChangeRequest(
+        user_id=user.id,
+        new_email=new_email,
+        token_hash=_hash_token(token),
+        created_at=now,
+        expires_at=now + timedelta(minutes=EMAIL_LINK_MINUTES),
+    ))
+    db.session.flush()
+
+    link = f"{_public_base_url()}/api/profile/email/confirm?token={token}"
+
+    text_body = (
+        f"Hi {user.username},\n\n"
+        "Someone (hopefully you) asked to use this address for your "
+        "Aether Forge account.\n\n"
+        f"Confirm the change here (valid for {EMAIL_LINK_MINUTES} minutes):\n"
+        f"{link}\n\n"
+        "If you did not ask for this, ignore this email and nothing "
+        "will change.\n"
+    )
+    html_body = (
+        f"<p>Hi {user.username},</p>"
+        "<p>Someone (hopefully you) asked to use this address for your "
+        "Aether Forge account.</p>"
+        f'<p><a href="{link}">Confirm my new email</a></p>'
+        f"<p>This link is valid for {EMAIL_LINK_MINUTES} minutes.</p>"
+        "<p>If you did not ask for this, ignore this email and nothing "
+        "will change.</p>"
+    )
+
+    try:
+        send_email(
+            new_email,
+            "Confirm your new Aether Forge email",
+            text_body,
+            html_body,
+        )
+    except EmailNotConfigured:
+        db.session.rollback()
+        current_app.logger.error("Email provider is not configured.")
+        return jsonify({
+            "message": "Email sending is not set up on the server yet."
+        }), 503
+    except EmailSendError:
+        db.session.rollback()
+        return jsonify({
+            "message": "We could not send the email. Please try again later."
+        }), 502
+
+    db.session.commit()
+
+    return jsonify({
+        "message": (
+            "We sent a confirmation link to the new address. "
+            "Your email changes after you click it."
+        ),
+        "pending_email": new_email,
+    }), 200
+
+
+@profile_bp.route("/email/confirm", methods=["GET"])
+def confirm_email():
+    """Step 2: the link inside the email. The token itself proves the person
+    can read mail sent to the new address, so no login is required."""
+
+    token = request.args.get("token", "")
+
+    invalid = lambda: (
+        _result_page(
+            "Link not valid",
+            "This confirmation link is invalid or has expired. "
+            "Please request a new one from your profile page.",
+            False,
+        ),
+        400,
+    )
+
+    if not token or len(token) > 200:
+        return invalid()
+
+    req = EmailChangeRequest.query.filter_by(
+        token_hash=_hash_token(token)
+    ).first()
+
+    now = datetime.utcnow()
+
+    if not req or req.used_at is not None or req.expires_at < now:
+        return invalid()
+
+    user = db.session.get(User, req.user_id)
+
+    if not user or user.google_id:
+        req.used_at = now
+        db.session.commit()
+        return invalid()
+
+    taken = User.query.filter(
+        func.lower(User.email) == req.new_email.lower(),
+        User.id != user.id
+    ).first()
+
+    if taken:
+        req.used_at = now
+        db.session.commit()
+        return _result_page(
+            "Email unavailable",
+            "That address is now used by another account, "
+            "so it could not be added.",
+            False,
+        ), 409
+
+    user.email = req.new_email
+    req.used_at = now
 
     try:
         db.session.commit()
     except IntegrityError:
         db.session.rollback()
-        return jsonify({
-            "message": "That email is already in use."
-        }), 409
+        return _result_page(
+            "Email unavailable",
+            "That address is now used by another account, "
+            "so it could not be added.",
+            False,
+        ), 409
 
-    return jsonify({
-        "message": "Email updated.",
-        "email": user.email,
-    }), 200
+    return _result_page(
+        "Email confirmed",
+        "Your new email address has been saved to your account.",
+        True,
+    )
+
 
 # --------------------------------------------------
 # Delete account
@@ -415,6 +633,10 @@ def delete_account():
     # --- 2. delete database rows (one transaction) --------------------
     try:
         CommunityAsset.query.filter_by(
+            user_id=user_id
+        ).delete(synchronize_session=False)
+
+        EmailChangeRequest.query.filter_by(
             user_id=user_id
         ).delete(synchronize_session=False)
 
