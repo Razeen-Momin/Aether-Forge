@@ -382,8 +382,8 @@
         font-size: 0.85rem;
         line-height: 1;
       }
-      .btn-small-text {
-        font-size: 0.78rem;
+      .actions .btn.small {
+        font-size: 0.7rem;
       }
 
       .actions .btn.full,
@@ -840,7 +840,7 @@
           <button class="btn ${own ? "" : "full"}" data-download="${asset.id}">⬇ Download</button>
           ${
             own && asset.file_format.toLowerCase() === "obj"
-              ? `<button class="btn btn-small-text" data-constructor="${asset.id}">Edit in Constructor</button>`
+              ? `<button class="btn small" data-constructor="${asset.id}">Edit in Constructor</button>`
               : ""
           }
           ${
