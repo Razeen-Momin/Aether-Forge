@@ -4,7 +4,7 @@ from datetime import datetime
 
 import requests
 from flask import Blueprint, current_app, jsonify, request, session
-from sqlalchemy import desc, or_
+from sqlalchemy import desc,func, or_
 from werkzeug.utils import secure_filename
 
 from backend.extensions import db
@@ -36,6 +36,30 @@ def _storage_headers(service_key, content_type=None):
         headers["Content-Type"] = content_type
     return headers
 
+DEFAULT_STORAGE_LIMIT_MB = 100
+
+
+def _storage_limit_bytes():
+    """Per-user storage limit. Set STORAGE_LIMIT_MB on the server to change it."""
+    try:
+        megabytes = float(os.getenv("STORAGE_LIMIT_MB", DEFAULT_STORAGE_LIMIT_MB))
+    except ValueError:
+        megabytes = DEFAULT_STORAGE_LIMIT_MB
+    if megabytes <= 0:
+        megabytes = DEFAULT_STORAGE_LIMIT_MB
+    return int(megabytes * 1024 * 1024)
+
+
+def _storage_used_bytes(user_id):
+    """Total size of all of this user's uploads (public and private)."""
+    total = db.session.query(
+        func.coalesce(func.sum(CommunityAsset.file_size), 0)
+    ).filter(CommunityAsset.user_id == user_id).scalar()
+    return int(total or 0)
+
+
+def _megabytes(size_bytes):
+    return f"{size_bytes / (1024 * 1024):.1f} MB"
 
 def _storage_error(response):
     try:
@@ -148,7 +172,19 @@ def upload_community_asset():
         return jsonify({"message": "The selected file is empty."}), 400
     if len(file_bytes) > MAX_UPLOAD_BYTES:
         return jsonify({"message": "File is too large. Maximum upload size is 50 MB."}), 413
-
+    
+    limit = _storage_limit_bytes()
+    used = _storage_used_bytes(user_id)
+    if used + len(file_bytes) > limit:
+        return jsonify({
+            "message": (
+                f"Not enough storage. You are using {_megabytes(used)} of "
+                f"{_megabytes(limit)} and this file is "
+                f"{_megabytes(len(file_bytes))}. Delete a model or "
+                "upload a smaller file."
+            )
+        }), 413
+    
     title = (request.form.get("title") or original_filename.rsplit(".", 1)[0]).strip()[:160]
     description = (request.form.get("description") or "").strip()[:1000]
     category = (request.form.get("category") or "Other").strip()[:60] or "Other"
@@ -366,6 +402,22 @@ def update_community_asset_file(asset_id):
 
     if len(file_data) > 50 * 1024 * 1024:
         return jsonify({"message": "File exceeds the 50 MB limit."}), 400
+
+    
+    # Only block when the new version is BIGGER and would pass the limit,
+    # so a user at the limit can still save a same-size or smaller edit.
+    old_size = asset.file_size or 0
+    if len(file_data) > old_size:
+        limit = _storage_limit_bytes()
+        used_by_others = _storage_used_bytes(user_id) - old_size
+        if used_by_others + len(file_data) > limit:
+            return jsonify({
+                "message": (
+                    f"Not enough storage to save this version. The limit is "
+                    f"{_megabytes(limit)}. Delete a model or reduce the "
+                    "model size."
+                )
+            }), 413
 
     supabase_url = os.getenv("SUPABASE_URL")
     service_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")

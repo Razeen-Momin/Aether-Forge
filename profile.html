@@ -406,6 +406,25 @@
         opacity: 0.5;
         cursor: not-allowed;
       }
+      .meter {
+        height: 10px;
+        border-radius: 999px;
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        overflow: hidden;
+      }
+      .meter-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        transition: width 0.4s ease;
+      }
+      .meter-fill.warn {
+        background: #d99a1f;
+      }
+      .meter-fill.full {
+        background: var(--danger);
+      }
       .info-box {
         color: var(--muted);
         font-size: 0.9rem;
@@ -619,6 +638,40 @@
           </div>`;
       }
 
+      function formatBytes(n) {
+        if (n < 1024) return `${n} B`;
+        if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+        const mb = n / (1024 * 1024);
+        return `${mb.toFixed(mb >= 10 ? 0 : 1)} MB`;
+      }
+
+      function storageSection(profile) {
+        const st = profile.storage;
+        if (!st) return "";
+
+        const pct =
+          st.limit_bytes > 0
+            ? Math.min(100, (st.used_bytes / st.limit_bytes) * 100)
+            : 0;
+        const level = pct >= 100 ? "full" : pct >= 80 ? "warn" : "";
+        const note =
+          pct >= 100
+            ? "You've reached your limit. Delete a model to upload more."
+            : pct >= 80
+              ? "You're close to your limit."
+              : "Counts all of your Community uploads, including private ones.";
+
+        return `
+          <section class="card">
+            <div class="card-head">
+              <h2>Storage</h2>
+              <span class="sub" style="margin: 0">${formatBytes(st.used_bytes)} of ${formatBytes(st.limit_bytes)} used</span>
+            </div>
+            <div class="meter"><div class="meter-fill ${level}" style="width: ${pct.toFixed(1)}%"></div></div>
+            <p class="sub" style="margin: 10px 0 0">${note}</p>
+          </section>`;
+      }
+
       function usernameSection(profile) {
         const u = profile.user;
         return `
@@ -758,7 +811,6 @@
               <div class="stat"><div class="num">${s.downloads}</div><div class="label">Total downloads received</div></div>
             </div>
           </section>
-
           <div class="two-col">
             <section class="card">
               <div class="card-head">
@@ -785,6 +837,8 @@
           ${passwordSection(profile)}
 
           ${deleteSection(profile)}
+          
+          ${storageSection(profile)}
 
         `;
 

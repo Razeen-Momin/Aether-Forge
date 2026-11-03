@@ -14,6 +14,8 @@ from backend.routes.community import (
     _storage_config,
     _storage_headers,
     _storage_error,
+    _storage_limit_bytes,
+    _storage_used_bytes,
 )
 
 
@@ -95,6 +97,10 @@ def get_profile():
             "projects": project_count,
             "uploads": upload_count,
             "downloads": int(download_total),
+        },
+        "storage": {
+            "used_bytes": _storage_used_bytes(user.id),
+            "limit_bytes": _storage_limit_bytes(),
         },
         "recent_projects": [
             {
