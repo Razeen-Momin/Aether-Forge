@@ -361,31 +361,31 @@
         border-radius: 5px;
       }
       .actions {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: 8px;
         width: 100%;
-        align-items: stretch;
+        margin-top: 14px;
       }
 
       .actions .btn {
-        width: 100%;
-        height: 42px;
+        flex: 1 1 calc(50% - 4px);
         min-width: 0;
-        padding: 0 5px;
+        height: 42px;
+        padding: 0 10px;
         margin: 0;
-
         display: flex;
         align-items: center;
         justify-content: center;
-
-        border-radius: 8px;
-        box-sizing: border-box;
-
-        font-size: 0.72rem;
-        font-weight: 700;
+        text-align: center;
         white-space: nowrap;
+        font-size: 0.85rem;
         line-height: 1;
+      }
+
+      .actions .btn.full,
+      .actions .btn:last-child:nth-child(odd) {
+        flex-basis: 100%;
       }
       .empty,
       .loading {
@@ -833,31 +833,17 @@
           Uploaded ${safe(date)}
         </div>
 
-       <div class="actions">
-  <button class="btn" data-download="${asset.id}">Download</button>
-  ${
-    own && asset.file_format.toLowerCase() === "obj"
-      ? `<button class="btn" data-edit="${asset.id}">Edit in Constructor</button>`
-      : ""
-  }
-  ${
-    own
-      ? `<button class="btn danger" data-delete="${asset.id}">Delete</button>`
-      : ""
-  }
-</div>
-
+        <div class="actions">
+          <button class="btn ${own ? "" : "full"}" data-download="${asset.id}">⬇ Download</button>
+          ${
+            own && asset.file_format.toLowerCase() === "obj"
+              ? `<button class="btn" data-constructor="${asset.id}">Edit in Constructor</button>`
+              : ""
+          }
           ${
             own
-              ? `
-      <button class="btn secondary" data-edit="${asset.id}">
-        ✎ Edit Details
-      </button>
-
-      <button class="btn danger" data-delete="${asset.id}">
-        🗑 Delete Upload
-      </button>
-    `
+              ? `<button class="btn secondary" data-edit="${asset.id}">✎ Edit Details</button>
+                 <button class="btn danger" data-delete="${asset.id}">🗑 Delete</button>`
               : ""
           }
         </div>
@@ -959,7 +945,7 @@
           }
         });
       grid.addEventListener("click", async (event) => {
-        const editInConstructor = event.target.closest("[data-edit]");
+        const editInConstructor = event.target.closest("[data-constructor]");
 
         if (editInConstructor) {
           if (!currentUser) {
@@ -967,7 +953,7 @@
             return;
           }
 
-          const assetId = editInConstructor.dataset.edit;
+          const assetId = editInConstructor.dataset.constructor;
 
           window.location.href = `AetherForge.html?community_asset_id=${encodeURIComponent(assetId)}`;
 
