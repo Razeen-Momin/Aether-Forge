@@ -12,6 +12,7 @@ from backend.models.user import User
 from backend.models.community_asset import CommunityAsset
 from backend.routes.community import community_bp
 from dotenv import load_dotenv
+from backend.routes.profile import profile_bp
 
 
 def create_app():
@@ -67,6 +68,7 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(projects_bp)
     app.register_blueprint(community_bp)
+    app.register_blueprint(profile_bp)
 
     # -----------------------------
     # Frontend files
@@ -130,6 +132,13 @@ def create_app():
           PROJECT_ROOT,
           "community.html"
     )
+
+    @app.route("/profile.html")
+    def profile_page():
+        return send_from_directory(
+            PROJECT_ROOT,
+            "profile.html"
+        )
 
     @app.route("/logo.png")
     def logo():
@@ -214,6 +223,23 @@ def create_app():
                             "ADD COLUMN google_id VARCHAR(255)"
                         )
                     )
+                # Member-since date for the profile page.
+                # Existing accounts have no real signup date, so they are
+                # backfilled with the moment this migration first runs.
+                if "created_at" not in user_columns:
+                    connection.execute(
+                        text(
+                            "ALTER TABLE users "
+                            "ADD COLUMN created_at TIMESTAMP"
+                        )
+                    )
+
+                connection.execute(
+                    text(
+                        "UPDATE users SET created_at = CURRENT_TIMESTAMP "
+                        "WHERE created_at IS NULL"
+                    )
+                )
 
                 # Ensure Google accounts and emails are unique
                 connection.execute(
@@ -231,9 +257,6 @@ def create_app():
                 )
 
     return app
-
-    return app
-
 
 # -----------------------------
 # Create Flask application

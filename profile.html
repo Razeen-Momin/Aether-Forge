@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AETHER FORGE | Profile</title>
+    <script src="theme.js"></script>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        overflow-x: hidden;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      /* ================= NAVIGATION ================= */
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 50px;
+        background: var(--nav-bg);
+        backdrop-filter: blur(15px);
+        border-bottom: 1px solid var(--line);
+        position: relative;
+        z-index: 100;
+        gap: 24px;
+      }
+      .logo-block {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        flex-shrink: 0;
+      }
+      .logo-img {
+        height: 64px;
+        width: auto;
+        opacity: 0.9;
+        transition:
+          transform 0.3s ease,
+          opacity 0.3s;
+      }
+      .logo-block:hover .logo-img {
+        transform: scale(1.04);
+        opacity: 1;
+      }
+      .nav-links {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+      }
+      .nav-link {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s;
+        position: relative;
+        padding-bottom: 5px;
+        white-space: nowrap;
+      }
+      .nav-link:hover,
+      .nav-link.active {
+        color: var(--accent);
+      }
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--accent);
+        transition: width 0.3s ease;
+      }
+      .nav-link:hover::after,
+      .nav-link.active::after {
+        width: 100%;
+      }
+      #auth-section {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        flex-shrink: 0;
+      }
+      .btn-nav-login,
+      .btn-nav-register,
+      .btn-nav-logout {
+        padding: 8px 18px;
+        font-size: 13px;
+        border-radius: 8px;
+        transition: 0.3s;
+        white-space: nowrap;
+      }
+      .btn-nav-login,
+      .btn-nav-register {
+        background: rgba(var(--accent-rgb), 0.1);
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .btn-nav-login:hover,
+      .btn-nav-register:hover {
+        background: var(--accent);
+        color: var(--on-accent);
+      }
+      .btn-nav-logout {
+        background: rgba(var(--danger-rgb), 0.1);
+        border: 1px solid var(--danger);
+        color: var(--danger);
+        cursor: pointer;
+      }
+      .btn-nav-logout:hover {
+        background: var(--danger);
+        color: #fff;
+      }
+      .operative-badge {
+        color: var(--text);
+        font-size: 13px;
+        background: rgba(var(--accent-rgb), 0.1);
+        padding: 8px 18px;
+        border-radius: 8px;
+        border: 1px solid rgba(var(--accent-rgb), 0.3);
+        white-space: nowrap;
+      }
+
+      /* ================= PAGE LAYOUT ================= */
+      main {
+        width: min(1100px, 92%);
+        margin: 40px auto 80px;
+        display: grid;
+        gap: 22px;
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow:
+          0 1px 2px var(--shadow),
+          0 8px 24px var(--shadow);
+        padding: 24px;
+      }
+
+      .card h2 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .card .sub {
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin-bottom: 16px;
+      }
+
+      /* ================= PROFILE HEADER ================= */
+      .pf-header {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        flex-wrap: wrap;
+      }
+      .pf-avatar {
+        width: 84px;
+        height: 84px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #fff;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        flex-shrink: 0;
+      }
+      .pf-info h1 {
+        font-size: 1.7rem;
+        margin-bottom: 4px;
+        word-break: break-word;
+      }
+      .pf-email {
+        color: var(--muted);
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+        word-break: break-all;
+      }
+      .pf-tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .tag {
+        font-size: 0.78rem;
+        padding: 4px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        background: var(--surface-2);
+      }
+
+      /* ================= STATS ================= */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .stat {
+        text-align: left;
+      }
+      .stat .num {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent);
+        line-height: 1.1;
+      }
+      .stat .label {
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin-top: 4px;
+      }
+
+      /* ================= LISTS ================= */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+      }
+      .card-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .card-head h2 {
+        margin: 0;
+      }
+      .card-head a {
+        font-size: 0.85rem;
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .card-head a:hover {
+        text-decoration: underline;
+      }
+
+      .list {
+        display: grid;
+        gap: 10px;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--surface);
+        text-decoration: none;
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+      }
+      a.row:hover {
+        border-color: var(--accent);
+        transform: translateY(-1px);
+      }
+      .row .title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .row .meta {
+        color: var(--muted);
+        font-size: 0.8rem;
+        margin-top: 2px;
+      }
+      .row .right {
+        color: var(--muted);
+        font-size: 0.8rem;
+        white-space: nowrap;
+        text-align: right;
+      }
+      .row .left {
+        min-width: 0;
+      }
+      .empty {
+        color: var(--muted);
+        font-size: 0.9rem;
+        padding: 18px;
+        text-align: center;
+        border: 1px dashed var(--line);
+        border-radius: 10px;
+      }
+      .empty a {
+        color: var(--accent);
+      }
+
+      /* ================= SETTINGS ================= */
+      .form-grid {
+        display: grid;
+        gap: 12px;
+        max-width: 420px;
+      }
+      label {
+        display: block;
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin-bottom: 5px;
+      }
+      input[type="password"] {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        color: var(--text);
+        padding: 12px 14px;
+        outline: none;
+        font-size: 0.95rem;
+      }
+      input[type="password"]:focus {
+        border-color: var(--accent);
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: var(--on-accent);
+        border: 1px solid var(--accent);
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        width: fit-content;
+        transition: filter 0.2s;
+      }
+      .btn-primary:hover {
+        filter: brightness(1.1);
+      }
+      .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .info-box {
+        color: var(--muted);
+        font-size: 0.9rem;
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--surface);
+      }
+
+      /* ================= NOTICE ================= */
+      .notice {
+        display: none;
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        border: 1px solid var(--accent);
+        background: rgba(var(--accent-rgb), 0.1);
+      }
+      .notice.show {
+        display: block;
+      }
+      .notice.error {
+        border-color: var(--danger);
+        background: rgba(var(--danger-rgb), 0.1);
+      }
+
+      .loading {
+        text-align: center;
+        color: var(--muted);
+        padding: 80px 0;
+      }
+
+      /* ================= RESPONSIVE ================= */
+      @media (max-width: 900px) {
+        nav {
+          flex-wrap: wrap;
+          padding: 14px 20px;
+        }
+        .nav-links {
+          order: 3;
+          width: 100%;
+          gap: 18px;
+          flex-wrap: wrap;
+        }
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 560px) {
+        .stats {
+          grid-template-columns: 1fr;
+        }
+        .pf-avatar {
+          width: 68px;
+          height: 68px;
+          font-size: 1.8rem;
+        }
+      }
+    </style>
+    <link rel="stylesheet" href="theme.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="index.html" class="logo-block"
+        ><img src="logo.png" alt="Aether Forge" class="logo-img"
+      /></a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="projects.html" class="nav-link">Projects</a>
+        <a href="index.html#features" class="nav-link">Features</a>
+        <a href="community.html" class="nav-link">Community</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <button
+          id="themeToggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Toggle theme"
+        >
+          ☀️
+        </button>
+      </div>
+      <div id="auth-section"></div>
+    </nav>
+
+    <main id="page">
+      <div id="notice" class="notice"></div>
+      <div class="loading" id="loading">Loading your profile…</div>
+    </main>
+
+    <script>
+      const page = document.getElementById("page");
+      const notice = document.getElementById("notice");
+
+      function showNotice(message, error = false) {
+        notice.textContent = message;
+        notice.className = "notice show" + (error ? " error" : "");
+        notice.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      function safe(value) {
+        return String(value ?? "").replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      }
+
+      function formatDate(value, withTime = false) {
+        if (!value) return "—";
+        const d = new Date(value);
+        if (Number.isNaN(d.getTime())) return "—";
+        return withTime
+          ? d.toLocaleString([], { dateStyle: "medium", timeStyle: "short" })
+          : d.toLocaleDateString([], { dateStyle: "medium" });
+      }
+
+      async function api(url, options = {}) {
+        const response = await fetch(url, {
+          credentials: "include",
+          ...options,
+        });
+        let data = {};
+        try {
+          data = await response.json();
+        } catch {}
+        if (!response.ok) {
+          const error = new Error(
+            data.message || `Request failed (${response.status})`,
+          );
+          error.status = response.status;
+          throw error;
+        }
+        return data;
+      }
+
+      function renderAuth(user) {
+        const authSection = document.getElementById("auth-section");
+        authSection.innerHTML = `
+          <a href="profile.html" class="operative-badge">${safe(user.username)}</a>
+          <button class="btn-nav-logout" id="logout-btn" type="button">Logout</button>`;
+        document
+          .getElementById("logout-btn")
+          .addEventListener("click", async () => {
+            try {
+              await api("/api/auth/logout", { method: "POST" });
+            } catch {}
+            window.location.href = "index.html";
+          });
+      }
+
+      function projectRows(projects) {
+        if (!projects.length) {
+          return `<div class="empty">No projects yet. <a href="projects.html">Create your first one</a>.</div>`;
+        }
+        return projects
+          .map(
+            (p) => `
+          <a class="row" href="AetherForge.html?project_id=${p.id}">
+            <div class="left">
+              <div class="title">${safe(p.name)}</div>
+              <div class="meta">Updated ${formatDate(p.updated_at)}</div>
+            </div>
+            <div class="right">Open →</div>
+          </a>`,
+          )
+          .join("");
+      }
+
+      function uploadRows(uploads) {
+        if (!uploads.length) {
+          return `<div class="empty">You haven't shared any models yet. <a href="community.html">Visit the Community</a>.</div>`;
+        }
+        return uploads
+          .map(
+            (u) => `
+          <a class="row" href="community.html">
+            <div class="left">
+              <div class="title">${safe(u.title)}</div>
+              <div class="meta">${safe((u.file_format || "").toUpperCase())} · ${safe(u.visibility)} · ${formatDate(u.created_at)}</div>
+            </div>
+            <div class="right">${u.downloads_count} downloads</div>
+          </a>`,
+          )
+          .join("");
+      }
+
+      function passwordSection(profile) {
+        if (!profile.can_change_password) {
+          return `
+            <div class="card">
+              <h2>Password</h2>
+              <p class="sub">Your account uses Google sign-in.</p>
+              <div class="info-box">
+                You sign in with Google, so there is no Aether Forge password
+                to change. Manage your password from your Google account.
+              </div>
+            </div>`;
+        }
+        return `
+          <div class="card">
+            <h2>Change password</h2>
+            <p class="sub">Use at least 6 characters.</p>
+            <form id="passwordForm" class="form-grid">
+              <div>
+                <label for="currentPassword">Current password</label>
+                <input type="password" id="currentPassword" autocomplete="current-password" required />
+              </div>
+              <div>
+                <label for="newPassword">New password</label>
+                <input type="password" id="newPassword" autocomplete="new-password" required minlength="6" />
+              </div>
+              <div>
+                <label for="confirmPassword">Confirm new password</label>
+                <input type="password" id="confirmPassword" autocomplete="new-password" required minlength="6" />
+              </div>
+              <button type="submit" class="btn-primary" id="passwordBtn">Update password</button>
+            </form>
+          </div>`;
+      }
+
+      function render(profile) {
+        const u = profile.user;
+        const s = profile.stats;
+        const initial = (u.username || "?").charAt(0).toUpperCase();
+
+        page.innerHTML = `
+          <div id="notice" class="notice"></div>
+
+          <section class="card">
+            <div class="pf-header">
+              <div class="pf-avatar">${safe(initial)}</div>
+              <div class="pf-info">
+                <h1>${safe(u.username)}</h1>
+                <div class="pf-email">${safe(u.email || "No email on file")}</div>
+                <div class="pf-tags">
+                  <span class="tag">${u.sign_in_method === "google" ? "Google account" : "Password account"}</span>
+                  <span class="tag">Member since ${formatDate(u.created_at)}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="stats">
+              <div class="stat"><div class="num">${s.projects}</div><div class="label">Projects</div></div>
+              <div class="stat"><div class="num">${s.uploads}</div><div class="label">Community uploads</div></div>
+              <div class="stat"><div class="num">${s.downloads}</div><div class="label">Total downloads received</div></div>
+            </div>
+          </section>
+
+          <div class="two-col">
+            <section class="card">
+              <div class="card-head">
+                <h2>Recent projects</h2>
+                <a href="projects.html">View all</a>
+              </div>
+              <div class="list">${projectRows(profile.recent_projects)}</div>
+            </section>
+
+            <section class="card">
+              <div class="card-head">
+                <h2>My Community uploads</h2>
+                <a href="community.html">Open Community</a>
+              </div>
+              <div class="list">${uploadRows(profile.recent_uploads)}</div>
+            </section>
+          </div>
+
+          ${passwordSection(profile)}
+        `;
+
+        // The notice element was re-created, so look it up again
+        window.noticeEl = document.getElementById("notice");
+        attachPasswordForm();
+      }
+
+      function attachPasswordForm() {
+        const form = document.getElementById("passwordForm");
+        if (!form) return;
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const current = document.getElementById("currentPassword").value;
+          const next = document.getElementById("newPassword").value;
+          const confirm = document.getElementById("confirmPassword").value;
+          const button = document.getElementById("passwordBtn");
+
+          if (next !== confirm) {
+            return flash("The new passwords do not match.", true);
+          }
+
+          button.disabled = true;
+          button.textContent = "Updating…";
+
+          try {
+            const data = await api("/api/profile/password", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                current_password: current,
+                new_password: next,
+              }),
+            });
+            form.reset();
+            flash(data.message || "Password updated.");
+          } catch (error) {
+            flash(error.message, true);
+          } finally {
+            button.disabled = false;
+            button.textContent = "Update password";
+          }
+        });
+      }
+
+      function flash(message, error = false) {
+        const el = window.noticeEl || notice;
+        el.textContent = message;
+        el.className = "notice show" + (error ? " error" : "");
+        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      async function init() {
+        try {
+          const profile = await api("/api/profile");
+          renderAuth(profile.user);
+          render(profile);
+        } catch (error) {
+          if (error.status === 401) {
+            window.location.href = "login.html";
+            return;
+          }
+          document.getElementById("loading").textContent =
+            "Could not load your profile. " + error.message;
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>

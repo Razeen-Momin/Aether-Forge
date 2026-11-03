@@ -1,6 +1,5 @@
-
 from backend.extensions import db
-
+from datetime import datetime
 
 class User(db.Model):
     __tablename__ = "users"
@@ -33,4 +32,11 @@ class User(db.Model):
         db.String(255),
         unique=True,
         nullable=True
+    )
+
+    # When the account was created (older accounts get a backfilled date)
+    created_at = db.Column(
+        db.DateTime,
+        nullable=True,
+        default=datetime.utcnow
     )

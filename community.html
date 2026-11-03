@@ -736,7 +736,7 @@
           if (!data.authenticated || !data.user)
             throw new Error("Not signed in");
           currentUser = data.user;
-          authSection.innerHTML = `<div class="operative-badge">OP: ${safe(currentUser.username)}</div><button class="btn-nav-logout" id="logout-btn" type="button">LOGOUT</button>`;
+          authSection.innerHTML = `<a href="profile.html" class="operative-badge" style="text-decoration: none; cursor: pointer" title="View profile">OP: ${safe(currentUser.username)}</a><button class="btn-nav-logout" id="logout-btn" type="button">LOGOUT</button>`;
           document
             .getElementById("logout-btn")
             .addEventListener("click", async () => {
