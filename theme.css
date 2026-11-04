@@ -194,3 +194,40 @@ select:focus {
   text-transform: none;
   letter-spacing: 0.2px;
 }
+
+/* ===== LOGO (SVG mark + text wordmark, follows the theme) ===== */
+.logo-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.logo-mark {
+  height: 48px;
+  width: 48px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.logo-block:hover .logo-mark {
+  transform: scale(1.05);
+}
+.logo-text {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.logo-text b {
+  font-weight: 500;
+  opacity: 0.75;
+}
+@media (max-width: 768px) {
+  .logo-mark {
+    height: 40px;
+    width: 40px;
+  }
+  .logo-text {
+    font-size: 1.15rem;
+  }
+}
