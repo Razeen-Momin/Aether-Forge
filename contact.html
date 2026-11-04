@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>AETHER FORGE | Contact</title>
+    <script src="theme.js"></script>
 
     <style>
       * {
@@ -19,9 +20,9 @@
       }
 
       body {
-        background: #020202;
+        background: var(--bg);
 
-        color: #ffffff;
+        color: var(--text);
 
         overflow-x: hidden;
 
@@ -62,8 +63,12 @@
         top: -50%;
 
         background-image:
-          linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+          linear-gradient(rgba(var(--accent-rgb), 0.1) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(var(--accent-rgb), 0.1) 1px,
+            transparent 1px
+          );
 
         background-size: 50px 50px;
 
@@ -93,7 +98,7 @@
 
         background: radial-gradient(
           circle,
-          rgba(0, 200, 255, 0.15) 0%,
+          rgba(var(--accent-rgb), 0.15) 0%,
           transparent 60%
         );
 
@@ -125,11 +130,11 @@
 
         padding: 20px 50px;
 
-        background: rgba(0, 5, 10, 0.6);
+        background: var(--nav-bg);
 
         backdrop-filter: blur(15px);
 
-        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        border-bottom: 1px solid rgba(var(--accent-rgb), 0.2);
 
         position: relative;
 
@@ -155,7 +160,7 @@
 
         opacity: 0.85;
 
-        filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.4));
+        filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.4));
 
         transition:
           transform 0.3s ease,
@@ -168,7 +173,7 @@
 
         opacity: 1;
 
-        filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.7));
+        filter: drop-shadow(0 0 15px rgba(var(--accent-rgb), 0.7));
       }
 
       .nav-links {
@@ -180,7 +185,7 @@
       }
 
       .nav-link {
-        color: #88ccdd;
+        color: var(--muted);
 
         text-decoration: none;
 
@@ -201,9 +206,9 @@
 
       .nav-link:hover,
       .nav-link.active {
-        color: #00ffff;
+        color: var(--accent);
 
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+        text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.6);
       }
 
       .nav-link::after {
@@ -218,9 +223,9 @@
 
         height: 2px;
 
-        background: #00ffff;
+        background: var(--accent);
 
-        box-shadow: 0 0 10px #00ffff;
+        box-shadow: 0 0 10px var(--accent);
 
         transition: width 0.3s ease;
       }
@@ -259,70 +264,70 @@
       }
 
       .btn-nav-login {
-        background: rgba(0, 255, 255, 0.05);
+        background: rgba(var(--accent-rgb), 0.05);
 
-        border: 1px solid #00ffff;
+        border: 1px solid var(--accent);
 
-        color: #00ffff;
+        color: var(--accent);
 
         text-decoration: none;
       }
 
       .btn-nav-register {
-        background: rgba(0, 255, 255, 0.1);
+        background: rgba(var(--accent-rgb), 0.1);
 
-        border: 1px solid #00ffff;
+        border: 1px solid var(--accent);
 
-        color: #00ffff;
+        color: var(--accent);
 
         text-decoration: none;
       }
 
       .btn-nav-login:hover,
       .btn-nav-register:hover {
-        background: #00ffff;
+        background: var(--accent);
 
-        color: #000;
+        color: var(--on-accent);
 
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+        box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.6);
 
         transform: translateY(-2px);
       }
 
       .btn-nav-logout {
-        background: rgba(255, 51, 51, 0.1);
+        background: rgba(var(--danger-rgb), 0.1);
 
-        border: 1px solid #ff3333;
+        border: 1px solid var(--danger);
 
-        color: #ff3333;
+        color: var(--danger);
 
         cursor: pointer;
       }
 
       .btn-nav-logout:hover {
-        background: #ff3333;
+        background: var(--danger);
 
         color: #fff;
 
-        box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
+        box-shadow: 0 0 20px rgba(var(--danger-rgb), 0.6);
 
         transform: translateY(-2px);
       }
 
       .operative-badge {
-        color: #fff;
+        color: var(--text);
 
         font-size: 12px;
 
         letter-spacing: 2px;
 
-        background: rgba(0, 255, 255, 0.1);
+        background: rgba(var(--accent-rgb), 0.1);
 
         padding: 8px 20px;
 
         border-radius: 4px;
 
-        border: 1px solid rgba(0, 255, 255, 0.3);
+        border: 1px solid rgba(var(--accent-rgb), 0.3);
       }
 
       /* =========================================
@@ -346,21 +351,21 @@
 
         text-transform: uppercase;
 
-        color: #ffffff;
+        color: var(--text);
 
-        text-shadow: 0 0 15px rgba(0, 255, 255, 0.25);
+        text-shadow: 0 0 15px rgba(var(--accent-rgb), 0.25);
 
         animation: contactTitleGlow 3s ease-in-out infinite alternate;
       }
 
       .contact-page-title span {
-        color: #00ffff;
+        color: var(--accent);
       }
 
       .contact-page-subtitle {
         margin-top: 12px;
 
-        color: #557f88;
+        color: var(--muted);
 
         font-size: 11px;
 
@@ -378,11 +383,11 @@
 
         margin: 25px auto 0;
 
-        background: #00ffff;
+        background: var(--accent);
 
         box-shadow:
-          0 0 10px #00ffff,
-          0 0 25px rgba(0, 255, 255, 0.5);
+          0 0 10px var(--accent),
+          0 0 25px rgba(var(--accent-rgb), 0.5);
 
         position: relative;
 
@@ -421,11 +426,11 @@
 
       @keyframes contactTitleGlow {
         from {
-          text-shadow: 0 0 10px rgba(0, 255, 255, 0.15);
+          text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.15);
         }
 
         to {
-          text-shadow: 0 0 25px rgba(0, 255, 255, 0.55);
+          text-shadow: 0 0 25px rgba(var(--accent-rgb), 0.55);
         }
       }
 
@@ -470,9 +475,9 @@
         ========================================= */
 
       .contact-panel {
-        background: rgba(0, 10, 15, 0.65);
+        background: var(--surface);
 
-        border: 1px solid rgba(0, 255, 255, 0.2);
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
 
         backdrop-filter: blur(15px);
 
@@ -480,7 +485,7 @@
 
         border-radius: 8px;
 
-        box-shadow: 0 0 30px rgba(0, 255, 255, 0.04);
+        box-shadow: 0 0 30px rgba(var(--accent-rgb), 0.04);
 
         transition:
           border 0.3s,
@@ -489,15 +494,15 @@
       }
 
       .contact-panel:hover {
-        border-color: rgba(0, 255, 255, 0.45);
+        border-color: rgba(var(--accent-rgb), 0.45);
 
-        box-shadow: 0 0 35px rgba(0, 255, 255, 0.08);
+        box-shadow: 0 0 35px rgba(var(--accent-rgb), 0.08);
 
         transform: translateY(-4px);
       }
 
       .panel-label {
-        color: #557f88;
+        color: var(--muted);
 
         font-size: 10px;
 
@@ -519,7 +524,7 @@
       }
 
       .panel-title span {
-        color: #00ffff;
+        color: var(--accent);
       }
 
       /* =========================================
@@ -537,9 +542,9 @@
 
         margin-bottom: 30px;
 
-        background: rgba(0, 255, 255, 0.05);
+        background: rgba(var(--accent-rgb), 0.05);
 
-        border: 1px solid rgba(0, 255, 255, 0.15);
+        border: 1px solid rgba(var(--accent-rgb), 0.15);
 
         border-radius: 4px;
       }
@@ -551,9 +556,9 @@
 
         border-radius: 50%;
 
-        background: #00ffff;
+        background: var(--accent);
 
-        box-shadow: 0 0 10px #00ffff;
+        box-shadow: 0 0 10px var(--accent);
 
         animation: statusPulse 1.5s infinite alternate;
       }
@@ -569,7 +574,7 @@
       }
 
       .status-text {
-        color: #00ffff;
+        color: var(--accent);
 
         font-size: 11px;
 
@@ -585,7 +590,7 @@
       }
 
       .info-label {
-        color: #557f88;
+        color: var(--muted);
 
         font-size: 10px;
 
@@ -597,7 +602,7 @@
       }
 
       .info-value {
-        color: #d7faff;
+        color: var(--text);
 
         font-size: 14px;
 
@@ -605,7 +610,7 @@
       }
 
       .info-value a {
-        color: #00ffff;
+        color: var(--accent);
 
         text-decoration: none;
 
@@ -613,7 +618,7 @@
       }
 
       .info-value a:hover {
-        text-shadow: 0 0 10px #00ffff;
+        text-shadow: 0 0 10px var(--accent);
       }
 
       /* =========================================
@@ -633,9 +638,9 @@
       .social-link {
         padding: 10px 15px;
 
-        border: 1px solid rgba(0, 255, 255, 0.2);
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
 
-        color: #88ccdd;
+        color: var(--muted);
 
         text-decoration: none;
 
@@ -649,13 +654,13 @@
       }
 
       .social-link:hover {
-        color: #00ffff;
+        color: var(--accent);
 
-        border-color: #00ffff;
+        border-color: var(--accent);
 
-        background: rgba(0, 255, 255, 0.05);
+        background: rgba(var(--accent-rgb), 0.05);
 
-        box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        box-shadow: 0 0 15px rgba(var(--accent-rgb), 0.2);
       }
 
       /* =========================================
@@ -669,7 +674,7 @@
       .form-group label {
         display: block;
 
-        color: #557f88;
+        color: var(--muted);
 
         font-size: 10px;
 
@@ -687,11 +692,11 @@
 
         padding: 14px 15px;
 
-        background: rgba(0, 0, 0, 0.55);
+        background: var(--bg);
 
-        border: 1px solid rgba(0, 255, 255, 0.2);
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
 
-        color: #ffffff;
+        color: var(--text);
 
         border-radius: 4px;
 
@@ -715,15 +720,15 @@
       .form-group input:focus,
       .form-group textarea:focus,
       .form-group select:focus {
-        border-color: #00ffff;
+        border-color: var(--accent);
 
-        box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);
+        box-shadow: 0 0 15px rgba(var(--accent-rgb), 0.15);
       }
 
       .form-group select option {
-        background: #020202;
+        background: var(--bg);
 
-        color: #ffffff;
+        color: var(--text);
       }
 
       /* =========================================
@@ -735,11 +740,11 @@
 
         padding: 16px;
 
-        background: rgba(0, 255, 255, 0.06);
+        background: rgba(var(--accent-rgb), 0.06);
 
-        border: 1px solid #00ffff;
+        border: 1px solid var(--accent);
 
-        color: #00ffff;
+        color: var(--accent);
 
         font-size: 12px;
 
@@ -755,11 +760,11 @@
       }
 
       .btn-transmit:hover {
-        background: #00ffff;
+        background: var(--accent);
 
-        color: #000000;
+        color: var(--on-accent);
 
-        box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+        box-shadow: 0 0 30px rgba(var(--accent-rgb), 0.6);
 
         transform: translateY(-2px);
       }
@@ -779,15 +784,15 @@
       .success-icon {
         font-size: 45px;
 
-        color: #00ffff;
+        color: var(--accent);
 
         margin-bottom: 20px;
 
-        text-shadow: 0 0 20px #00ffff;
+        text-shadow: 0 0 20px var(--accent);
       }
 
       .success-message h3 {
-        color: #ffffff;
+        color: var(--text);
 
         font-size: 20px;
 
@@ -797,7 +802,7 @@
       }
 
       .success-message p {
-        color: #557f88;
+        color: var(--muted);
 
         font-size: 12px;
 
@@ -821,9 +826,9 @@
 
         z-index: 5;
 
-        background: rgba(0, 10, 15, 0.65);
+        background: var(--surface);
 
-        border: 1px solid rgba(0, 255, 255, 0.2);
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
 
         backdrop-filter: blur(15px);
 
@@ -831,7 +836,7 @@
 
         border-radius: 8px;
 
-        box-shadow: 0 0 30px rgba(0, 255, 255, 0.04);
+        box-shadow: 0 0 30px rgba(var(--accent-rgb), 0.04);
       }
 
       .feedback-header {
@@ -851,11 +856,11 @@
       }
 
       .feedback-header h2 span {
-        color: #00ffff;
+        color: var(--accent);
       }
 
       .feedback-header p {
-        color: #557f88;
+        color: var(--muted);
 
         font-size: 11px;
 
@@ -875,7 +880,7 @@
         ========================================= */
 
       .rating-title {
-        color: #557f88;
+        color: var(--muted);
 
         font-size: 10px;
 
@@ -907,7 +912,7 @@
       .rating label {
         font-size: 30px;
 
-        color: #234047;
+        color: rgba(var(--accent-rgb), 0.25);
 
         cursor: pointer;
 
@@ -923,9 +928,9 @@
       .rating label:hover,
       .rating label:hover ~ label,
       .rating input:checked ~ label {
-        color: #00ffff;
+        color: var(--accent);
 
-        text-shadow: 0 0 12px #00ffff;
+        text-shadow: 0 0 12px var(--accent);
       }
 
       /* =========================================
@@ -951,9 +956,9 @@
       .feedback-types label {
         padding: 10px 15px;
 
-        border: 1px solid rgba(0, 255, 255, 0.2);
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
 
-        color: #557f88;
+        color: var(--muted);
 
         font-size: 10px;
 
@@ -967,19 +972,19 @@
       }
 
       .feedback-types label:hover {
-        color: #00ffff;
+        color: var(--accent);
 
-        border-color: #00ffff;
+        border-color: var(--accent);
       }
 
       .feedback-types input:checked + label {
-        color: #00ffff;
+        color: var(--accent);
 
-        border-color: #00ffff;
+        border-color: var(--accent);
 
-        background: rgba(0, 255, 255, 0.08);
+        background: rgba(var(--accent-rgb), 0.08);
 
-        box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);
+        box-shadow: 0 0 15px rgba(var(--accent-rgb), 0.15);
       }
 
       /* =========================================
@@ -991,9 +996,9 @@
 
         padding: 30px 20px;
 
-        border-top: 1px solid rgba(0, 255, 255, 0.1);
+        border-top: 1px solid rgba(var(--accent-rgb), 0.1);
 
-        color: #34555d;
+        color: var(--muted);
 
         font-size: 10px;
 
@@ -1104,6 +1109,118 @@
         }
       }
     </style>
+    <link rel="stylesheet" href="theme.css" />
+    <style>
+      /* Contact page: calm, professional polish (same direction as theme.css) */
+      .contact-page-title {
+        font-size: 2.8rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        text-transform: none;
+        text-shadow: none;
+        animation: none;
+      }
+      .contact-page-subtitle {
+        font-size: 14px;
+        letter-spacing: 0.2px;
+        text-transform: none;
+        animation: none;
+      }
+      .contact-title-line {
+        box-shadow: none;
+        height: 2px;
+        border-radius: 2px;
+        opacity: 0.8;
+      }
+      .contact-title-line::after {
+        display: none;
+      }
+      .panel-title,
+      .feedback-header h2 {
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        text-transform: none;
+      }
+      .panel-label,
+      .info-label,
+      .form-group label,
+      .rating-title,
+      .feedback-header p,
+      .social-link,
+      .feedback-types label,
+      .status-text {
+        letter-spacing: 0.3px;
+        text-transform: none;
+        font-size: 12px;
+      }
+      .info-value {
+        letter-spacing: 0.2px;
+      }
+      .info-value a:hover,
+      .rating label:hover,
+      .rating label:hover ~ label,
+      .rating input:checked ~ label,
+      .success-icon {
+        text-shadow: none;
+      }
+      .status-dot {
+        box-shadow: none;
+      }
+      .contact-panel,
+      .feedback-section {
+        border-radius: 14px;
+        backdrop-filter: none;
+        box-shadow:
+          0 1px 2px var(--shadow),
+          0 8px 24px var(--shadow);
+      }
+      .contact-panel:hover {
+        box-shadow:
+          0 1px 2px var(--shadow),
+          0 12px 30px var(--shadow);
+      }
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        border-radius: 10px;
+        color: var(--text);
+      }
+      .form-group input::placeholder,
+      .form-group textarea::placeholder {
+        color: var(--muted);
+        opacity: 0.7;
+      }
+      .btn-transmit {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--on-accent);
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+        text-transform: none;
+      }
+      .btn-transmit:hover {
+        background: var(--accent);
+        color: var(--on-accent);
+        filter: brightness(1.08);
+        box-shadow: 0 8px 24px rgba(var(--accent-rgb), 0.25);
+      }
+      .social-link:hover {
+        box-shadow: none;
+      }
+      .feedback-types input:checked + label {
+        box-shadow: none;
+      }
+      .success-message h3 {
+        letter-spacing: 0.5px;
+      }
+      footer {
+        letter-spacing: 0.5px;
+        text-transform: none;
+        font-size: 12px;
+      }
+    </style>
   </head>
 
   <body>
@@ -1136,6 +1253,15 @@
         <a href="community.html" class="nav-link"> Community </a>
 
         <a href="contact.html" class="nav-link active"> Contact </a>
+
+        <button
+          id="themeToggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Toggle theme"
+        >
+          ☀️
+        </button>
       </div>
 
       <div id="auth-section"></div>

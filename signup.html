@@ -1,74 +1,235 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AETHER FORGE | REGISTRATION</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AETHER FORGE | Sign up</title>
+    <script src="theme.js"></script>
     <style>
-        body { margin: 0; background: #020202; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; perspective: 1000px; }
-        .bg-gradient { position: absolute; width: 150vw; height: 150vh; background: conic-gradient(from 180deg at 50% 50%, #000 0deg, #001a22 180deg, #000 360deg); animation: spin 20s linear infinite reverse; z-index: -1; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        .auth-container { background: rgba(0, 15, 25, 0.6); border: 1px solid rgba(0, 255, 255, 0.3); padding: 50px 40px; border-radius: 15px; width: 90%; max-width: 380px; backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 255, 255, 0.05); transform: rotateX(-5deg); transition: 0.5s; }
-        .auth-container:hover { transform: rotateX(0deg) translateZ(20px); box-shadow: 0 30px 60px rgba(0, 255, 255, 0.15); }
-        
-        h2 { margin-top: 0; letter-spacing: 6px; font-size: 22px; color: #00ffff; text-shadow: 0 0 15px rgba(0, 255, 255, 0.5); text-align: center; margin-bottom: 35px; }
-        .input-group { margin-bottom: 25px; position: relative; }
-        label { display: block; font-size: 11px; color: #00ffff; margin-bottom: 8px; letter-spacing: 2px; text-transform: uppercase; }
-        input { width: 100%; padding: 12px 15px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(0,255,255,0.2); color: #fff; border-radius: 6px; box-sizing: border-box; outline: none; transition: 0.3s; font-size: 14px; letter-spacing: 1px; }
-        input:focus { border-color: #00ffff; box-shadow: 0 0 15px rgba(0, 255, 255, 0.3); background: rgba(0,20,30,0.8); }
-        
-        .btn-auth { width: 100%; padding: 15px; background: rgba(0, 255, 255, 0.1); border: 1px solid #00ffff; color: #00ffff; font-size: 14px; letter-spacing: 3px; cursor: pointer; border-radius: 6px; transition: 0.3s; text-transform: uppercase; font-weight: bold; }
-        .btn-auth:hover { background: #00ffff; color: #000; box-shadow: 0 0 25px rgba(0, 255, 255, 0.6); }
-        .toggle-text { margin-top: 25px; font-size: 12px; color: #88ccdd; display: block; text-decoration: none; text-align: center; letter-spacing: 1px; transition: 0.3s; }
-        .toggle-text:hover { color: #00ffff; text-shadow: 0 0 8px rgba(0,255,255,0.5); }
-        #status-message { margin-top: 20px; font-size: 12px; text-align: center; letter-spacing: 1px; min-height: 15px; }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        flex-direction: column;
+      }
+      .auth-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 28px;
+      }
+      .auth-top .logo-img {
+        height: 56px;
+        width: auto;
+        display: block;
+      }
+      .auth-main {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 24px 16px 48px;
+      }
+      .auth-container {
+        width: 100%;
+        max-width: 400px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 40px 36px;
+        box-shadow:
+          0 1px 2px var(--shadow),
+          0 16px 40px var(--shadow);
+      }
+      h2 {
+        margin: 0 0 6px;
+        font-size: 1.6rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        text-align: center;
+      }
+      .subtitle {
+        margin: 0 0 28px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .input-group {
+        margin-bottom: 18px;
+      }
+      label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      input {
+        width: 100%;
+        padding: 12px 14px;
+        background: var(--bg);
+        border: 1px solid var(--line);
+        color: var(--text);
+        border-radius: 10px;
+        outline: none;
+        font-size: 1rem;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.18);
+      }
+      .btn-auth {
+        width: 100%;
+        padding: 13px;
+        margin-top: 4px;
+        background: var(--accent);
+        border: 1px solid var(--accent);
+        color: var(--on-accent);
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        cursor: pointer;
+        transition:
+          filter 0.2s,
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .btn-auth:hover {
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 24px rgba(var(--accent-rgb), 0.25);
+      }
+      .toggle-text {
+        margin-top: 22px;
+        font-size: 0.9rem;
+        color: var(--muted);
+        display: block;
+        text-decoration: none;
+        text-align: center;
+        transition: color 0.2s;
+      }
+      .toggle-text:hover {
+        color: var(--accent);
+      }
+      #status-message {
+        margin-top: 16px;
+        font-size: 0.9rem;
+        text-align: center;
+        min-height: 20px;
+      }
+      #status-message.info {
+        color: var(--muted);
+      }
+      #status-message.ok {
+        color: var(--accent);
+      }
+      #status-message.err {
+        color: var(--danger);
+      }
+      .google-divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 22px 0 18px;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      .google-divider::before,
+      .google-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+      .google-button-wrapper {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
     </style>
-</head>
-<body>
-    <div class="bg-gradient"></div>
-    <div class="auth-container">
-        <h2>REGISTER PROFILE</h2>
+    <link rel="stylesheet" href="theme.css" />
+  </head>
+  <body>
+    <header class="auth-top">
+      <a href="index.html" class="logo-block">
+        <img src="logo.png" alt="Aether Forge" class="logo-img" />
+      </a>
+      <button
+        id="themeToggle"
+        class="theme-toggle"
+        type="button"
+        aria-label="Toggle theme"
+      >
+        ☀️
+      </button>
+    </header>
+    <main class="auth-main">
+      <div class="auth-container">
+        <h2>Create your account</h2>
+        <p class="subtitle">Start building with Aether Forge.</p>
         <form id="register-form">
-            <div class="input-group"><label>NEW OPERATIVE ID</label><input type="text" id="username" required autocomplete="off"></div>
-            <div class="input-group"><label>CREATE ACCESS CODES</label><input type="password" id="password" required></div>
-            <button type="submit" class="btn-auth">INITIALIZE RECORD</button>
+          <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" required autocomplete="username" />
+          </div>
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              required
+              autocomplete="new-password"
+            />
+          </div>
+          <button type="submit" class="btn-auth">Create account</button>
         </form>
-        <div id="status-message"></div>
-        <a href="login.html" class="toggle-text">Existing Operative? Return to Login.</a>
-    </div>
+        <div id="status-message" class="info"></div>
+        <a href="login.html" class="toggle-text"
+          >Already have an account? Sign in.</a
+        >
+      </div>
+    </main>
 
     <script>
-        const registerForm = document.getElementById('register-form');
-        const statusMessage = document.getElementById('status-message');
+      const registerForm = document.getElementById("register-form");
+      const statusMessage = document.getElementById("status-message");
 
-        registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            statusMessage.style.color = "#00ffff";
-            statusMessage.innerText = "TRANSMITTING CREDENTIALS...";
+      function setStatus(kind, text) {
+        statusMessage.className = kind;
+        statusMessage.innerText = text;
+      }
 
-            try {
-                const response = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    statusMessage.style.color = "#00ff00"; 
-                    statusMessage.innerText = "RECORD INITIALIZED. REDIRECTING...";
-                    setTimeout(() => window.location.href = 'login.html', 1500); 
-                } else {
-                    statusMessage.style.color = "#ff3333";
-                    statusMessage.innerText = "ERROR: " + data.message;
-                }
-            } catch (error) {
-                statusMessage.style.color = "#ff3333";
-                statusMessage.innerText = "NETWORK ERROR: MAINFRAME OFFLINE.";
-            }
-        });
+      registerForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        setStatus("info", "Creating your account...");
+
+        try {
+          const response = await fetch("/api/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+          });
+          const data = await response.json();
+          if (response.ok) {
+            setStatus("ok", "Account created. Redirecting to sign in...");
+            setTimeout(() => (window.location.href = "login.html"), 1500);
+          } else {
+            setStatus("err", data.message || "Registration failed.");
+          }
+        } catch (error) {
+          setStatus("err", "Network error: server unreachable.");
+        }
+      });
     </script>
-</body>
+  </body>
 </html>
