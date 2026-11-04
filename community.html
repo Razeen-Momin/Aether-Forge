@@ -6,6 +6,15 @@
     <title>AETHER FORGE | Community</title>
     <link rel="icon" type="image/svg+xml" href="logo.svg" />
     <script src="theme.js"></script>
+      <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="thumbnail.js"></script>
     <style>
       * {
         box-sizing: border-box;
@@ -529,6 +538,19 @@
           flex: 1;
         }
       }
+      .preview {
+        position: relative;
+        overflow: hidden;
+      }
+      .preview.has-image {
+        font-size: 0;
+      }
+      .preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
     </style>
     <link rel="stylesheet" href="theme.css" />
   </head>
@@ -798,9 +820,12 @@
 
         return `
     <article class="asset">
-      <div class="preview">
-        ◇
-        <span>${safe(asset.file_format.toUpperCase())} MODEL</span>
+        <div class="preview ${asset.thumbnail_url ? "has-image" : ""}" data-preview="${asset.id}">
+        ${
+          asset.thumbnail_url
+            ? `<img src="${safe(asset.thumbnail_url)}" alt="Preview of ${safe(asset.title)}" loading="lazy" />`
+            : `◇<span>${safe(asset.file_format.toUpperCase())} MODEL</span>`
+        }
       </div>
 
       <div class="asset-body">
@@ -849,6 +874,99 @@
     </article>
   `;
       }
+            // ---------- 3D preview images ----------
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      // thumbnail.js is a module, so it may finish loading after this script
+      async function getThumbnailTool() {
+        for (let i = 0; i < 50; i++) {
+          if (window.AFThumbnails) return window.AFThumbnails;
+          await sleep(100);
+        }
+        return null;
+      }
+
+      // Remember models whose preview failed, so we do not download them
+      // again on every visit (the file size changes if the model is edited).
+      const FAILED_KEY = "af-thumb-failed";
+      function failedList() {
+        try {
+          return JSON.parse(localStorage.getItem(FAILED_KEY) || "[]");
+        } catch {
+          return [];
+        }
+      }
+      function markFailed(asset) {
+        try {
+          const list = failedList();
+          list.push(`${asset.id}:${asset.file_size}`);
+          localStorage.setItem(FAILED_KEY, JSON.stringify(list.slice(-200)));
+        } catch {}
+      }
+
+      function setPreviewImage(box, url, title) {
+        box.classList.add("has-image");
+        box.innerHTML = `<img src="${safe(url)}" alt="Preview of ${safe(title)}" />`;
+      }
+
+      // Your own models that have no preview yet get one drawn here
+      // (older uploads, and models you just edited in the Constructor).
+      let backfillRunning = false;
+      async function backfillThumbnails(assets) {
+        if (!currentUser || backfillRunning) return;
+
+        const failed = failedList();
+        const todo = assets.filter(
+          (a) =>
+            a.creator_id === currentUser.id &&
+            !a.thumbnail_url &&
+            !failed.includes(`${a.id}:${a.file_size}`),
+        );
+        if (!todo.length) return;
+
+        backfillRunning = true;
+        try {
+          const tool = await getThumbnailTool();
+          if (!tool) return;
+
+          for (const asset of todo) {
+            if (!tool.supports(asset.file_format, asset.file_size)) continue;
+            try {
+              const source = await api(`/api/community/${asset.id}/source-url`);
+              const fileResponse = await fetch(source.url);
+              if (!fileResponse.ok) throw new Error("File download failed");
+
+              const png = await tool.generate(
+                await fileResponse.blob(),
+                asset.file_format,
+              );
+              if (!png) {
+                markFailed(asset);
+                continue;
+              }
+
+              const form = new FormData();
+              form.append("thumbnail", png, "thumbnail.png");
+              const saved = await api(`/api/community/${asset.id}/thumbnail`, {
+                method: "PUT",
+                body: form,
+              });
+
+              const box = document.querySelector(`[data-preview="${asset.id}"]`);
+              if (box && saved.thumbnail_url) {
+                setPreviewImage(box, saved.thumbnail_url, asset.title);
+              }
+            } catch (error) {
+              console.warn("Preview skipped for model", asset.id, error);
+              markFailed(asset);
+            }
+          }
+        } finally {
+          backfillRunning = false;
+        }
+      }
       async function loadAssets() {
         grid.innerHTML = '<div class="loading">Loading…</div>';
         hideNotice();
@@ -873,6 +991,7 @@
           grid.innerHTML = assets.length
             ? assets.map(card).join("")
             : `<div class="empty">${activeTab === "mine" ? "You have not uploaded any models yet." : "No models found. Try another search or upload the first model."}</div>`;
+          backfillThumbnails(assets); // runs in the background
         } catch (error) {
           grid.innerHTML =
             '<div class="empty">Could not load community models.</div>';
@@ -924,6 +1043,15 @@
           try {
             const uploadForm = document.getElementById("uploadForm");
             const form = new FormData(uploadForm);
+            
+            const extension = file.name.split(".").pop().toLowerCase();
+            const thumbs = await getThumbnailTool();
+            if (thumbs && thumbs.supports(extension, file.size)) {
+              button.textContent = "Creating preview…";
+              const png = await thumbs.generate(file, extension);
+              if (png) form.append("thumbnail", png, "thumbnail.png");
+              button.textContent = "Uploading…";
+            }
             await api("/api/community", { method: "POST", body: form });
             closeModal();
             uploadForm.reset();

@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime
 
 import requests
-from flask import Blueprint, current_app, jsonify, request, session
+from flask import Blueprint, Response, current_app, jsonify, request, session
 from sqlalchemy import desc,func, or_
 from werkzeug.utils import secure_filename
 
@@ -70,6 +70,96 @@ def _storage_error(response):
     return str(message or f"Storage request failed ({response.status_code}).")
 
 
+# ---------------------------------------------------------------
+# 3D preview images (thumbnails)
+# The visitor's browser draws the preview with Three.js and sends a small
+# PNG. It is stored next to the model file in the same private bucket.
+# ---------------------------------------------------------------
+MAX_THUMBNAIL_BYTES = 400 * 1024
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+
+
+def _thumbnail_path(asset):
+    return asset.storage_path.rsplit("/", 1)[0] + "/thumbnail.png"
+
+
+def _asset_storage_paths(asset):
+    """Every object in the bucket that belongs to this asset."""
+    paths = [asset.storage_path]
+    if asset.thumbnail_updated_at:
+        paths.append(_thumbnail_path(asset))
+    return paths
+
+
+def _read_thumbnail_upload():
+    """PNG bytes sent in the 'thumbnail' form field, or None if unusable."""
+    uploaded = request.files.get("thumbnail")
+    if not uploaded:
+        return None
+    data = uploaded.read(MAX_THUMBNAIL_BYTES + 1)
+    if not data or len(data) > MAX_THUMBNAIL_BYTES:
+        return None
+    if not data.startswith(PNG_SIGNATURE):
+        return None
+    return data
+
+
+def _store_thumbnail(asset, png_bytes):
+    """Upload the preview image. Returns True when it was stored."""
+    config = _storage_config()
+    if not config:
+        return False
+    project_url, service_key, bucket = config
+    try:
+        response = requests.post(
+            f"{project_url}/storage/v1/object/{bucket}/{_thumbnail_path(asset)}",
+            headers={
+                **_storage_headers(service_key, "image/png"),
+                "x-upsert": "true",
+            },
+            data=png_bytes,
+            timeout=30,
+        )
+    except requests.RequestException:
+        current_app.logger.exception("Thumbnail upload request failed.")
+        return False
+    if response.status_code not in (200, 201):
+        current_app.logger.error(
+            "Thumbnail upload rejected: %s", _storage_error(response)
+        )
+        return False
+    asset.thumbnail_updated_at = datetime.utcnow()
+    return True
+
+
+def _signed_url(config, storage_path, seconds=SIGNED_URL_SECONDS):
+    """Temporary link to a private object, or None if it could not be made."""
+    project_url, service_key, bucket = config
+    try:
+        response = requests.post(
+            f"{project_url}/storage/v1/object/sign/{bucket}/{storage_path}",
+            headers=_storage_headers(service_key, "application/json"),
+            json={"expiresIn": seconds},
+            timeout=20,
+        )
+    except requests.RequestException:
+        current_app.logger.exception("Supabase signed URL request failed.")
+        return None
+    if response.status_code not in (200, 201):
+        current_app.logger.error(
+            "Supabase signed URL failed: %s", _storage_error(response)
+        )
+        return None
+    signed_path = (response.json() or {}).get("signedURL")
+    if not signed_path:
+        return None
+    if signed_path.startswith(("http://", "https://")):
+        return signed_path
+    if not signed_path.startswith("/"):
+        signed_path = "/" + signed_path
+    return f"{project_url}/storage/v1{signed_path}"
+
+
 def _asset_json(asset, owner_name=None):
     return {
         "id": asset.id,
@@ -86,6 +176,11 @@ def _asset_json(asset, owner_name=None):
         ),
         "creator_id": asset.user_id,
         "created_at": asset.created_at.isoformat() + "Z",
+        "thumbnail_url": (
+            f"/api/community/{asset.id}/thumbnail"
+            f"?v={int(asset.thumbnail_updated_at.timestamp())}"
+            if asset.thumbnail_updated_at else None
+        ),
     }
 
 
@@ -247,6 +342,15 @@ def upload_community_asset():
         current_app.logger.exception("Could not save community asset metadata.")
         return jsonify({"message": "Upload reached storage, but its details could not be saved."}), 500
 
+    # Optional 3D preview made by the browser. It never blocks the upload.
+    png_bytes = _read_thumbnail_upload()
+    if png_bytes and _store_thumbnail(asset, png_bytes):
+        try:
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            current_app.logger.exception("Could not save the preview marker.")
+
     return jsonify({
         "message": "Community asset uploaded successfully.",
         "asset": _asset_json(asset),
@@ -295,6 +399,93 @@ def get_asset_download_url(asset_id):
     asset.downloads_count += 1
     db.session.commit()
     return jsonify({"download_url": download_url, "expires_in": SIGNED_URL_SECONDS}), 200
+
+@community_bp.get("/<int:asset_id>/thumbnail")
+def get_asset_thumbnail(asset_id):
+    asset = db.session.get(CommunityAsset, asset_id)
+    if not asset or not asset.thumbnail_updated_at:
+        return jsonify({"message": "No preview available."}), 404
+
+    is_owner = session.get("user_id") == asset.user_id
+    if asset.visibility == "private" and not is_owner:
+        return jsonify({"message": "This is a private model."}), 403
+
+    config = _storage_config()
+    if not config:
+        return jsonify({"message": "Community storage is not configured on the server."}), 503
+
+    url = _signed_url(config, _thumbnail_path(asset), 60)
+    if not url:
+        return jsonify({"message": "Could not load the preview."}), 502
+
+    try:
+        image = requests.get(url, timeout=20)
+    except requests.RequestException:
+        return jsonify({"message": "Could not load the preview."}), 502
+    if image.status_code != 200:
+        return jsonify({"message": "Preview not found."}), 404
+
+    result = Response(image.content, mimetype="image/png")
+    result.headers["X-Content-Type-Options"] = "nosniff"
+    # The address changes (?v=...) whenever the preview changes
+    result.headers["Cache-Control"] = (
+        "private, max-age=3600"
+        if asset.visibility == "private"
+        else "public, max-age=86400"
+    )
+    return result
+
+
+@community_bp.put("/<int:asset_id>/thumbnail")
+def update_asset_thumbnail(asset_id):
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"message": "Please log in first."}), 401
+
+    asset = CommunityAsset.query.filter_by(id=asset_id, user_id=user_id).first()
+    if not asset:
+        return jsonify({"message": "Asset not found or you do not own it."}), 404
+
+    png_bytes = _read_thumbnail_upload()
+    if not png_bytes:
+        return jsonify({"message": "Send a PNG preview image under 400 KB."}), 400
+
+    if not _storage_config():
+        return jsonify({"message": "Community storage is not configured on the server."}), 503
+
+    if not _store_thumbnail(asset, png_bytes):
+        return jsonify({"message": "Could not store the preview image."}), 502
+
+    db.session.commit()
+    return jsonify({"thumbnail_url": _asset_json(asset)["thumbnail_url"]}), 200
+
+
+@community_bp.get("/<int:asset_id>/source-url")
+def get_asset_source_url(asset_id):
+    """Owner-only link to the model file, used to draw its preview.
+    Unlike /download, this does not add to the download counter."""
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"message": "Please log in first."}), 401
+
+    asset = CommunityAsset.query.filter_by(id=asset_id, user_id=user_id).first()
+    if not asset:
+        return jsonify({"message": "Asset not found or you do not own it."}), 404
+
+    config = _storage_config()
+    if not config:
+        return jsonify({"message": "Community storage is not configured on the server."}), 503
+
+    url = _signed_url(config, asset.storage_path)
+    if not url:
+        return jsonify({"message": "Could not prepare the model file."}), 502
+
+    return jsonify({
+        "url": url,
+        "file_format": asset.file_format,
+        "file_size": asset.file_size,
+    }), 200
+
 
 @community_bp.get("/<int:asset_id>/edit")
 def get_asset_edit_url(asset_id):
@@ -436,6 +627,9 @@ def update_community_asset_file(asset_id):
 
         asset.file_size = len(file_data)
         asset.original_filename = filename
+        # The old preview no longer matches the model. It is redrawn the
+        # next time the owner opens the Community page.
+        asset.thumbnail_updated_at = None
 
         db.session.commit()
 
@@ -477,7 +671,7 @@ def delete_community_asset(asset_id):
         response = requests.delete(
             f"{project_url}/storage/v1/object/{bucket}",
             headers=_storage_headers(service_key, "application/json"),
-            json={"prefixes": [asset.storage_path]},
+            json={"prefixes": _asset_storage_paths(asset)},
             timeout=30,
         )
     except requests.RequestException:

@@ -578,11 +578,18 @@ def delete_account():
     user_id = user.id
 
     # --- 1. delete the uploaded files from Supabase -------------------
-    storage_paths = [
-        path for (path,) in db.session.query(
-            CommunityAsset.storage_path
-        ).filter(CommunityAsset.user_id == user_id).all()
-    ]
+    storage_paths = []
+    for storage_path, preview_time in db.session.query(
+        CommunityAsset.storage_path,
+        CommunityAsset.thumbnail_updated_at
+    ).filter(CommunityAsset.user_id == user_id).all():
+        storage_paths.append(storage_path)
+
+        # The 3D preview image is stored next to the model file
+        if preview_time:
+            storage_paths.append(
+                storage_path.rsplit("/", 1)[0] + "/thumbnail.png"
+            )
 
     if storage_paths:
         config = _storage_config()

@@ -186,6 +186,13 @@ def create_app():
             "theme.js"
         )
 
+    @app.route("/thumbnail.js")
+    def thumbnail_js():
+        return send_from_directory(
+            PROJECT_ROOT,
+            "thumbnail.js"
+        )
+
     # -----------------------------
     # Create database tables
     # -----------------------------
@@ -298,6 +305,24 @@ def create_app():
                         "ix_users_google_id_unique ON users (google_id)"
                     )
                 )
+                        # Marker for 3D preview images on community models
+        inspector = inspect(db.engine)
+
+        if "community_assets" in inspector.get_table_names():
+
+            asset_columns = [
+                column["name"]
+                for column in inspector.get_columns("community_assets")
+            ]
+
+            if "thumbnail_updated_at" not in asset_columns:
+                with db.engine.begin() as connection:
+                    connection.execute(
+                        text(
+                            "ALTER TABLE community_assets "
+                            "ADD COLUMN thumbnail_updated_at TIMESTAMP"
+                        )
+                    )
 
     return app
 

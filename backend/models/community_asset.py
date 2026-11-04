@@ -32,6 +32,10 @@ class CommunityAsset(db.Model):
     )
 
     downloads_count = db.Column(db.Integer, nullable=False, default=0)
+    
+    # Set when a 3D preview image exists for this model
+    thumbnail_updated_at = db.Column(db.DateTime, nullable=True)
+    
     created_at = db.Column(
         db.DateTime,
         nullable=False,
