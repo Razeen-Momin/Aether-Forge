@@ -4,6 +4,7 @@ import os
 import re
 import secrets
 from datetime import datetime, timedelta
+from html import escape
 
 import requests
 from flask import Blueprint, Response, current_app, request, jsonify, session
@@ -16,6 +17,7 @@ from backend.models.user import User
 from backend.models.project import Project
 from backend.models.community_asset import CommunityAsset
 from backend.models.email_change import EmailChangeRequest
+from backend.models.password_reset import PasswordResetToken
 from backend.email_service import send_email, EmailNotConfigured, EmailSendError
 from backend.routes.community import (
     _storage_config,
@@ -424,7 +426,7 @@ def change_email():
         "will change.\n"
     )
     html_body = (
-        f"<p>Hi {user.username},</p>"
+        f"<p>Hi {escape(user.username)},</p>"
         "<p>Someone (hopefully you) asked to use this address for your "
         "Aether Forge account.</p>"
         f'<p><a href="{link}">Confirm my new email</a></p>'
@@ -637,6 +639,10 @@ def delete_account():
         ).delete(synchronize_session=False)
 
         EmailChangeRequest.query.filter_by(
+            user_id=user_id
+        ).delete(synchronize_session=False)
+
+        PasswordResetToken.query.filter_by(
             user_id=user_id
         ).delete(synchronize_session=False)
 

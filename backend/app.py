@@ -14,6 +14,8 @@ from backend.models.email_change import EmailChangeRequest
 from backend.routes.community import community_bp
 from dotenv import load_dotenv
 from backend.routes.profile import profile_bp
+from backend.models.password_reset import PasswordResetToken
+from backend.routes.password_reset import password_reset_bp
 
 
 def create_app():
@@ -70,6 +72,7 @@ def create_app():
     app.register_blueprint(projects_bp)
     app.register_blueprint(community_bp)
     app.register_blueprint(profile_bp)
+    app.register_blueprint(password_reset_bp)
 
     # -----------------------------
     # Frontend files
@@ -104,6 +107,20 @@ def create_app():
         return send_from_directory(
             PROJECT_ROOT,
             "signup.html"
+        )
+
+    @app.route("/forgot-password.html")
+    def forgot_password_page():
+        return send_from_directory(
+            PROJECT_ROOT,
+            "forgot-password.html"
+        )
+
+    @app.route("/reset-password.html")
+    def reset_password_page():
+        return send_from_directory(
+            PROJECT_ROOT,
+            "reset-password.html"
         )
 
     @app.route("/AetherForge.html")

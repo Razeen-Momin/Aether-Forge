@@ -154,6 +154,18 @@
         justify-content: center;
         width: 100%;
       }
+      .forgot-row {
+        text-align: right;
+        margin: -6px 0 14px;
+      }
+      .forgot-link {
+        font-size: 0.85rem;
+        color: var(--muted);
+        text-decoration: none;
+      }
+      .forgot-link:hover {
+        color: var(--accent);
+      }
     </style>
     <link rel="stylesheet" href="theme.css" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -189,6 +201,11 @@
               required
               autocomplete="current-password"
             />
+          </div>
+          <div class="forgot-row">
+            <a href="forgot-password.html" class="forgot-link"
+              >Forgot password?</a
+            >
           </div>
           <button type="submit" class="btn-auth">Sign in</button>
         </form>
