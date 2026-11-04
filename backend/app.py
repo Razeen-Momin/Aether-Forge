@@ -165,6 +165,13 @@ def create_app():
             "logo.png"
         )
 
+    @app.route("/logo.svg")
+    def logo_svg():
+        return send_from_directory(
+            PROJECT_ROOT,
+            "logo.svg"
+        )
+
     @app.route("/theme.css")
     def theme_css():
         return send_from_directory(

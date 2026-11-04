@@ -404,20 +404,6 @@ def update_community_asset_file(asset_id):
         return jsonify({"message": "File exceeds the 50 MB limit."}), 400
 
     
-    # Only block when the new version is BIGGER and would pass the limit,
-    # so a user at the limit can still save a same-size or smaller edit.
-    old_size = asset.file_size or 0
-    if len(file_data) > old_size:
-        limit = _storage_limit_bytes()
-        used_by_others = _storage_used_bytes(user_id) - old_size
-        if used_by_others + len(file_data) > limit:
-            return jsonify({
-                "message": (
-                    f"Not enough storage to save this version. The limit is "
-                    f"{_megabytes(limit)}. Delete a model or reduce the "
-                    "model size."
-                )
-            }), 413
 
     supabase_url = os.getenv("SUPABASE_URL")
     service_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
