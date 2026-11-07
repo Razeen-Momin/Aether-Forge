@@ -199,6 +199,13 @@ def create_app():
             "viewer.js"
         )
 
+    @app.route("/editor-theme.css")
+    def editor_theme_css():
+        return send_from_directory(
+            PROJECT_ROOT,
+            "editor-theme.css"
+        )
+
     # -----------------------------
     # Create database tables
     # -----------------------------

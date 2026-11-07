@@ -8,7 +8,8 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
 
-    <title>AETHER FORGE v11 | 3D ENGINEERING WORKSPACE</title>
+    <title>Aether Forge | 3D Workspace</title>
+    <script src="theme.js"></script>
 
     <style>
       * {
@@ -1623,7 +1624,8 @@
         }
       }
     </style>
-
+    <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="editor-theme.css" />
     <script type="importmap">
       {
         "imports": {
@@ -1637,7 +1639,7 @@
   <body>
     <div id="hud"></div>
 
-    <a href="index.html" class="home-btn"> ᐊ MAIN TERMINAL </a>
+    <a href="index.html" class="home-btn"> ← Home </a>
 
     <header id="professional-header" aria-label="Aether Forge workspace header">
       <div class="brand-block">
@@ -1655,6 +1657,15 @@
         >
       </div>
       <div class="header-actions">
+              <div class="header-actions">
+        <button
+          id="themeToggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Toggle theme"
+        >
+          ☀️
+        </button>
         <button
           type="button"
           class="header-btn"
@@ -1978,7 +1989,7 @@
 
           <label class="prop-label">NEON CORE</label>
 
-          <input type="color" id="prop-color" value="#00ffff" />
+          <input type="color" id="prop-color" value="#8f82f5" />
 
           <label class="prop-label">PHOTON INTENSITY</label>
 
@@ -2393,7 +2404,58 @@
 
       const grid = new THREE.GridHelper(10000, 10000, 0x647987, 0xaab7bf);
 
-      scene.add(grid);
+            scene.add(grid);
+
+      /* THEME: viewport colours follow the dark / light button */
+
+      const GRID_DIVISIONS = 10000; // must match the GridHelper above
+
+      const SCENE_THEMES = {
+        dark: {
+          background: 0x151822,
+          fog: 0x151822,
+          gridCenter: 0x4a5070,
+          gridLines: 0x262a3b,
+        },
+        light: {
+          background: 0xe7e9f1,
+          fog: 0xdfe2ec,
+          gridCenter: 0x8c93ad,
+          gridLines: 0xc5c9d9,
+        },
+      };
+
+      function applySceneTheme() {
+        const name =
+          document.documentElement.getAttribute("data-theme") === "light"
+            ? "light"
+            : "dark";
+        const t = SCENE_THEMES[name];
+
+        scene.background = new THREE.Color(t.background);
+        scene.fog.color.set(t.fog);
+
+        // The grid stores one colour per line end, so we repaint them
+        const colors = grid.geometry.getAttribute("color");
+        const centerColor = new THREE.Color(t.gridCenter);
+        const lineColor = new THREE.Color(t.gridLines);
+        const centerIndex = GRID_DIVISIONS / 2;
+
+        for (let i = 0; i <= GRID_DIVISIONS; i++) {
+          const c = i === centerIndex ? centerColor : lineColor;
+          for (let v = 0; v < 4; v++) {
+            colors.setXYZ(i * 4 + v, c.r, c.g, c.b);
+          }
+        }
+        colors.needsUpdate = true;
+      }
+
+      applySceneTheme();
+
+      new MutationObserver(applySceneTheme).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
+      });
 
       /* CONSTRUCTION */
 
@@ -2450,9 +2512,9 @@
 ========================================= */
 
       function createMaterial(
-        color = 0x00ffff,
-        glow = 0.5,
-        opacity = 0.8,
+        color = 0x8f82f5,
+        glow = 0,
+        opacity = 1,  
         wireframe = false,
       ) {
         return new THREE.MeshStandardMaterial({
@@ -5840,7 +5902,7 @@
           ),
         );
         const pointMat = new THREE.PointsMaterial({
-          color: 0x008caf,
+          color: 0x7c6ff0,
           size: 0.11,
           sizeAttenuation: true,
           transparent: true,
@@ -6114,7 +6176,7 @@
         geo.setAttribute("position", new THREE.Float32BufferAttribute(arr, 3));
         geo.computeVertexNormals();
         const mat = new THREE.MeshBasicMaterial({
-          color: 0x00a9d1,
+          color: 0x8f82f5,
           transparent: true,
           opacity: 0.28,
           depthTest: false,
