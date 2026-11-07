@@ -70,7 +70,7 @@ function geometryToMesh(geometry) {
   return new THREE.Mesh(geometry, neutralMaterial(geometry));
 }
 
-async function loadModel(blob, format) {
+export async function loadModel(blob, format) {
   if (format === "obj") {
     const text = await blob.text();
     const group = new OBJLoader().parse(text);
@@ -106,9 +106,10 @@ function disposeObject(object) {
   object.traverse((child) => {
     if (child.geometry) child.geometry.dispose();
     if (child.material) {
-      (Array.isArray(child.material) ? child.material : [child.material]).forEach(
-        (m) => materials.add(m),
-      );
+      (Array.isArray(child.material)
+        ? child.material
+        : [child.material]
+      ).forEach((m) => materials.add(m));
     }
   });
   materials.forEach((m) => {
@@ -142,8 +143,14 @@ async function drawPreview(blob, format) {
   const radius = box.getSize(new THREE.Vector3()).length() / 2 || 1;
   holder.position.sub(center);
 
-  const camera = new THREE.PerspectiveCamera(35, WIDTH / HEIGHT, radius / 100, radius * 100);
-  const distance = (radius / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.05;
+  const camera = new THREE.PerspectiveCamera(
+    35,
+    WIDTH / HEIGHT,
+    radius / 100,
+    radius * 100,
+  );
+  const distance =
+    (radius / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.05;
   camera.position.set(1, 0.7, 1).normalize().multiplyScalar(distance);
   camera.lookAt(0, 0, 0);
 
@@ -154,7 +161,9 @@ async function drawPreview(blob, format) {
 
   gl.render(scene, camera);
 
-  const png = await new Promise((resolve) => gl.domElement.toBlob(resolve, "image/png"));
+  const png = await new Promise((resolve) =>
+    gl.domElement.toBlob(resolve, "image/png"),
+  );
 
   disposeObject(holder);
   return png;
@@ -169,7 +178,9 @@ let queue = Promise.resolve();
 function withTimeout(promise, ms) {
   return Promise.race([
     promise,
-    new Promise((_, reject) => setTimeout(() => reject(new Error("Preview timed out")), ms)),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Preview timed out")), ms),
+    ),
   ]);
 }
 

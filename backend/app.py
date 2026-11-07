@@ -192,6 +192,12 @@ def create_app():
             PROJECT_ROOT,
             "thumbnail.js"
         )
+    @app.route("/viewer.js")
+    def viewer_js():
+        return send_from_directory(
+            PROJECT_ROOT,
+            "viewer.js"
+        )
 
     # -----------------------------
     # Create database tables

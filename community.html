@@ -15,6 +15,7 @@
       }
     </script>
     <script type="module" src="thumbnail.js"></script>
+    <script type="module" src="viewer.js"></script>
     <style>
       * {
         box-sizing: border-box;
@@ -551,6 +552,142 @@
         object-fit: contain;
         display: block;
       }
+            /* 3D viewer pop-up */
+      .preview.viewable {
+        cursor: pointer;
+      }
+      .preview.viewable::after {
+        content: "View in 3D";
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        padding: 5px 11px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        border-radius: 999px;
+        background: var(--accent);
+        color: var(--on-accent);
+        opacity: 0;
+        transform: translateY(4px);
+        transition: 0.2s;
+        pointer-events: none;
+      }
+      .preview.viewable:hover::after {
+        opacity: 1;
+        transform: none;
+      }
+      @media (hover: none) {
+        .preview.viewable::after {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .viewer-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: var(--overlay);
+        backdrop-filter: blur(4px);
+      }
+      .viewer-backdrop.show {
+        display: flex;
+      }
+      .viewer {
+        width: min(980px, 100%);
+        max-height: calc(100vh - 40px);
+        display: flex;
+        flex-direction: column;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: 0 24px 60px var(--shadow);
+        overflow: hidden;
+      }
+      .viewer-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--line);
+      }
+      .viewer-head h2 {
+        font-size: 1.15rem;
+        margin: 0 0 2px;
+        overflow-wrap: anywhere;
+      }
+      .viewer-head p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+      .viewer-close {
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--text);
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      .viewer-close:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .viewer-stage {
+        position: relative;
+        height: min(62vh, 560px);
+        background: radial-gradient(circle at 50% 40%, var(--surface-2), var(--surface) 75%);
+      }
+      .viewer-stage canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        outline: none;
+        touch-action: none;
+      }
+      .viewer-status {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        text-align: center;
+        color: var(--muted);
+        pointer-events: none;
+      }
+      .viewer-status:empty {
+        display: none;
+      }
+      .viewer-tools {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 20px;
+        border-top: 1px solid var(--line);
+      }
+      .viewer-tools .btn {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+      }
+      .viewer-hint {
+        margin-left: auto;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+      @media (max-width: 640px) {
+        .viewer-hint {
+          width: 100%;
+          margin-left: 0;
+        }
+      }
     </style>
     <link rel="stylesheet" href="theme.css" />
   </head>
@@ -721,6 +858,27 @@
         </div>
       </form>
     </div>
+        <!-- 3D viewer pop-up -->
+    <div class="viewer-backdrop" id="viewerModal" aria-hidden="true">
+      <div class="viewer" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+        <div class="viewer-head">
+          <div>
+            <h2 id="viewerTitle">3D model</h2>
+            <p id="viewerMeta"></p>
+          </div>
+          <button class="viewer-close" id="viewerClose" type="button" aria-label="Close viewer">✕</button>
+        </div>
+        <div class="viewer-stage" id="viewerStage">
+          <div class="viewer-status" id="viewerStatus"></div>
+        </div>
+        <div class="viewer-tools">
+          <button type="button" class="btn secondary" id="viewerRotate">Auto-rotate: on</button>
+          <button type="button" class="btn secondary" id="viewerWire">Wireframe: off</button>
+          <button type="button" class="btn secondary" id="viewerReset">Reset view</button>
+          <span class="viewer-hint">Drag to rotate · Scroll to zoom · Right-drag to move</span>
+        </div>
+      </div>
+    </div>
 
     <script>
       const API = "";
@@ -820,8 +978,8 @@
 
         return `
     <article class="asset">
-        <div class="preview ${asset.thumbnail_url ? "has-image" : ""}" data-preview="${asset.id}">
-        ${
+            <div class="preview ${asset.thumbnail_url ? "has-image" : ""} ${canView(asset) ? "viewable" : ""}" data-preview="${asset.id}" ${canView(asset) ? `data-view="${asset.id}" title="Click to view in 3D"` : ""}>
+      ${
           asset.thumbnail_url
             ? `<img src="${safe(asset.thumbnail_url)}" alt="Preview of ${safe(asset.title)}" loading="lazy" />`
             : `◇<span>${safe(asset.file_format.toUpperCase())} MODEL</span>`
@@ -1193,6 +1351,36 @@
             button.textContent = "Save Changes";
           }
         });
+              // ---------- 3D viewer ----------
+      const VIEWABLE_FORMATS = ["obj", "glb", "stl", "ply"];
+      function canView(asset) {
+        return (
+          VIEWABLE_FORMATS.includes(String(asset.file_format).toLowerCase()) &&
+          (asset.file_size || 0) <= 30 * 1024 * 1024
+        );
+      }
+
+      grid.addEventListener("click", async (event) => {
+        const target = event.target.closest("[data-view]");
+        if (!target) return;
+
+        if (!window.AFViewer) {
+          showNotice("The 3D viewer is still loading. Try again in a moment.", true);
+          return;
+        }
+
+        try {
+          const info = await api(`/api/community/${target.dataset.view}/view-url`);
+          window.AFViewer.open({
+            url: info.url,
+            format: info.file_format,
+            title: info.title,
+            size: info.file_size,
+          });
+        } catch (error) {
+          showNotice(error.message, true);
+        }
+      });
       init();
     </script>
   </body>

@@ -459,6 +459,32 @@ def update_asset_thumbnail(asset_id):
     db.session.commit()
     return jsonify({"thumbnail_url": _asset_json(asset)["thumbnail_url"]}), 200
 
+@community_bp.get("/<int:asset_id>/view-url")
+def get_asset_view_url(asset_id):
+    """Temporary link used by the 3D viewer pop-up. Public models are open
+    to everyone and private ones to their owner. Viewing does not count as
+    a download."""
+    asset = db.session.get(CommunityAsset, asset_id)
+    if not asset:
+        return jsonify({"message": "Asset not found."}), 404
+
+    if asset.visibility == "private" and session.get("user_id") != asset.user_id:
+        return jsonify({"message": "This is a private model."}), 403
+
+    config = _storage_config()
+    if not config:
+        return jsonify({"message": "Community storage is not configured on the server."}), 503
+
+    url = _signed_url(config, asset.storage_path)
+    if not url:
+        return jsonify({"message": "Could not prepare the model file."}), 502
+
+    return jsonify({
+        "url": url,
+        "title": asset.title,
+        "file_format": asset.file_format,
+        "file_size": asset.file_size,
+    }), 200
 
 @community_bp.get("/<int:asset_id>/source-url")
 def get_asset_source_url(asset_id):
