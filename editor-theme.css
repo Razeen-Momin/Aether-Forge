@@ -45,6 +45,11 @@ html[data-theme="light"] {
   flex-shrink: 0;
 }
 
+/* Bottom-bar buttons keep their text colour on hover: dark text on the accent colour */
+.action-btn.visible-btn-text:hover {
+  color: var(--on-accent) !important;
+}
+
 /* =====================================================================
    The editor's styles, recoloured with theme variables
    (generated from the original <style> block of AetherForge.html)
@@ -547,7 +552,7 @@ input[type="range"] {
 }
 
 .visible-btn-text {
-  color: var(--bg) !important;
+  color: var(--text) !important;
   font-weight: bold;
 }
 
